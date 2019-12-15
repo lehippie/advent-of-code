@@ -1,7 +1,10 @@
 """Advent of Code 2019 - Day One."""
 
 
-INPUT_FILE = __file__.rsplit('/', 1)[0] + '/input.txt'
+from pathlib import Path
+
+
+INPUT_FILE = Path(__file__).parent / 'input.txt'
 
 
 def fuel_for_mass(mass):
