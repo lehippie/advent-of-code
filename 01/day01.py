@@ -1,23 +1,31 @@
-"""Advent of Code - Day One."""
+"""Advent of Code 2019 - Day One."""
 
 
-def fuel_needed(mass):
+INPUT_FILE = __file__.rsplit('/', 1)[0] + '/input.txt'
+
+
+def fuel_for_mass(mass):
     return max(mass // 3 - 2, 0)
 
 
-def fuel_total(mass):
-    fuel = [fuel_needed(mass)]
+def fuel_needed(mass):
+    fuel = [fuel_for_mass(mass)]
     while fuel[-1] != 0:
-        fuel.append(fuel_needed(fuel[-1]))
+        fuel.append(fuel_for_mass(fuel[-1]))
     return sum(fuel)
 
 
-if __name__ == '__main__':
-    fuel1 = 0
-    fuel2 = 0
-    with open('input.txt') as f:
+def calculation(modules=INPUT_FILE):
+    fuel_modules = 0
+    fuel_total = 0
+    with open(modules) as f:
         for mass in f:
-            fuel1 += fuel_needed(int(mass))
-            fuel2 += fuel_total(int(mass))
-    print(f"Amount of fuel needed for the modules: {fuel1}")
-    print(f"Amount of fuel needed, counting added fuel: {fuel2}")
+            fuel_modules += fuel_for_mass(int(mass))
+            fuel_total += fuel_needed(int(mass))
+    return fuel_modules, fuel_total
+
+
+if __name__ == '__main__':
+    fuel_modules, fuel_total = calculation()
+    print(f"Amount of fuel needed for the modules: {fuel_modules}")
+    print(f"Amount of fuel needed, counting added fuel: {fuel_total}")
