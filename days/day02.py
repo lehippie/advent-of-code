@@ -4,10 +4,10 @@ import env
 from lib import intcode
 
 # Input
-file = 'inputs/02_gravity_assist_program.txt'
+gap_file = 'inputs/02_gravity_assist_program.txt'
 
 # Part 1
-gap = intcode.from_file(file)
+gap = intcode.from_file(gap_file)
 gap.memory[1] = 12
 gap.memory[2] = 2
 gap.execute()
@@ -16,7 +16,7 @@ print(f"Gravity Assist Program output for '1202' input: {gap.memory[0]}")
 # Part 2
 def execute_gap(noun, verb):
     """Execute Gravity Assist Program with given noun and verb."""
-    gap = intcode.from_file(file)
+    gap = intcode.from_file(gap_file)
     gap.memory[1] = noun
     gap.memory[2] = verb
     gap.execute()
