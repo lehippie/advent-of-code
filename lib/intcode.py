@@ -15,7 +15,7 @@ class Intcode():
     def __init__(self, init_values):
         """Initialize memory state."""
         self.init_values = init_values
-        self.memory = init_values
+        self.memory = init_values.copy()
         self.pointer = 0
         self.finished = False
 
@@ -31,13 +31,12 @@ class Intcode():
     def execute(self):
         """Execute the whole program."""
         while not self.finished:
-            self.do_next()
+            self.do_next_instruction()
 
-    def do_next(self):
+    def do_next_instruction(self):
         """Execute the next instruction."""
-        instruction = self.memory[self.pointer:self.pointer + 4]
-        opcode = instruction[0]
-        parameters = instruction[1:]
+        opcode = self.memory[self.pointer]
+        parameters = self.memory[self.pointer + 1:self.pointer + 4]
 
         if opcode == 1:
             self.add(*parameters)
