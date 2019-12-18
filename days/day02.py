@@ -22,12 +22,24 @@ def execute(program, noun, verb):
     program.execute()
     return program.memory[0]
 
-def find_input(program, wanted_output):
+def find_input(program, wanted_output, max_input=100):
     """Find input of program that gives wanted output."""
-    for noun in range(100):
-        for verb in range(100):
+    for noun in range(max_input):
+        for verb in range(max_input):
             if execute(program, noun, verb) == wanted_output:
                 return 100 * noun + verb
 
 wanted = 19690720
 print(f"Input giving {wanted} output: {find_input(gap, wanted)}")
+
+# Extra
+import numpy as np
+import matplotlib.pyplot as plt
+outputs = np.zeros((100, 100))
+nouns = list(range(100))
+verbs = nouns.copy()
+for n in nouns:
+    for v in verbs:
+        outputs[n,v] = execute(gap, n, v)
+plt.imshow(outputs)
+plt.show()
