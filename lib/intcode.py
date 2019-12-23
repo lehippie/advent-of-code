@@ -72,3 +72,9 @@ class Intcode():
         Multiply values at addresses a and b and store result at address r.
         """
         self.memory[r] = self.memory[a] * self.memory[b]
+
+
+if __name__ == "__main__":
+    import env
+    from tests import tests_intcode
+    tests_intcode.tests()

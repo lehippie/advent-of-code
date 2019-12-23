@@ -49,3 +49,9 @@ class Wire():
         """Timing to closest intersection point."""
         timings = [self.delay(c) + wire2.delay(c) for c in self.crosses(wire2)]
         return min(timings)
+
+
+if __name__ == "__main__":
+    import env
+    from tests import tests_wires
+    tests_wires.tests()

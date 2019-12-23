@@ -12,3 +12,9 @@ def fuel_total(mass):
     while fuel[-1] != 0:
         fuel.append(fuel_for_mass(fuel[-1]))
     return sum(fuel)
+
+
+if __name__ == "__main__":
+    import env
+    from tests import tests_fuel
+    tests_fuel.tests()
