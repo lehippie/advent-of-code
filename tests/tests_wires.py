@@ -30,3 +30,7 @@ def tests():
     wire2 = wires.Wire('U98,R91,D20,R16,D67,R40,U7,R15,U6,R7')
     assert wire1.closest_cross(wire2) == 135
     assert wire1.shortest_cross(wire2) == 410
+
+
+if __name__ == "__main__":
+    tests()

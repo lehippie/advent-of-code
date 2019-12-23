@@ -13,3 +13,7 @@ def tests():
     assert fuel.fuel_total(14) == 2
     assert fuel.fuel_total(1969) == 966
     assert fuel.fuel_total(100756) == 50346
+
+
+if __name__ == "__main__":
+    tests()
