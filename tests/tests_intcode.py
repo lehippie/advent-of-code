@@ -29,6 +29,14 @@ def tests():
     assert i.pointer == 0
     assert i.memory == [1,9,10,3,2,3,11,0,99,30,40,50]
 
+    i = intcode.Intcode([1002,4,3,4,33])
+    i.execute()
+    assert i.memory == [1002,4,3,4,99]
+
+    i = intcode.Intcode([1101,100,-1,4,0])
+    i.execute()
+    assert i.memory == [1101,100,-1,4,99]
+
 
 if __name__ == "__main__":
     tests()
