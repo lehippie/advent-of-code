@@ -7,8 +7,8 @@ from lib import intcode
 test = intcode.from_file('inputs/05_test_diagnostic_program.txt')
 
 # Part 1: 2845163
-test.execute() # Input = 1
+print(test.execute(1))
 
 # Part 2: 9436229
 test.reset()
-test.execute() # Input = 5
+print(test.execute(5))

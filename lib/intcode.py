@@ -18,6 +18,8 @@ class Intcode():
         self.memory = init_values.copy()
         self.pointer = 0
         self.finished = False
+        self.input = None
+        self.output = None
 
 
     ##########################
@@ -28,10 +30,12 @@ class Intcode():
         """Restore Program to initial state."""
         self.__init__(self.init_values)
 
-    def execute(self):
+    def execute(self, input_value=None):
         """Execute the whole program."""
+        self.input = input_value
         while not self.finished:
             self.execute_next()
+        return self.output
 
     def execute_next(self):
         """Execute the next instruction."""
@@ -45,10 +49,10 @@ class Intcode():
             self.multiply(self.process_parameters(2))
 
         elif opcode == 3:
-            self.input_value()
+            self.get_input()
 
         elif opcode == 4:
-            self.output(self.process_parameters(1))
+            self.output_value(self.process_parameters(1))
 
         elif opcode == 5:
             self.jump_if_true(self.process_parameters(2))
@@ -97,15 +101,23 @@ class Intcode():
         self.memory[result_address] = parameters[0] * parameters[1]
         self.pointer += 4
 
-    def input_value(self):
+    def get_input(self):
         """Input instruction (opcode 3)."""
         result_address = self.memory[self.pointer + 1]
-        self.memory[result_address] = int(input("Enter input value: "))
+        if self.input is None:
+            self.memory[result_address] = int(input("Enter input value: "))
+        else:
+            self.memory[result_address] = self.input
         self.pointer += 2
 
-    def output(self, parameter):
+    def output_value(self, parameter):
         """Output instruction (opcode 4)."""
-        print(parameter)
+        if self.output is None:
+            self.output = parameter
+        elif isinstance(self.output, int):
+            self.output = [self.output, parameter]
+        else:
+            self.output.append(parameter)
         self.pointer += 2
 
     def jump_if_true(self, parameters):
