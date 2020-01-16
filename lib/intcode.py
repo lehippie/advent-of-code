@@ -1,70 +1,46 @@
 """Intcode computer."""
 
 
-def from_file(init_file):
+def from_file(init_file, name='unnamed'):
     """Create Intcode instance from a file."""
     with open(init_file) as f:
         init_values = f.readline()
     init_values = [int(i) for i in init_values.split(',')]
-    return Intcode(init_values)
+    return Intcode(init_values, name=name)
 
 
 class Intcode():
     """Intcode computer class."""
 
-    def __init__(self, init_values):
-        """Initialize memory state."""
+    def __init__(self, init_values, name='unnamed'):
         self.initial_memory = init_values
+        self.name = name
         self.memory = init_values.copy()
         self.pointer = 0
+        self._process_opcode()
         self.finished = False
-        self.input = None
+        self.input = []
+        self.waiting_for_input = False
         self.output = None
+        self.output_pending = False
 
+    def __repr__(self):
+        return f"Intcode({self.memory}, {self.name})"
 
-    ##########################
-    ####    EXECUTION     ####
-    ##########################
+    def __str__(self):
+        return (f"Name: {self.name}\n"
+                f"Memory: {self.memory}\n"
+                f"Current pointer: {self.pointer}\n"
+                f"Current instruction: {self.instr}\n"
+                f"Current opcode: {self.opcode}\n")
 
-    def reset(self):
-        """Restore Program to initial state."""
-        self.__init__(self.initial_memory)
-
-    def execute(self, input_values=None):
-        """Execute the whole program."""
-        self.input = input_values
-        while not self.finished:
-            self.execute_next()
-        return self.output
-
-    def execute_next(self):
-        """Execute the next instruction."""
+    def _process_opcode(self):
+        """Update arguments with current pointer position."""
         self.instr = self.memory[self.pointer]
-        opcode = self.instr % 100
-        if opcode == 1:
-            self._instr_add(self.process_parameters(2))
-        elif opcode == 2:
-            self._instr_multiply(self.process_parameters(2))
-        elif opcode == 3:
-            self._instr_input()
-        elif opcode == 4:
-            self._instr_output(self.process_parameters(1))
-        elif opcode == 5:
-            self._instr_jump_if_true(self.process_parameters(2))
-        elif opcode == 6:
-            self._instr_jump_if_false(self.process_parameters(2))
-        elif opcode == 7:
-            self._instr_less_than(self.process_parameters(2))
-        elif opcode == 8:
-            self._instr_equals(self.process_parameters(2))
-        elif opcode == 99:
-            self.finished = True
-        else:
-            raise IOError(
-                f"Unknown opcode '{opcode}' at address {self.pointer}.")
+        self.opcode = self.instr % 100
 
-    def process_parameters(self, nparams):
-        """Return correct parameters from mode."""
+    def _process_parameters(self, nparams):
+        """Read modes from instruction and return correct parameters."""
         modes = [int(i) for i in str(self.instr//100).zfill(nparams)[::-1]]
         param = self.memory[self.pointer + 1 : self.pointer + nparams + 1]
         for i, m in enumerate(modes):
@@ -73,6 +49,60 @@ class Intcode():
         if len(param) == 1:
             param = param[0]
         return param
+
+
+    ##########################
+    ####    EXECUTION     ####
+    ##########################
+
+    def reset(self):
+        """Restore Program to initial state."""
+        self.__init__(self.initial_memory, self.name)
+
+    def execute(self, input_values=None, output_stream=None):
+        """Execute the program."""
+        # Process new input values
+        if input_values is not None:
+            self.waiting_for_input = False
+            if isinstance(input_values, int):
+                input_values = [input_values]
+            self.input.extend(input_values)
+        # Main loop
+        while not self.finished:
+            self._execute_next_instr()
+            if self.waiting_for_input:
+                return
+            self._process_opcode()
+            if self.opcode == 99:
+                self.finished = True
+            if self.output_pending:
+                self.output_pending = False
+                if output_stream == 'stdout':
+                    print(self.output)
+                else:
+                    return self.output
+
+    def _execute_next_instr(self):
+        """Execute the next instruction."""
+        if self.opcode == 1:
+            self._instr_add(self._process_parameters(2))
+        elif self.opcode == 2:
+            self._instr_multiply(self._process_parameters(2))
+        elif self.opcode == 3:
+            self._instr_input()
+        elif self.opcode == 4:
+            self._instr_output(self._process_parameters(1))
+        elif self.opcode == 5:
+            self._instr_jump_if_true(self._process_parameters(2))
+        elif self.opcode == 6:
+            self._instr_jump_if_false(self._process_parameters(2))
+        elif self.opcode == 7:
+            self._instr_less_than(self._process_parameters(2))
+        elif self.opcode == 8:
+            self._instr_equals(self._process_parameters(2))
+        else:
+            raise IOError(
+                f"Unknown opcode '{self.opcode}' at address {self.pointer}.")
 
 
     ############################
@@ -93,24 +123,17 @@ class Intcode():
 
     def _instr_input(self):
         """Input instruction (opcode 3)."""
-        result_address = self.memory[self.pointer + 1]
-        if self.input is None:
-            self.memory[result_address] = int(input("Enter input value: "))
-        elif isinstance(self.input, int):
-            self.memory[result_address] = self.input
+        if not self.input:
+            self.waiting_for_input = True
         else:
-            self.memory[result_address] = self.input[0]
-            self.input = self.input[1:]
-        self.pointer += 2
+            result_address = self.memory[self.pointer + 1]
+            self.memory[result_address] = self.input.pop(0)
+            self.pointer += 2
 
     def _instr_output(self, parameter):
         """Output instruction (opcode 4)."""
-        if self.output is None:
-            self.output = parameter
-        elif isinstance(self.output, int):
-            self.output = [self.output, parameter]
-        else:
-            self.output.append(parameter)
+        self.output = parameter
+        self.output_pending = True
         self.pointer += 2
 
     def _instr_jump_if_true(self, parameters):

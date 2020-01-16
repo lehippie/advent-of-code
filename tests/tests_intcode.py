@@ -5,6 +5,7 @@ from lib import intcode
 
 
 def tests():
+    ####    Day02 tests    ####
     i = intcode.Intcode([1,0,0,0,99])
     i.execute()
     assert i.memory == [2,0,0,0,99]
@@ -28,6 +29,9 @@ def tests():
     i.reset()
     assert i.pointer == 0
     assert i.memory == [1,9,10,3,2,3,11,0,99,30,40,50]
+
+
+    ####    Day05 tests    ####
 
     i = intcode.Intcode([1002,4,3,4,33])
     i.execute()
