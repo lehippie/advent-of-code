@@ -19,7 +19,7 @@ def feedback_thrusters(amplifiers, phase_sequence):
     while not amplifiers[-1].finished:
         for amp in amplifiers:
             signal = amp.execute(signal)
-            print(f"Amp {amp} output: {signal}")
+            # print(f"Amp {amp} output: {signal}")
             if amp is amplifiers[-1] and signal is not None:
                 last_output_from_E = signal
     return last_output_from_E
