@@ -16,14 +16,13 @@ class Intcode():
         self.name = name
         self.initial_memory = init_values
         self.memory = init_values.copy()
-        self.opcode_db = self._known_opcodes()
+        self.opcode_db = self.known_opcodes()
         self.pointer = 0
         self.relative_base = 0
-        self._decode_instruction()
+        self.decode_current_instruction()
         self.input = []
         self.waiting_for_input = False
         self.output = None
-        self.output_pending = False
         self.finished = False
 
     def __repr__(self):
@@ -32,7 +31,7 @@ class Intcode():
     def __str__(self):
         return self.name
 
-    def _known_opcodes(self):
+    def known_opcodes(self):
         """Create a dictionnary of available opcode."""
         return {1: self._instr_add,
                 2: self._instr_multiply,
@@ -44,7 +43,7 @@ class Intcode():
                 8: self._instr_equals,
                 9: self._instr_relative_base_offset}
 
-    def _decode_instruction(self):
+    def decode_current_instruction(self):
         """Read instruction and opcode at current pointer."""
         self.instr = self.memory[self.pointer]
         self.opcode = self.instr % 100
@@ -54,36 +53,46 @@ class Intcode():
     ####    EXECUTION     ####
     ##########################
 
-    def execute(self, input_values=None, output_stream=None):
-        """Execute the program."""
-        # Process new input values
-        if input_values is not None:
-            self.waiting_for_input = False
-            if isinstance(input_values, int):
-                input_values = [input_values]
-            self.input.extend(input_values)
-        # Main loop
-        while not self.finished:
-            self._execute_one_instr()
-            if self.waiting_for_input:
-                return
-            if self.output_pending:
-                self.output_pending = False
-                if output_stream == 'stdout':
-                    print(self.output)
-                else:
-                    return self.output
+    def _process_input_values(self, input_values):
+        """Add input values to pending list."""
+        if isinstance(input_values, int):
+            input_values = [input_values]
+        self.input.extend(input_values)
+        self.waiting_for_input = False
 
-    def _execute_one_instr(self):
+    def execute_one_instr(self, input_values=None):
         """Execute instruction at current pointer."""
+        # Inputs and output initialization
+        self.output = None
+        if input_values is not None:
+            self._process_input_values(input_values)
+        # Execute instruction
         if self.opcode in self.opcode_db:
             self.opcode_db[self.opcode]()
         else:
             raise IOError(f"Unknown opcode '{self.opcode}' "
                           f"at address {self.pointer}.")
-        self._decode_instruction()
+        # Update current instruction and check if program has ended
+        self.decode_current_instruction()
         if self.opcode == 99:
             self.finished = True
+        # Deal with pending inputs or outputs
+        if self.waiting_for_input:
+            return 'Waiting for an input...'
+        else:
+            return self.output
+
+    def execute(self, input_values=None, output_stream=None):
+        """Execute the program."""
+        if input_values is not None:
+            self._process_input_values(input_values)
+        while not self.finished:
+            rc = self.execute_one_instr()
+            if rc is not None:
+                if output_stream == 'stdout':
+                    print(rc)
+                else:
+                    return rc
 
     def reset(self):
         """Restore Program to initial state."""
@@ -131,7 +140,6 @@ class Intcode():
     def _instr_output(self):
         """Output instruction."""
         self.output = self._process_parameters(1)[0]
-        self.output_pending = True
         self.pointer += 2
 
     def _instr_jump_if_true(self):

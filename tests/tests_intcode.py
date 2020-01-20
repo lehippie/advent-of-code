@@ -97,14 +97,11 @@ def tests():
     ###########################
     ####    Day09 tests    ####
     ###########################
-    i = intcode.Intcode([109,19,99])
-    i.relative_base = 2000
-    i.execute()
-    assert i.relative_base == 2019
-
     i = intcode.Intcode([109,19,109,-34,99])
     i.relative_base = 2000
-    i.execute()
+    i.execute_one_instr()
+    assert i.relative_base == 2019
+    i.execute_one_instr()
     assert i.relative_base == 1985
 
 
