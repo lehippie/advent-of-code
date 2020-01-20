@@ -18,6 +18,7 @@ class Intcode():
         self.memory = init_values.copy()
         self.opcode_db = self._known_opcodes()
         self.pointer = 0
+        self.relative_base = 0
         self._decode_instruction()
         self.input = []
         self.waiting_for_input = False
@@ -40,7 +41,8 @@ class Intcode():
                 5: self._instr_jump_if_true,
                 6: self._instr_jump_if_false,
                 7: self._instr_less_than,
-                8: self._instr_equals}
+                8: self._instr_equals,
+                9: self._instr_relative_base_offset}
 
     def _decode_instruction(self):
         """Read instruction and opcode at current pointer."""
@@ -95,11 +97,13 @@ class Intcode():
     def _process_parameters(self, nb_param):
         """Return parameters according to instruction's modes."""
         modes = [int(i) for i in str(self.instr//100).zfill(nb_param)[::-1]]
-        parameters = self.memory[self.pointer+1 : self.pointer+nb_param+1]
+        params = self.memory[self.pointer+1 : self.pointer+nb_param+1]
         for i, m in enumerate(modes):
             if m == 0:
-                parameters[i] = self.memory[parameters[i]]
-        return parameters
+                params[i] = self.memory[params[i]]
+            elif m == 2:
+                params[i] = self.memory[self.relative_base + params[i]]
+        return params
 
     def _instr_add(self):
         """Addition instruction."""
@@ -159,6 +163,11 @@ class Intcode():
         addr = self.memory[self.pointer + 3]
         self.memory[addr] = int(a == b)
         self.pointer += 4
+
+    def _instr_relative_base_offset(self):
+        """Relative base offset instruction."""
+        self.relative_base += self._process_parameters(1)[0]
+        self.pointer += 2
 
 
 if __name__ == "__main__":

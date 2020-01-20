@@ -5,7 +5,9 @@ from lib import intcode
 
 
 def tests():
+    ###########################
     ####    Day02 tests    ####
+    ###########################
     i = intcode.Intcode([1,0,0,0,99])
     i.execute()
     assert i.memory == [2,0,0,0,99]
@@ -30,9 +32,9 @@ def tests():
     assert i.pointer == 0
     assert i.memory == [1,9,10,3,2,3,11,0,99,30,40,50]
 
-
+    ###########################
     ####    Day05 tests    ####
-
+    ###########################
     i = intcode.Intcode([1002,4,3,4,33])
     i.execute()
     assert i.memory == [1002,4,3,4,99]
@@ -91,6 +93,19 @@ def tests():
     assert i.execute(8) == 1000
     i.reset()
     assert i.execute(666) == 1001
+
+    ###########################
+    ####    Day09 tests    ####
+    ###########################
+    i = intcode.Intcode([109,19,99])
+    i.relative_base = 2000
+    i.execute()
+    assert i.relative_base == 2019
+
+    i = intcode.Intcode([109,19,109,-34,99])
+    i.relative_base = 2000
+    i.execute()
+    assert i.relative_base == 1985
 
 
 if __name__ == "__main__":
