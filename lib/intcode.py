@@ -79,24 +79,26 @@ class Intcode():
 
     def execute_instr(self, input_values=None):
         """Execute instruction at current pointer."""
-        # Inputs and output initialization
-        self.output = None
-        self._process_input_values(input_values)
-        # Execute instruction
-        if self.opcode in self.opcodes:
-            self.opcodes[self.opcode]()
-        else:
-            raise IOError(f"Unknown opcode '{self.opcode}'"
-                          f" at address {self.pointer}.")
-        # Check if this is the end of the program
-        self._decode_current_instruction()
-        if self.opcode == 99:
-            self.finished = True
-        return self.output
+        if not self.finished:
+            # Inputs and output initialization
+            self.output = None
+            self._process_input_values(input_values)
+            # Execute instruction
+            if self.opcode in self.opcodes:
+                self.opcodes[self.opcode]()
+            else:
+                raise IOError(f"Unknown opcode '{self.opcode}'"
+                            f" at address {self.pointer}.")
+            # Check if this is the end of the program
+            self._decode_current_instruction()
+            if self.opcode == 99:
+                self.finished = True
+            return self.output
 
     def execute(self, input_values=None, stdout=False):
         """Execute the program until next output instruction.
 
+        Execution is stopped if an input value is needed.
         If <stdout> is True, each output is sent to stdout and
         the program keeps executing.
         """
