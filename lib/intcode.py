@@ -62,7 +62,7 @@ class Intcode():
         else:
             raise IOError("Invalid 'program_values' format.")
 
-    def _read(self, address):
+    def read(self, address):
         """Return value stored at <address>.
 
         If <address> is outside of memory, create buffer entry
@@ -73,7 +73,7 @@ class Intcode():
         except IndexError:
             return self.buffer[address]
 
-    def _write(self, address, value):
+    def write(self, address, value):
         """Write <value> at <address> expanding memory if needed."""
         try:
             self.memory[address] = value
@@ -137,15 +137,18 @@ class Intcode():
 
     def _process_parameters(self, nb_param):
         """Return correct parameters from instruction's modes."""
+        addresses = list(range(self.pointer + 1, self.pointer + 1 + nb_param))
+        values = [self.read(a) for a in addresses]
         modes = [int(i) for i in str(self.instr//100).zfill(nb_param)[::-1]]
-        pslice = range(self.pointer + 1, self.pointer + nb_param + 1)
-        params = [self._read(a) for a in pslice]
-        for i, m in enumerate(modes):
+        params = []
+        for a, v, m in zip(addresses, values, modes):
             if m == 0:      # Position mode
-                params[i] = self._read(params[i])
+                params.append(v)
+            elif m == 1:    # Immediate mode
+                params.append(a)
             elif m == 2:    # Relative mode
-                params[i] = self._read(self.relative_base + params[i])
-        if len(params) == 1:
+                params.append(self.relative_base + v)
+        if nb_param == 1:
             params = params[0]
         return params
 
@@ -156,72 +159,68 @@ class Intcode():
 
     def _decode_current_instruction(self):
         """Read instruction and opcode at current pointer."""
-        self.instr = self._read(self.pointer)
+        self.instr = self.read(self.pointer)
         self.opcode = self.instr % 100
 
     def _instr_add(self):
-        """Addition instruction."""
-        a, b = self._process_parameters(2)
-        addr = self._read(self.pointer + 3)
-        self._write(addr, a + b)
+        """Addition instruction (opcode 1)."""
+        a, b, result = self._process_parameters(3)
+        self.write(result, self.read(a) + self.read(b))
         self.pointer += 4
 
     def _instr_multiply(self):
-        """Multiplication instruction."""
-        a, b = self._process_parameters(2)
-        addr = self._read(self.pointer + 3)
-        self._write(addr, a * b)
+        """Multiplication instruction (opcode 2)."""
+        a, b, result = self._process_parameters(3)
+        self.write(result, self.read(a) * self.read(b))
         self.pointer += 4
 
     def _instr_input(self):
-        """Input instruction."""
+        """Input instruction (opcode 3)."""
         if not self.inputs:
             self.waiting_for_input = True
         else:
-            addr = self._read(self.pointer + 1)
-            self._write(addr, self.inputs.pop(0))
+            address = self._process_parameters(1)
+            self.write(address, self.inputs.pop(0))
             self.pointer += 2
 
     def _instr_output(self):
-        """Output instruction."""
-        output_value = self._process_parameters(1)
-        self.outputs.append(output_value)
+        """Output instruction (opcode 4)."""
+        value = self.read(self._process_parameters(1))
+        self.outputs.append(value)
         self.pointer += 2
-        return output_value
+        return value
 
     def _instr_jump_if_true(self):
-        """Jump-if-true instruction."""
+        """Jump-if-true instruction (opcode 5)."""
         a, b = self._process_parameters(2)
-        if a:
-            self.pointer = b
+        if self.read(a):
+            self.pointer = self.read(b)
         else:
             self.pointer += 3
 
     def _instr_jump_if_false(self):
-        """Jump-if-false instruction."""
+        """Jump-if-false instruction (opcode 6)."""
         a, b = self._process_parameters(2)
-        if not a:
-            self.pointer = b
+        if not self.read(a):
+            self.pointer = self.read(b)
         else:
             self.pointer += 3
 
     def _instr_less_than(self):
-        """Comparison instruction."""
-        a, b = self._process_parameters(2)
-        addr = self._read(self.pointer + 3)
-        self._write(addr, int(a < b))
+        """Comparison instruction (opcode 7)."""
+        a, b, result = self._process_parameters(3)
+        self.write(result, int(self.read(a) < self.read(b)))
         self.pointer += 4
 
     def _instr_equals(self):
-        """Equality instruction."""
-        a, b = self._process_parameters(2)
-        addr = self._read(self.pointer + 3)
-        self._write(addr, int(a == b))
+        """Equality instruction (opcode 8)."""
+        a, b, result = self._process_parameters(3)
+        self.write(result, int(self.read(a) == self.read(b)))
         self.pointer += 4
 
     def _instr_relative_base_offset(self):
-        """Relative base offset instruction."""
-        self.relative_base += self._process_parameters(1)
+        """Relative base offset instruction (opcode 9)."""
+        self.relative_base += self.read(self._process_parameters(1))
         self.pointer += 2
 
 
