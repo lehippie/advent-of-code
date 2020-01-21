@@ -22,7 +22,7 @@ def feedback_thrusters(amplifiers, phase_sequence, debug=False):
             signal = amp.execute(signal)
             if debug:
                 print(f"Amp {amp} output: {signal}")
-    return amplifiers[-1].last_output
+    return amplifiers[-1].outputs[-1]
 
 
 if __name__ == "__main__":

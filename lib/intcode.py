@@ -5,33 +5,34 @@ class Intcode():
     """Intcode computer class.
 
     Arguments:
-        program_values -- Program loaded in the computer memory:
-                          list of Int
-                            OR
-                          path to a file containig a list of Int.
+        program -- Program loaded in the computer memory.
+                   Can be a list of Int OR the path to a file
+                   containig such list on its first line.
         name -- Name of the Intcode computer's instance.
     """
 
-    ######################
-    ####    SETUP     ####
-    ######################
-
-    def __init__(self, program_values, name='Unnamed'):
+    def __init__(self, program, name='Unnamed'):
         """Initial computer state."""
         self.name = name
-        self.initial_memory = self._initialize_memory(program_values)
-        self.memory = self.initial_memory.copy()
-        self.opcodes = self.known_opcodes()
+        self.initial_program = self._initialize_memory(program)
+        self.memory = self.initial_program.copy()
+        self.instructions = self.known_instructions()
         self.pointer = 0
         self.relative_base = 0
         self.inputs = []
-        self.output = None
+        self.outputs = []
         self.waiting_for_input = False
         self.finished = False
         self._decode_current_instruction()
 
-    def known_opcodes(self):
-        """Dictionnary of available opcode."""
+    def __repr__(self):
+        return f"Intcode({self.initial_program}, {self.name})"
+
+    def __str__(self):
+        return self.name
+
+    def known_instructions(self):
+        """Dictionnary of available instructions."""
         return {1: self._instr_add,
                 2: self._instr_multiply,
                 3: self._instr_input,
@@ -80,12 +81,9 @@ class Intcode():
     def execute_instr(self, input_values=None):
         """Execute instruction at current pointer."""
         if not self.finished:
-            # Inputs and output initialization
-            self.output = None
             self._process_input_values(input_values)
-            # Execute instruction
-            if self.opcode in self.opcodes:
-                self.opcodes[self.opcode]()
+            if self.opcode in self.instructions:
+                ret = self.instructions[self.opcode]()
             else:
                 raise IOError(f"Unknown opcode '{self.opcode}'"
                             f" at address {self.pointer}.")
@@ -93,29 +91,28 @@ class Intcode():
             self._decode_current_instruction()
             if self.opcode == 99:
                 self.finished = True
-            return self.output
+            return ret
 
-    def execute(self, input_values=None, stdout=False):
+    def execute(self, input_values=None, pause_on_output=True):
         """Execute the program until next output instruction.
 
         Execution is stopped if an input value is needed.
-        If <stdout> is True, each output is sent to stdout and
-        the program keeps executing.
+        If <pause_on_output> is False, each output is stored
+        and only returned as a list at the end.
         """
         self._process_input_values(input_values)
         while not self.finished:
-            self.execute_instr()
+            ret = self.execute_instr()
             if self.waiting_for_input:
                 return
-            if self.output is not None:
-                if stdout:
-                    print(self.output)
-                else:
-                    return self.output
+            if ret is not None and pause_on_output:
+                return ret
+        if not pause_on_output:
+            return self.outputs
 
     def reset(self):
         """Restore Program to initial state."""
-        self.__init__(self.initial_memory, self.name)
+        self.__init__(self.initial_program, self.name)
 
 
     ###############################
@@ -127,9 +124,9 @@ class Intcode():
         modes = [int(i) for i in str(self.instr//100).zfill(nb_param)[::-1]]
         params = self.memory[self.pointer+1 : self.pointer+nb_param+1]
         for i, m in enumerate(modes):
-            if m == 0:
+            if m == 0: # Position mode
                 params[i] = self.memory[params[i]]
-            elif m == 2:
+            elif m == 2: # # Relative mode
                 params[i] = self.memory[self.relative_base + params[i]]
         if len(params) == 1:
             params = params[0]
@@ -139,6 +136,11 @@ class Intcode():
     ############################
     ####    INSTRUCTIONS    ####
     ############################
+
+    def _decode_current_instruction(self):
+        """Read instruction and opcode at current pointer."""
+        self.instr = self.memory[self.pointer]
+        self.opcode = self.instr % 100
 
     def _instr_add(self):
         """Addition instruction."""
@@ -165,10 +167,10 @@ class Intcode():
 
     def _instr_output(self):
         """Output instruction."""
-        value = self._process_parameters(1)
-        self.output = value
-        self.last_output = value
+        output_value = self._process_parameters(1)
+        self.outputs.append(output_value)
         self.pointer += 2
+        return output_value
 
     def _instr_jump_if_true(self):
         """Jump-if-true instruction."""
