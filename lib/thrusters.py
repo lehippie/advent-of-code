@@ -10,19 +10,19 @@ def thrusters(amplifier, phase_sequence):
     return signal
 
 
-def feedback_thrusters(amplifiers, phase_sequence):
+def feedback_thrusters(amplifiers, phase_sequence, debug=False):
     """Get output signal from a chain of thrusters with feedback loop."""
     for amp, phase in zip(amplifiers, phase_sequence):
-        # print(f"Init amp {amp} with phase {phase}")
+        if debug:
+            print(f"Init amp {amp} with phase {phase}")
         amp.execute(phase)
     signal = 0
     while not amplifiers[-1].finished:
         for amp in amplifiers:
             signal = amp.execute(signal)
-            # print(f"Amp {amp} output: {signal}")
-            if amp is amplifiers[-1] and signal is not None:
-                last_output_from_E = signal
-    return last_output_from_E
+            if debug:
+                print(f"Amp {amp} output: {signal}")
+    return amplifiers[-1].last_output
 
 
 if __name__ == "__main__":

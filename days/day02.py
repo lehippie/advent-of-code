@@ -6,15 +6,14 @@ from lib.intcode import Intcode
 # Input
 gap = Intcode('inputs/02_gravity_assist_program.txt')
 
-
-# Part 1: 4484226
+# Part 1:
 gap.memory[1] = 12
 gap.memory[2] = 2
 gap.execute()
 print(f"Gravity Assist Program output for '1202' input: {gap.memory[0]}")
+assert gap.memory[0] == 4484226
 
-
-# Part 2: 5696
+# Part 2:
 def execute(program, noun, verb):
     """Execute program with given noun and verb."""
     program.reset()
@@ -31,7 +30,9 @@ def find_input(program, wanted_output, max_input=100):
                 return 100 * noun + verb
 
 wanted = 19690720
-print(f"Input giving {wanted} output: {find_input(gap, wanted)}")
+best_input = find_input(gap, wanted)
+print(f"Input giving {wanted} output: {best_input}")
+assert best_input == 5696
 
 
 # Extra
@@ -46,5 +47,4 @@ def gap_outputs():
             outputs[n,v] = execute(gap, n, v)
     plt.imshow(outputs)
     plt.show()
-
 # gap_outputs()
