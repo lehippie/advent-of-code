@@ -7,7 +7,7 @@ from lib.intcode import Intcode
 diagnostic = Intcode('inputs/05_test_diagnostic_program.txt')
 
 # Part 1:
-outs = diagnostic.execute(1, pause_on_output=False)
+outs = diagnostic.execute(1)
 print("Diagnostic for air conditioner unit:", outs)
 assert outs[-1] == 2845163
 

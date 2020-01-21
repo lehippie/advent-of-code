@@ -1,5 +1,7 @@
 """Intcode computer for Advent of Code 2019."""
 
+from collections import defaultdict
+
 
 class Intcode():
     """Intcode computer class.
@@ -16,6 +18,7 @@ class Intcode():
         self.name = name
         self.initial_program = self._initialize_memory(program)
         self.memory = self.initial_program.copy()
+        self.buffer = defaultdict(int)
         self.instructions = self.known_instructions()
         self.pointer = 0
         self.relative_base = 0
@@ -43,6 +46,11 @@ class Intcode():
                 8: self._instr_equals,
                 9: self._instr_relative_base_offset}
 
+
+    #######################
+    ####    MEMORY     ####
+    #######################
+
     def _initialize_memory(self, program_values):
         """Initialize memory from program values."""
         if isinstance(program_values, list):
@@ -54,16 +62,23 @@ class Intcode():
         else:
             raise IOError("Invalid 'program_values' format.")
 
-    def _decode_current_instruction(self):
-        """Read instruction and opcode at current pointer."""
-        self.instr = self.memory[self.pointer]
-        self.opcode = self.instr % 100
+    def _read(self, address):
+        """Return value stored at <address>.
 
-    def __repr__(self):
-        return f"Intcode({self.memory}, {self.name})"
+        If <address> is outside of memory, create buffer entry
+        with value 0.
+        """
+        try:
+            return self.memory[address]
+        except IndexError:
+            return self.buffer[address]
 
-    def __str__(self):
-        return self.name
+    def _write(self, address, value):
+        """Write <value> at <address> expanding memory if needed."""
+        try:
+            self.memory[address] = value
+        except IndexError:
+            self.buffer[address] = value
 
 
     ##########################
@@ -87,28 +102,29 @@ class Intcode():
             else:
                 raise IOError(f"Unknown opcode '{self.opcode}'"
                             f" at address {self.pointer}.")
-            # Check if this is the end of the program
             self._decode_current_instruction()
             if self.opcode == 99:
                 self.finished = True
             return ret
 
-    def execute(self, input_values=None, pause_on_output=True):
-        """Execute the program until next output instruction.
+    def execute(self, input_values=None, blocking_mode=False):
+        """Execute the full program and return the outputs.
 
-        Execution is stopped if an input value is needed.
-        If <pause_on_output> is False, each output is stored
-        and only returned as a list at the end.
+        If an input value is needed the program is halted.
+        If <blocking_mode> is True, any output halts the program.
         """
         self._process_input_values(input_values)
         while not self.finished:
             ret = self.execute_instr()
             if self.waiting_for_input:
                 return
-            if ret is not None and pause_on_output:
+            if blocking_mode and ret is not None:
                 return ret
-        if not pause_on_output:
-            return self.outputs
+        if not blocking_mode:
+            if len(self.outputs) == 1:
+                return self.outputs[0]
+            else:
+                return self.outputs
 
     def reset(self):
         """Restore Program to initial state."""
@@ -122,12 +138,13 @@ class Intcode():
     def _process_parameters(self, nb_param):
         """Return correct parameters from instruction's modes."""
         modes = [int(i) for i in str(self.instr//100).zfill(nb_param)[::-1]]
-        params = self.memory[self.pointer+1 : self.pointer+nb_param+1]
+        pslice = range(self.pointer + 1, self.pointer + nb_param + 1)
+        params = [self._read(a) for a in pslice]
         for i, m in enumerate(modes):
-            if m == 0: # Position mode
-                params[i] = self.memory[params[i]]
-            elif m == 2: # # Relative mode
-                params[i] = self.memory[self.relative_base + params[i]]
+            if m == 0:      # Position mode
+                params[i] = self._read(params[i])
+            elif m == 2:    # Relative mode
+                params[i] = self._read(self.relative_base + params[i])
         if len(params) == 1:
             params = params[0]
         return params
@@ -139,21 +156,21 @@ class Intcode():
 
     def _decode_current_instruction(self):
         """Read instruction and opcode at current pointer."""
-        self.instr = self.memory[self.pointer]
+        self.instr = self._read(self.pointer)
         self.opcode = self.instr % 100
 
     def _instr_add(self):
         """Addition instruction."""
         a, b = self._process_parameters(2)
-        addr = self.memory[self.pointer + 3]
-        self.memory[addr] = a + b
+        addr = self._read(self.pointer + 3)
+        self._write(addr, a + b)
         self.pointer += 4
 
     def _instr_multiply(self):
         """Multiplication instruction."""
         a, b = self._process_parameters(2)
-        addr = self.memory[self.pointer + 3]
-        self.memory[addr] = a * b
+        addr = self._read(self.pointer + 3)
+        self._write(addr, a * b)
         self.pointer += 4
 
     def _instr_input(self):
@@ -161,8 +178,8 @@ class Intcode():
         if not self.inputs:
             self.waiting_for_input = True
         else:
-            addr = self.memory[self.pointer + 1]
-            self.memory[addr] = self.inputs.pop(0)
+            addr = self._read(self.pointer + 1)
+            self._write(addr, self.inputs.pop(0))
             self.pointer += 2
 
     def _instr_output(self):
@@ -191,15 +208,15 @@ class Intcode():
     def _instr_less_than(self):
         """Comparison instruction."""
         a, b = self._process_parameters(2)
-        addr = self.memory[self.pointer + 3]
-        self.memory[addr] = int(a < b)
+        addr = self._read(self.pointer + 3)
+        self._write(addr, int(a < b))
         self.pointer += 4
 
     def _instr_equals(self):
         """Equality instruction."""
         a, b = self._process_parameters(2)
-        addr = self.memory[self.pointer + 3]
-        self.memory[addr] = int(a == b)
+        addr = self._read(self.pointer + 3)
+        self._write(addr, int(a == b))
         self.pointer += 4
 
     def _instr_relative_base_offset(self):

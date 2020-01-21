@@ -19,8 +19,8 @@ def feedback_thrusters(amplifiers, phase_sequence, debug=False):
     signal = 0
     while not amplifiers[-1].finished:
         for amp in amplifiers:
-            signal = amp.execute(signal)
-            if debug:
+            signal = amp.execute(signal, blocking_mode=True)
+            if debug and signal is not None:
                 print(f"Amp {amp} output: {signal}")
     return amplifiers[-1].outputs[-1]
 
