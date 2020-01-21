@@ -3,19 +3,16 @@
 import env
 from lib import fuel
 
-
 # Input
-modules_masses = []
 with open('inputs/01_modules.txt') as f:
-    for mass in f:
-        modules_masses.append(int(mass))
+    modules_masses = [int(mass) for mass in f]
 
+# Part 1:
+fuel_modules = sum(fuel.fuel_for_mass(m) for m in modules_masses)
+print(f"Amount of fuel needed for the modules: {fuel_modules}")
+assert fuel_modules == 3426455
 
-# Part 1: 3426455
-fuel_modules = [fuel.fuel_for_mass(m) for m in modules_masses]
-print(f"Amount of fuel needed for the modules: {sum(fuel_modules)}")
-
-
-# Part 2: 5136807
-total_fuel = [fuel.fuel_total(m) for m in modules_masses]
-print(f"Amount of fuel needed, counting added fuel: {sum(total_fuel)}")
+# Part 2:
+total_fuel = sum(fuel.fuel_total(m) for m in modules_masses)
+print(f"Amount of fuel needed, counting added fuel: {total_fuel}")
+assert total_fuel == 5136807

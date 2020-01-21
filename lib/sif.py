@@ -57,7 +57,7 @@ class Sif():
         img = np.array([list(map(int, d)) for d in self.image])
         plt.rcParams['toolbar'] = 'None'
         _, ax = plt.subplots(
-            figsize=(2, 2 * self.height / self.width),
+            figsize=(3, 3 * self.height / self.width),
             facecolor='k')
         ax.matshow(img, cmap=plt.cm.get_cmap('bone'))
         ax.axis('off')
