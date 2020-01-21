@@ -3,13 +3,13 @@
 from itertools import permutations
 
 import env
-from lib import intcode, thrusters
+from lib.intcode import Intcode
+from lib import thrusters
 
 # Input
 acs = 'inputs/07_amplifier_controller_software.txt'
 
-# Part 1: 117312
-amp = intcode.from_file(acs)
+amp = Intcode(acs)
 max_signal = 0
 for phases in permutations(range(5)):
     thruster_signal = thrusters.thrusters(amp, phases)
@@ -19,8 +19,7 @@ for phases in permutations(range(5)):
 print(f"Maximum output is {max_signal} "
       f"for phase sequence {best_phases}")
 
-# Part 2: 1336480
-amplifiers = [intcode.from_file(acs, name=i) for i in 'ABCDE']
+amplifiers = [Intcode(acs, name=i) for i in 'ABCDE']
 max_signal = 0
 for phases in permutations(range(5, 10)):
     for amp in amplifiers:

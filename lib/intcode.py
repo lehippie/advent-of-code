@@ -1,35 +1,30 @@
 """Intcode computer."""
 
 
-def from_file(init_file, name='unnamed intcode computer'):
-    """Create Intcode instance from a file."""
-    with open(init_file) as f:
-        init_values = f.readline()
-    init_values = [int(i) for i in init_values.split(',')]
-    return Intcode(init_values, name=name)
-
-
 class Intcode():
     """Intcode computer class."""
 
-    def __init__(self, init_values, name='unnamed intcode computer'):
+    def __init__(self, init_values, name='Unnamed'):
         self.name = name
-        self.initial_memory = init_values
-        self.memory = init_values.copy()
-        self.opcode_db = self.known_opcodes()
+        self.initial_memory = self.initialize_memory(init_values)
+        self.memory = self.initial_memory.copy()
+        self.opcodes = self.known_opcodes()
         self.pointer = 0
         self.relative_base = 0
-        self.decode_current_instruction()
-        self.input = []
+        self.inputs = []
         self.waiting_for_input = False
         self.output = None
         self.finished = False
+        self.decode_current_instruction()
 
-    def __repr__(self):
-        return f"Intcode({self.memory}, {self.name})"
-
-    def __str__(self):
-        return self.name
+    def initialize_memory(self, init_values):
+        """Initialize memory from list of int or from file."""
+        if isinstance(init_values, list):
+            return init_values
+        elif isinstance(init_values, str):
+            with open(init_values) as f:
+                init = f.readline()
+            return [int(i) for i in init.split(',')]
 
     def known_opcodes(self):
         """Create a dictionnary of available opcode."""
@@ -48,6 +43,12 @@ class Intcode():
         self.instr = self.memory[self.pointer]
         self.opcode = self.instr % 100
 
+    def __repr__(self):
+        return f"Intcode({self.memory}, {self.name})"
+
+    def __str__(self):
+        return self.name
+
 
     ##########################
     ####    EXECUTION     ####
@@ -57,7 +58,7 @@ class Intcode():
         """Add input values to pending list."""
         if isinstance(input_values, int):
             input_values = [input_values]
-        self.input.extend(input_values)
+        self.inputs.extend(input_values)
         self.waiting_for_input = False
 
     def execute_one_instr(self, input_values=None):
@@ -67,8 +68,8 @@ class Intcode():
         if input_values is not None:
             self._process_input_values(input_values)
         # Execute instruction
-        if self.opcode in self.opcode_db:
-            self.opcode_db[self.opcode]()
+        if self.opcode in self.opcodes:
+            self.opcodes[self.opcode]()
         else:
             raise IOError(f"Unknown opcode '{self.opcode}' "
                           f"at address {self.pointer}.")
@@ -130,11 +131,11 @@ class Intcode():
 
     def _instr_input(self):
         """Input instruction."""
-        if not self.input:
+        if not self.inputs:
             self.waiting_for_input = True
         else:
             addr = self.memory[self.pointer + 1]
-            self.memory[addr] = self.input.pop(0)
+            self.memory[addr] = self.inputs.pop(0)
             self.pointer += 2
 
     def _instr_output(self):

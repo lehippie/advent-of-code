@@ -1,11 +1,10 @@
 """Day 2 script."""
 
 import env
-from lib import intcode
-
+from lib.intcode import Intcode
 
 # Input
-gap = intcode.from_file('inputs/02_gravity_assist_program.txt')
+gap = Intcode('inputs/02_gravity_assist_program.txt')
 
 
 # Part 1: 4484226
