@@ -6,7 +6,7 @@ def thrusters(amplifier, phase_sequence):
     signal = 0
     for phase in phase_sequence:
         amplifier.reset()
-        signal = amplifier.execute([phase, signal])
+        signal = amplifier.run([phase, signal])
     return signal
 
 
@@ -15,11 +15,11 @@ def feedback_thrusters(amplifiers, phase_sequence, debug=False):
     for amp, phase in zip(amplifiers, phase_sequence):
         if debug:
             print(f"Init amp {amp} with phase {phase}")
-        amp.execute(phase)
+        amp.run(phase)
     signal = 0
     while not amplifiers[-1].finished:
         for amp in amplifiers:
-            signal = amp.execute(signal, blocking_mode=True)
+            signal = amp.run(signal, halt_on_output=True)
             if debug and signal is not None:
                 print(f"Amp {amp} output: {signal}")
     return amplifiers[-1].outputs[-1]
