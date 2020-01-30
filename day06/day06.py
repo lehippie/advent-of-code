@@ -6,10 +6,9 @@ from orbits import Orbit
 # Input
 input_file = Path(__file__).parent / 'local_orbits.txt'
 with open(input_file) as f:
-    orbits_map = [line[:-1] for line in f]
+    orb = Orbit([line.replace('\n', '') for line in f])
 
 # Part 1:
-orb = Orbit(orbits_map)
 print(f"Orbit map checksum is {orb.checksum}")
 assert orb.checksum == 294191
 

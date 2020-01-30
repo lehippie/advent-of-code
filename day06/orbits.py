@@ -5,7 +5,7 @@ class Orbit():
     """Orbit Map class."""
 
     def __init__(self, raw_map):
-        self.map = raw_map
+        self.map = [m for m in raw_map if m]
         self.direct()
         self.indirect()
         self.calculate_checksum()
