@@ -13,3 +13,8 @@ print(f"Best location is {ceres.station} "
 assert ceres.station_count == 340
 
 # Part 2:
+n = 200
+bet = ceres.vaporized(n)
+bet_format = 100 * bet[0] + bet[1]
+print(f"The {n}th asteroid to be vaporized is at {bet}")
+assert bet_format == 2628

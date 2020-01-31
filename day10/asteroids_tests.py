@@ -30,6 +30,17 @@ def tests():
     a = AsteroidsMap(testmap)
     assert a.station == (11,13)
     assert a.station_count == 210
+    assert a.vaporized(1) == (11,12)
+    assert a.vaporized(2) == (12,1)
+    assert a.vaporized(3) == (12,2)
+    assert a.vaporized(10) == (12,8)
+    assert a.vaporized(20) == (16,0)
+    assert a.vaporized(50) == (16,9)
+    assert a.vaporized(100) == (10,16)
+    assert a.vaporized(199) == (9,6)
+    assert a.vaporized(200) == (8,2)
+    assert a.vaporized(201) == (10,9)
+    assert a.vaporized(299) == (11,1)
 
 
 if __name__ == "__main__":
