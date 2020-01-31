@@ -8,8 +8,8 @@ input_file = Path(__file__).parent / 'ceres_asteroids_map.txt'
 ceres = AsteroidsMap(str(input_file))
 
 # Part 1:
-print(f"Best location is {ceres.best} "
-      f"with {ceres.counts[ceres.best]} asteroids detected.")
-assert ceres.counts[ceres.best] == 340
+print(f"Best location is {ceres.station} "
+      f"with {ceres.station_count} asteroids detected.")
+assert ceres.station_count == 340
 
 # Part 2:
