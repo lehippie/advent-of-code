@@ -5,6 +5,6 @@ from intcode import Intcode
 
 # Input
 input_file = Path(__file__).parent / 'painting_robot_program.txt'
-robot = Intcode(str(input_file))
+robot = Intcode.from_file(input_file)
 
 # Part 1:
