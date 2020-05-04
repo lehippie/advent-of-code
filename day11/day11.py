@@ -1,6 +1,9 @@
 """Day 11: Space Police."""
 
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+
 from intcode import Intcode
 from painting_robot import PaintingRobot
 
@@ -10,13 +13,21 @@ robot_brain = Intcode.from_file(input_file)
 
 # Part 1:
 robot = PaintingRobot()
-while True:
-    color = robot_brain.run(robot.look(), halt_on_output=True)
-    direction = robot_brain.run(halt_on_output=True)
-    if robot_brain.finished:
-        break
-    robot.action(color, direction)
-print("Amount of panels painted:", len(robot.panels))
-assert len(robot.panels) == 1863
+panels = robot.run(robot_brain)
+print("Amount of panels painted:", len(panels))
+assert len(panels) == 1863
 
 # Part 2:
+robot = PaintingRobot(start='white')
+robot_brain.reset()
+panels = robot.run(robot_brain)
+
+xx = [p[0] for p, c in panels.items() if c]
+yy = [p[1] for p, c in panels.items() if c]
+plt.rcParams['toolbar'] = 'None'
+_, ax = plt.subplots(
+    figsize=(4, 0.6),
+    facecolor='k')
+ax.set_facecolor('k')
+ax.plot(xx, yy, 'ws')
+plt.show() # BLULZJLZ

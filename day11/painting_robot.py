@@ -4,12 +4,15 @@
 class PaintingRobot():
     """Emergency hull painting robot class."""
 
-    def __init__(self, posx=0, posy=0, face='n'):
+    def __init__(self, posx=0, posy=0, face='n', start='black'):
         """Init PaintingRobot."""
         self.posx = posx
         self.posy = posy
         self.face = face
-        self.panels = {(self.posx, self.posy): 0}
+        if start == 'black':
+            self.panels = {(self.posx, self.posy): 0}
+        elif start == 'white':
+            self.panels = {(self.posx, self.posy): 1}
 
 
     def look(self):
@@ -65,6 +68,16 @@ class PaintingRobot():
         self.rotate(direction)
         self.move()
         return self.look()
+
+
+    def run(self, brain):
+        """Run robot with given Intcode computer as brain."""
+        while True:
+            color = brain.run(self.look(), halt_on_output=True)
+            direction = brain.run(halt_on_output=True)
+            if brain.finished:
+                return self.panels
+            self.action(color, direction)
 
 
 if __name__ == '__main__':
