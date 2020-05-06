@@ -27,3 +27,6 @@ assert total_energy == 7687
 
 
 # Part 2:
+cycle_steps = sim.find_cycle()
+print(f"System cycles in {cycle_steps} steps.")
+assert cycle_steps == 334945516288044

@@ -1,6 +1,7 @@
 """Moons Motion library."""
 
 from itertools import combinations
+from numpy import lcm
 
 class Moon():
     """Moon class."""
@@ -78,6 +79,24 @@ class MotionSimulator():
             self.apply_gravity()
             self.apply_velocity()
         self.steps += n
+
+    def state(self, ax):
+        return ''.join(
+            ''.join(map(str, [m.pos[ax], m.vel[ax]]))
+            for m in self.moons
+        )
+
+    def find_cycle(self):
+        cycles = [None, None, None]
+        self.steps = 0
+        memory = [self.state(0), self.state(1), self.state(2)]
+        while not all(cycles):
+            self.next_step()
+            for k in range(3):
+                state = self.state(k)
+                if not cycles[k] and state == memory[k]:
+                    cycles[k] = self.steps
+        return lcm.reduce(cycles)
 
 
 if __name__ == '__main__':

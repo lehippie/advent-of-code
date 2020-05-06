@@ -117,6 +117,7 @@ def tests_motion():
         "pos=<x= 2, y= 0, z= 4>, vel=<x= 1, y=-1, z=-1>"
     )
     assert sim.energy() == 179
+    assert sim.find_cycle() == 2772
 
     sim = MotionSimulator([
         Moon([-8, -10, 0]),
@@ -212,6 +213,7 @@ def tests_motion():
         "pos=<x= 16, y=-13, z=23>, vel=<x= 7, y=  1, z= 1>"
     )
     assert sim.energy() == 1940
+    assert sim.find_cycle() == 4686774924
 
 
 if __name__ == '__main__':
