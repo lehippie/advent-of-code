@@ -16,15 +16,15 @@ class Arcade():
 
 
     def get_next_tile(self):
-        """Read Intcode program get tile info."""
+        """Read Intcode program to get tile info."""
         x = self.program.run(halt_on_output=True)
         y = self.program.run(halt_on_output=True)
         tile_id = self.program.run(halt_on_output=True)
         return x, y, tile_id
 
-    
+
     def draw_tile(self, x, y, tile_id):
-        """Draw tile from data."""
+        """Draw tile from intcode output."""
         self.tiles[(x, y)] = tile_id
 
 
@@ -56,6 +56,12 @@ class Arcade():
                 self.program.execute_next(input_values=self.joystick())
     
 
+def tests():
+    a = Arcade()
+    a.draw_tile(1, 2, 3)
+    a.draw_tile(6, 5, 4)
+    assert a.tiles == {(1, 2): 3, (6, 5): 4}
+
+
 if __name__ == '__main__':
-    from arcade_tests import tests
     tests()
