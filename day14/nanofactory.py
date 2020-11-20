@@ -14,8 +14,12 @@ class Factory:
 
     def __init__(self, reactions, final_product="FUEL", raw_material="ORE"):
         self.reactions = self.parse_input(reactions)
-        self.reactor = self.reactions[final_product].copy()
+        self.final_product = final_product
         self.raw_material = raw_material
+        self.direct_reaction = self.simplify(
+            reaction=self.reactions[final_product],
+            reactive=raw_material,
+        )
 
 
     @classmethod
@@ -26,13 +30,14 @@ class Factory:
         return cls(reactions, **kwargs)
 
 
-    def parse_input(self, reactions, reac_sep=",", prod_sep="=>"):
+    @staticmethod
+    def parse_input(reactions, reac_sep=",", prod_sep="=>"):
         """Read reactions and extract content."""
         parsed = {}
         for reaction in reactions:
             reactives, product = reaction.split(prod_sep)
             prod_q, product = product.strip().split(" ")
-            parsed[product] = {"quantity": int(prod_q)}
+            parsed[product] = {"_q": int(prod_q)}
             reactives = reactives.split(reac_sep)
             for reactive in reactives:
                 chem_q, chemical = reactive.strip().split(" ")
@@ -40,41 +45,56 @@ class Factory:
         return parsed
 
 
-    def run_one_cycle(self):
-        """Update reactor by replacing one level of needed chemicals"""
-        for chemical, needed in self.reactor.copy().items():
-            if chemical in ["quantity", self.raw_material] or needed < 0:
-                continue
-            source = self.reactions[chemical]
-            how_many = ceil(needed / source["quantity"])
-            self.reactor[chemical] -= source["quantity"] * how_many
-            for src_chem, src_q in source.items():
-                if src_chem == "quantity":
+    @staticmethod
+    def is_simplified(reaction, reactive):
+        """Check if <reactive> is the only needed reactive of <reaction>."""
+        status = {c: q for c, q in reaction.items() if q > 0}
+        return set(status.keys()) == set(["_q", reactive])
+
+
+    def simplify(self, reaction, reactive):
+        """Make <reactive> the only one needed in <reaction>."""
+        reaction = reaction.copy()
+        while not self.is_simplified(reaction, reactive):
+            for chemical, needed_quantity in reaction.copy().items():
+                if (chemical in ["_q", reactive] or needed_quantity <= 0):
                     continue
-                self.reactor[src_chem] = self.reactor.get(src_chem, 0)
-                self.reactor[src_chem] += src_q * how_many
-        self.reactor = {c: q for c, q in self.reactor.items() if q != 0}        
+                source = self.reactions[chemical]
+                how_many = ceil(needed_quantity / source["_q"])
+                reaction[chemical] -= source["_q"] * how_many
+                for src_chemical, src_q in source.items():
+                    if src_chemical != "_q":
+                        reaction[src_chemical] = (
+                            reaction.get(src_chemical, 0)
+                            + src_q * how_many
+                        )
+        return {c: q for c, q in reaction.items() if q != 0}
 
 
-    @property
-    def is_simplified(self):
-        """Check if <raw_material> is the only reactive.."""
-        status = {c: q for c, q in self.reactor.items() if q > 0}
-        return set(status.keys()) == set(["quantity", self.raw_material])
+    def is_producible(self, product_quantity, raw_material_quantity):
+        """Can <product_quantity> be produced from <raw_material_quantity>."""
+        target_reaction = {
+            c: q * product_quantity
+            for c, q in self.reactions[self.final_product].items()
+        }
+        target_reaction = self.simplify(target_reaction, self.raw_material)
+        return target_reaction[self.raw_material] <= raw_material_quantity
 
 
-    def simplify(self):
-        """Do cycles until needed reactives are converted to <raw_materials>."""
-        while not self.is_simplified:
-            self.run_one_cycle()
-        return self.reactor[self.raw_material]
-
-    
-    # def produce(self, raw_quantity=1000000000000):
-    #     """Calculate how many <final_product> can be produced."""
-    #     if not self.is_simplified():
-    #         self.simplify()
-    #     return raw_quantity // self.simplify()
+    def produce(self, raw_material_quantity=10**12):
+        """How many <final_product> can be producted from <raw_material>."""
+        low = raw_material_quantity // self.direct_reaction[self.raw_material]
+        high = low * 2
+        while self.is_producible(high, raw_material_quantity):
+            low = high
+            high = low * 2
+        while high - low != 1:
+            mid = (high + low) // 2
+            if self.is_producible(mid, raw_material_quantity):
+                low = mid
+            else:
+                high = mid
+        return low
 
 
 def tests():
@@ -82,22 +102,22 @@ def tests():
     test_dir = Path(__file__).parent / "test_reactions"
     
     fac = Factory.from_file(test_dir / "1.txt")
-    assert fac.simplify() == 31, fac.simplify()
+    assert fac.direct_reaction["ORE"] == 31
 
     fac = Factory.from_file(test_dir / "2.txt")
-    assert fac.simplify() == 165, fac.simplify()
+    assert fac.direct_reaction["ORE"] == 165
 
     fac = Factory.from_file(test_dir / "3.txt")
-    assert fac.simplify() == 13312, fac.simplify()
-    # assert fac.produce() == 82892753, fac.produce()
+    assert fac.direct_reaction["ORE"] == 13312
+    assert fac.produce() == 82892753
 
     fac = Factory.from_file(test_dir / "4.txt")
-    assert fac.simplify() == 180697, fac.simplify()
-    # assert fac.produce() == 5586022, fac.produce()
+    assert fac.direct_reaction["ORE"] == 180697
+    assert fac.produce() == 5586022
 
     fac = Factory.from_file(test_dir / "5.txt")
-    assert fac.simplify() == 2210736, fac.simplify()
-    # assert fac.produce() == 460664, fac.produce()
+    assert fac.direct_reaction["ORE"] == 2210736
+    assert fac.produce() == 460664
 
 
 if __name__ == "__main__":
