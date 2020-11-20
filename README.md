@@ -1,2 +1,2 @@
-# advent2019
-Advent of Code 2019
+# advent-of-code
+Advent of Code in python3
