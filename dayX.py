@@ -3,7 +3,7 @@
 from pathlib import Path
 
 
-INPUT = "puzzle_input.txt"
+INPUT_FILE = "puzzle_input.txt"
 
 
 def load_input(filename):
@@ -28,6 +28,6 @@ def part_two(puzzle_input):
 
 if __name__ == "__main__":
     tests()
-    puzzle_input = load_input(INPUT)
+    puzzle_input = load_input(INPUT_FILE)
     part_one(puzzle_input)
     part_two(puzzle_input)
