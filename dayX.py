@@ -14,16 +14,24 @@ def load_input(filename):
     return data
 
 
-def tests():
-    """Day tests."""
-
+# --- Part One ---
 
 def part_one(puzzle_input):
     """Part One solution."""
 
 
+# --- Part Two ---
+
 def part_two(puzzle_input):
     """Part Two solution."""
+
+
+# --- Tests ---
+
+def tests():
+    """Day tests."""
+    # Part One
+    # Part Two
 
 
 if __name__ == "__main__":
