@@ -15,17 +15,19 @@ def load_input(filename):
 
 
 def decode_seat(boarding_pass):
-    """Return row, column and ID of a seat."""
-    row = boarding_pass[:7].replace("B", "1").replace("F", "0")
-    row = int(row, base=2)
-    col = boarding_pass[-3:].replace("R", "1").replace("L", "0")
-    col = int(col, base=2)
-    return (row, col, row * 8 + col)
+    """Return seat ID."""
+    return int(
+        boarding_pass.replace("B", "1")
+                     .replace("F", "0")
+                     .replace("R", "1")
+                     .replace("L", "0"),
+        base=2
+    )
 
 
 def part_one(passes):
     """Part One solution."""
-    seats_ids = [decode_seat(p)[2] for p in passes]
+    seats_ids = [decode_seat(p) for p in passes]
     max_sid = max(seats_ids)
     print(f"{max_sid} is the maximum seat ID nearby.")
     assert max_sid == 928
@@ -42,10 +44,10 @@ def part_two(seats_ids):
 
 def tests():
     """Day tests."""
-    assert decode_seat("FBFBBFFRLR") == (44, 5, 357)
-    assert decode_seat("BFFFBBFRRR") == (70, 7, 567)
-    assert decode_seat("FFFBBBFRRR") == (14, 7, 119)
-    assert decode_seat("BBFFBBFRLL") == (102, 4, 820)
+    assert decode_seat("FBFBBFFRLR") == 357
+    assert decode_seat("BFFFBBFRRR") == 567
+    assert decode_seat("FFFBBBFRRR") == 119
+    assert decode_seat("BBFFBBFRLL") == 820
 
 
 if __name__ == "__main__":

@@ -29,7 +29,7 @@ def part_two(puzzle_input):
 # --- Tests ---
 
 def tests():
-    """Day tests."""
+    test = load_input("test_input.txt")
     # Part One
     # Part Two
 
