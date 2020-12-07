@@ -2,7 +2,6 @@
 
 import re
 from pathlib import Path
-from typing import final
 
 
 INPUT_FILE = "luggage_rules.txt"
