@@ -29,8 +29,8 @@ def part_two(puzzle_input):
 # --- Tests ---
 
 def tests():
-    test = load_input("test_input.txt")
     # Part One
+    test = load_input("test_input.txt")
     # Part Two
 
 
