@@ -10,7 +10,7 @@ def load_input(filename):
     """Import puzzle input."""
     filepath = Path(__file__).parent / filename
     with filepath.open() as f:
-        data = [line.strip() for line in f]
+        data = [line.rstrip() for line in f]
     return data
 
 

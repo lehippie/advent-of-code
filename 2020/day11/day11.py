@@ -28,8 +28,7 @@ class Seats:
 
     @property
     def occupied(self):
-        count = Counter(str(self))
-        return count.get("#", 0)
+        return Counter(str(self)).get("#", 0)
 
     def count_around(self, row, col):
         occupation = Counter()
