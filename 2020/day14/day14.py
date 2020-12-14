@@ -1,6 +1,7 @@
 """Day 14: Docking Data."""
 
 import re
+from collections import Counter
 from itertools import product
 from pathlib import Path
 
@@ -25,11 +26,9 @@ class PortComputer():
         self.memory = {}
 
     def write(self, address, value):
-        mask_or = int(self.mask.replace("X", "0"), 2)
-        mask_and = int(self.mask.replace("1", "X")
-                                .replace("0", "1")
-                                .replace("X", "0"), 2)
-        self.memory[address] = (value | mask_or) & ~mask_and
+        mOR = self.mask.replace("X", "0")
+        mAND = self.mask.replace("1", "X").replace("0", "1").replace("X", "0")
+        self.memory[address] = (value | int(mOR, 2)) & ~int(mAND, 2)
 
     def run(self):
         for instruction in self.program:
@@ -55,13 +54,10 @@ def part_one(puzzle_input):
 class PortComputerV2(PortComputer):
     def write(self, address, value):
         # Erase 1's in address where X's are
-        Xpos = [i for i, m in enumerate(self.mask) if m == "X"]
-        address = f"{address:036b}"
-        for X in Xpos:
-            address = address[:X] + "0" + address[X+1:]
-        address = int(address, 2)
+        mask = self.mask.replace("1", "0").replace("X", "1")
+        address = address & ~int(mask, 2)
         # Store value in floating addresses
-        for combination in product("01", repeat=len(Xpos)):
+        for combination in product("01", repeat=Counter(self.mask)["X"]):
             mask_bits = self.mask
             for c in combination:
                 mask_bits = mask_bits.replace("X", c, 1)
