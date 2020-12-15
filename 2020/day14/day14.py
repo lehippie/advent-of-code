@@ -27,8 +27,8 @@ class PortComputer():
 
     def write(self, address, value):
         mOR = self.mask.replace("X", "0")
-        mAND = self.mask.replace("1", "X").replace("0", "1").replace("X", "0")
-        self.memory[address] = (value | int(mOR, 2)) & ~int(mAND, 2)
+        mAND = self.mask.replace("X", "1")
+        self.memory[address] = (value | int(mOR, 2)) & int(mAND, 2)
 
     def run(self):
         for instruction in self.program:
