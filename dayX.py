@@ -3,8 +3,7 @@
 from pathlib import Path
 
 
-INPUT_FILE = "puzzle_input.txt"
-
+INPUT_FILE = "README.md"
 
 def load_input(filename):
     """Import puzzle input."""
@@ -17,25 +16,34 @@ def load_input(filename):
 # --- Part One ---
 
 def part_one(puzzle_input):
-    """Part One solution."""
+    return NotImplemented
 
 
 # --- Part Two ---
 
 def part_two(puzzle_input):
-    """Part Two solution."""
+    return NotImplemented
 
 
-# --- Tests ---
+# --- Tests & Run ---
 
 def tests():
     # Part One
-    test = load_input("test_input.txt")
+    test = load_input("README.md")
+    assert part_one(test)
     # Part Two
+    assert part_two(test)
 
 
 if __name__ == "__main__":
     tests()
+
     puzzle_input = load_input(INPUT_FILE)
-    part_one(puzzle_input)
-    part_two(puzzle_input)
+
+    result_one = part_one(puzzle_input)
+    print(f"Part One answer: {result_one}")
+    assert result_one
+
+    result_two = part_two(puzzle_input)
+    print(f"Part Two answer: {result_two}")
+    assert result_two
