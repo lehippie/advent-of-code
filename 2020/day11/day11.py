@@ -66,9 +66,7 @@ class Seats:
             count = self.count_seen
         else:
             raise IOError(f"Unknown method {method}.")
-
-        if print_steps:
-            print(self)
+        
         while True:
             new_layout = deepcopy(self.layout)
             for r, c in product(
@@ -83,9 +81,6 @@ class Seats:
                 break
             else:
                 self.layout = new_layout
-                if print_steps:
-                    print("\n")
-                    print(self)
 
 
 def part_one(seat_layout):
