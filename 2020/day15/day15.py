@@ -4,10 +4,12 @@
 # --- Part One ---
 
 def part_one(starting_numbers: list, limit=2020):
-    spoken = {n: i + 1 for i, n in enumerate(starting_numbers[:-1])}
+    spoken = [None] * limit
+    for i, n in enumerate(starting_numbers[:-1]):
+        spoken[n] = i + 1
     last = starting_numbers[-1]
     for turn in range(len(starting_numbers), limit):
-        if last not in spoken:
+        if spoken[last] is None:
             spoken[last] = turn
             last = 0
         else:
