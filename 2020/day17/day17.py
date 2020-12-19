@@ -23,18 +23,24 @@ class Grid:
     def __init__(self, initial_grid):
         self.active = initial_grid
 
-    def active_neighbors(self, position):
-        arounds = set(product(*((p, p-1, p+1) for p in position)))
-        arounds.remove(position)
-        return len(arounds.intersection(self.active))
+    @staticmethod
+    def neighbors(position):
+        positions_around = set(product(*((p, p-1, p+1) for p in position)))
+        positions_around.remove(position)
+        return positions_around
 
     def run_one_cycle(self):
-        coords = (set(range(min(p)-1, max(p)+2)) for p in zip(*self.active))
-        self.active = {
-            c for c in product(*coords)
-            if ((c in self.active and self.active_neighbors(c) in {2, 3})
-             or (c not in self.active and self.active_neighbors(c) == 3))
-        }
+        next_active_cubes = set()
+        inactive_cubes_to_check = set()
+        for cube in self.active:
+            neighbors = self.neighbors(cube)
+            if len(neighbors.intersection(self.active)) in {2, 3}:
+                next_active_cubes.add(cube)
+            inactive_cubes_to_check.update(neighbors.difference(self.active))
+        for cube in inactive_cubes_to_check:
+            if len(self.neighbors(cube).intersection(self.active)) == 3:
+                next_active_cubes.add(cube)
+        self.active = next_active_cubes
 
     def boot(self, cycles=6):
         for _ in range(cycles):
