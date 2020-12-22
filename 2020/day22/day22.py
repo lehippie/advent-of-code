@@ -2,6 +2,7 @@
 
 from collections import deque
 from copy import deepcopy
+from itertools import islice
 from pathlib import Path
 
 
@@ -27,38 +28,36 @@ class Combat:
         self.decks = deepcopy(decks)
         self.winner = None
 
-    @property
-    def is_finished(self):
-        decks_length = [len(deck) for deck in self.decks]
-        if any(l == 0 for l in decks_length):
-            return decks_length.index(max(decks_length))
-        return None
+    def has_won(self):
+        try:
+            return next((k+1) % 2
+                        for k, deck in enumerate(self.decks)
+                        if len(deck) == 0)
+        except StopIteration:
+            return None
 
     def play_round(self):
-        cards = [deck.popleft() for deck in self.decks]
-        winner = cards.index(max(cards))
-        self.decks[winner].extend(sorted(cards, reverse=True))
+        cards = tuple(deck.popleft() for deck in self.decks)
+        win = cards.index(max(cards))
+        self.decks[win].extend(sorted(cards, reverse=True))
 
     def play(self):
-        while (winner := self.is_finished) is None:
+        while (player := self.has_won()) is None:
             self.play_round()
-        self.winner = winner
+        self.winner = player
 
-    @property
-    def winner_score(self):
-        assert self.winner is not None, "No winner yet."
+    def score(self, player):
         score = 0
-        winner_deck = list(self.decks[self.winner])
-        winner_deck.reverse()
-        for k, card in enumerate(winner_deck):
-            score += (k + 1) * card
+        deck = self.decks[player]
+        for k, card in zip(range(len(deck), 0, -1), deck):
+            score += k * card
         return score
 
 
 def part_one(decks):
     game = Combat(decks)
     game.play()
-    return game.winner_score
+    return game.score(game.winner)
 
 
 # --- Part Two ---
@@ -67,41 +66,39 @@ class RecursiveCombat(Combat):
 
     def __init__(self, decks):
         super().__init__(decks)
-        self.history = []
+        self.history = set()
 
-    @property
     def deck_hash(self):
         return hash("|".join(
             str(",".join(str(card) for card in deck))
             for deck in self.decks
         ))
 
-    @property
-    def is_finished(self):
-        if self.deck_hash in self.history:
+    def has_won(self):
+        if (dh := self.deck_hash()) in self.history:
             return 0
-        return super().is_finished # is this working ?
+        self.history.add(dh)
+        return super().has_won()
 
     def play_round(self):
-        self.history.append(self.deck_hash)
-        cards = [deck.popleft() for deck in self.decks]
-        if all(len(deck) >= cards[k] for k, deck in enumerate(self.decks)):
+        cards = tuple(deck.popleft() for deck in self.decks)
+        if all(len(deck) >= card for deck, card in zip(self.decks, cards)):
             sub_game = RecursiveCombat([
-                deque(list(deck)[0:cards[k]])
-                for k, deck in enumerate(self.decks)
+                deque(islice(deck, card))
+                for deck, card in zip(self.decks, cards)
             ])
             sub_game.play()
-            winner = sub_game.winner
+            win = sub_game.winner
         else:
-            winner = cards.index(max(cards))
-        self.decks[winner].append(cards[winner])
-        self.decks[winner].append(cards[int(not winner)])
+            win = cards.index(max(cards))
+        self.decks[win].append(cards[win])
+        self.decks[win].append(cards[(win+1) % 2])
 
 
 def part_two(decks):
     game = RecursiveCombat(decks)
     game.play()
-    return game.winner_score
+    return game.score(game.winner)
 
 
 # --- Tests & Run ---
@@ -123,4 +120,4 @@ if __name__ == "__main__":
 
     result_two = part_two(puzzle_input)
     print(f"Part Two answer: {result_two}")
-    assert result_two
+    assert result_two == 32665
