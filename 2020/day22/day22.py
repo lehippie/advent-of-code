@@ -69,10 +69,7 @@ class RecursiveCombat(Combat):
         self.history = set()
 
     def deck_hash(self):
-        return hash("|".join(
-            str(",".join(str(card) for card in deck))
-            for deck in self.decks
-        ))
+        return (self.score(0), self.score(1))
 
     def has_won(self):
         if (dh := self.deck_hash()) in self.history:
