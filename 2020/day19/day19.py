@@ -24,7 +24,7 @@ def load_input(filename):
 
 def reduce_rule(rules, rule_id):
     rule = rules[rule_id]
-    while not all(c in "ab (|)" for c in rule):
+    while not all(c in "ab (|)+" for c in rule):
         for i in set(re.findall(r"\d+", rule)):
             rule = re.sub(r"\b" + i + r"\b", rules[int(i)], rule)
     return "^" + rule.replace(" ", "") + "$"
@@ -40,7 +40,7 @@ def part_one(rules, messages):
 
 def part_two(rules, messages):
     maxlen = max(len(m) for m in messages)
-    rules[8] = f"({'|'.join('42 '*i for i in range(1, maxlen))})"
+    rules[8] = "(42+)"
     rules[11] = f"({'|'.join('42 '*i + '31 '*i for i in range(1, maxlen//2))})"
     return part_one(rules, messages)
 
