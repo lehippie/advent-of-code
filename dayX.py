@@ -3,12 +3,11 @@
 from pathlib import Path
 
 
-INPUT_FILE = "README.md"
+# --- Parsing input ---
 
-def load_input(filename):
-    """Import puzzle input."""
+def parse_input(filename):
     filepath = Path(__file__).parent / filename
-    with filepath.open() as f:
+    with open(filepath) as f:
         data = [line.rstrip() for line in f]
     return data
 
@@ -28,17 +27,15 @@ def part_two(puzzle_input):
 # --- Tests & Run ---
 
 def tests():
-    # Part One
-    test = load_input("README.md")
+    test = parse_input("README.md")
     assert part_one(test)
-    # Part Two
     assert part_two(test)
 
 
 if __name__ == "__main__":
     tests()
 
-    puzzle_input = load_input(INPUT_FILE)
+    puzzle_input = parse_input("README.md")
 
     result_one = part_one(puzzle_input)
     print(f"Part One answer: {result_one}")
