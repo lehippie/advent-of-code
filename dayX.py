@@ -38,9 +38,9 @@ if __name__ == "__main__":
     puzzle_input = parse_input("README.md")
 
     result_one = part_one(puzzle_input)
-    print(f"Part One answer: {result_one}")
+    print("Part One answer:", result_one)
     assert result_one
 
     result_two = part_two(puzzle_input)
-    print(f"Part Two answer: {result_two}")
+    print("Part Two answer:", result_two)
     assert result_two
