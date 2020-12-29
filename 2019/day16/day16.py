@@ -16,43 +16,56 @@ def parse_input(filename):
 # --- Part One ---
 
 def gen_plus(k, limit):
-    start = k
-    stop = 2*k + 1
-    offset = 4*k +4
+    start = k - 1
+    stop = 2*k
+    offset = 4*k + 4
     for rep in range(limit):
-        for idx in range(start + rep*offset, stop + rep*offset):
-            if idx >= limit:
-                return
-            yield idx
+        if start + rep*offset >= limit - 1:
+            return
+        yield (
+            start + rep*offset,
+            min(stop + rep*offset, limit - 1),
+        )
+
 
 def gen_minus(k, limit):
-    start = 3*k + 2
-    stop = 4*k + 3
-    offset = 4*k +4
+    start = 3*k + 1
+    stop = 4*k + 2
+    offset = 4*k + 4
     for rep in range(limit):
-        for idx in range(start + rep*offset, stop + rep*offset):
-            if idx >= limit:
-                return
-            yield idx
+        if start + rep*offset >= limit - 1:
+            return
+        yield (
+            start + rep*offset,
+            min(stop + rep*offset, limit - 1),
+        )
+
 
 def fft(signal):
+    csum = signal.copy() + [0]
+    for k in range(1, len(signal)):
+        csum[k] = csum[k] + csum[k-1]
     for k in range(len(signal)):
         signal[k] = abs(
-            sum(signal[l] for l in gen_plus(k, len(signal)))
-            - sum(signal[l] for l in gen_minus(k, len(signal)))
+            sum(csum[b] - csum[a] for a, b in gen_plus(k, len(signal)))
+            - sum(csum[b] - csum[a]for a, b in gen_minus(k, len(signal)))
         ) % 10
     return signal
 
+
 def part_one(signal, phases=100):
     signal = list(map(int, signal))
+    # print(0, signal)
     for _ in range(phases):
         signal = fft(signal)
+        # print(_+1, signal)
     return "".join(map(str, signal[:8]))
 
 
 # --- Part Two ---
 
 def part_two(signal):
+    return NotImplemented
     offset = int(signal[:7])
     signal = "".join(chain.from_iterable(repeat(signal, 10000)))
     output = part_one(signal)
@@ -66,12 +79,9 @@ def tests():
     assert part_one("80871224585914546619083218645595") == "24176176"
     assert part_one("19617804207202209144916044189917") == "73745418"
     assert part_one("69317163492948606335995924319873") == "52432133"
-    assert part_two("03036732577212944063491565474664") == "84462026"
-    print("ok", 1)
-    assert part_two("02935109699940807407585447034323") == "78725270"
-    print("ok", 2)
-    assert part_two("03081770884921959731165446850517") == "53553731"
-    print("ok", 3)
+    # assert part_two("03036732577212944063491565474664") == "84462026"
+    # assert part_two("02935109699940807407585447034323") == "78725270"
+    # assert part_two("03081770884921959731165446850517") == "53553731"
 
 
 if __name__ == "__main__":
