@@ -22,19 +22,22 @@ def part_two(cups, moves=10000000, maxi=1000000):
     cups = [None for _ in range(maxi + 1)]
     for c, n in zip(init, init[1:] + [init[0]]):
         cups[c] = n
-        
+
     cur = init[0]
     for _ in range(moves):
-        picked = (cups[cur], cups[cups[cur]], cups[cups[cups[cur]]])
+        pick1 = cups[cur]
+        pick2 = cups[pick1]
+        pick3 = cups[pick2]
+        picked = {pick1, pick2, pick3}
         try:
             dest = next(cup for cup in range(cur-1, 0, -1)
                             if cup not in picked)
         except StopIteration:
             dest = next(cup for cup in range(maxi, 0, -1)
                             if cup not in picked)
-        cups[cur] = cups[picked[-1]]
-        cups[picked[-1]] = cups[dest]
-        cups[dest] = picked[0]
+        cups[cur] = cups[pick3]
+        cups[pick3] = cups[dest]
+        cups[dest] = pick1
         cur = cups[cur]
     return cups[1] * cups[cups[1]]
 
