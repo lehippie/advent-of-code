@@ -18,27 +18,21 @@ def parse_input(filename):
 def gen_plus(k, limit):
     start = k - 1
     stop = 2*k
-    offset = 4*k + 4
-    for rep in range(limit):
-        if start + rep*offset >= limit - 1:
-            return
-        yield (
-            start + rep*offset,
-            min(stop + rep*offset, limit - 1),
-        )
+    step = 4*k + 4
+    while start < limit - 1:
+        yield (start, min(stop, limit - 1))
+        start = start + step
+        stop = stop + step
 
 
 def gen_minus(k, limit):
     start = 3*k + 1
     stop = 4*k + 2
-    offset = 4*k + 4
-    for rep in range(limit):
-        if start + rep*offset >= limit - 1:
-            return
-        yield (
-            start + rep*offset,
-            min(stop + rep*offset, limit - 1),
-        )
+    step = 4*k + 4
+    while start < limit - 1:
+        yield (start, min(stop, limit - 1))
+        start = start + step
+        stop = stop + step
 
 
 def fft(signal):
@@ -48,28 +42,25 @@ def fft(signal):
     for k in range(len(signal)):
         signal[k] = abs(
             sum(csum[b] - csum[a] for a, b in gen_plus(k, len(signal)))
-            - sum(csum[b] - csum[a]for a, b in gen_minus(k, len(signal)))
+            - sum(csum[b] - csum[a] for a, b in gen_minus(k, len(signal)))
         ) % 10
     return signal
 
 
 def part_one(signal, phases=100):
     signal = list(map(int, signal))
-    # print(0, signal)
     for _ in range(phases):
         signal = fft(signal)
-        # print(_+1, signal)
     return "".join(map(str, signal[:8]))
 
 
 # --- Part Two ---
 
 def part_two(signal):
-    return NotImplemented
     offset = int(signal[:7])
     signal = "".join(chain.from_iterable(repeat(signal, 10000)))
-    output = part_one(signal)
-    return "".join(map(str, output[offset:offset+8]))
+    output = part_one(signal[offset:])
+    return "".join(map(str, output[:8]))
 
 
 # --- Tests & Run ---
@@ -93,6 +84,6 @@ if __name__ == "__main__":
     print("Part One answer:", result_one)
     assert result_one == "63794407"
 
-    result_two = part_two(puzzle_input)
-    print("Part Two answer:", result_two)
-    assert result_two
+    # result_two = part_two(puzzle_input)
+    # print("Part Two answer:", result_two)
+    # assert result_two
