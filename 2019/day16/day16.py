@@ -1,6 +1,5 @@
 """Day 16: Flawed Frequency Transmission."""
 
-from itertools import chain, repeat
 from pathlib import Path
 
 
@@ -35,11 +34,11 @@ def gen_minus(k, limit):
         stop = stop + step
 
 
-def fft(signal):
-    csum = signal.copy() + [0]
+def fft(signal, skip=0):
+    csum = signal + [0]
     for k in range(1, len(signal)):
         csum[k] = csum[k] + csum[k-1]
-    for k in range(len(signal)):
+    for k in range(skip, len(signal)):
         signal[k] = abs(
             sum(csum[b] - csum[a] for a, b in gen_plus(k, len(signal)))
             - sum(csum[b] - csum[a] for a, b in gen_minus(k, len(signal)))
@@ -47,20 +46,19 @@ def fft(signal):
     return signal
 
 
-def part_one(signal, phases=100):
+def part_one(signal, phases=100, skip=0):
     signal = list(map(int, signal))
     for _ in range(phases):
-        signal = fft(signal)
-    return "".join(map(str, signal[:8]))
+        signal = fft(signal, skip)
+    return "".join(map(str, signal[skip:skip+8]))
 
 
 # --- Part Two ---
 
 def part_two(signal):
     offset = int(signal[:7])
-    signal = "".join(chain.from_iterable(repeat(signal, 10000)))
-    output = part_one(signal[offset:])
-    return "".join(map(str, output[:8]))
+    real_signal = signal * 10000
+    return part_one(real_signal, skip=offset)
 
 
 # --- Tests & Run ---
@@ -70,9 +68,9 @@ def tests():
     assert part_one("80871224585914546619083218645595") == "24176176"
     assert part_one("19617804207202209144916044189917") == "73745418"
     assert part_one("69317163492948606335995924319873") == "52432133"
-    # assert part_two("03036732577212944063491565474664") == "84462026"
-    # assert part_two("02935109699940807407585447034323") == "78725270"
-    # assert part_two("03081770884921959731165446850517") == "53553731"
+    assert part_two("03036732577212944063491565474664") == "84462026"
+    assert part_two("02935109699940807407585447034323") == "78725270"
+    assert part_two("03081770884921959731165446850517") == "53553731"
 
 
 if __name__ == "__main__":
@@ -84,6 +82,6 @@ if __name__ == "__main__":
     print("Part One answer:", result_one)
     assert result_one == "63794407"
 
-    # result_two = part_two(puzzle_input)
-    # print("Part Two answer:", result_two)
-    # assert result_two
+    result_two = part_two(puzzle_input)
+    print("Part Two answer:", result_two)
+    assert result_two == "77247538"
