@@ -1,11 +1,12 @@
-"""Puzzle."""
+"""Day 1: Not Quite Lisp."""
 
 from pathlib import Path
+from collections import Counter
 
 
-PUZZLE_INPUT_FILE = ""
-ANSWER_PART_ONE = None
-ANSWER_PART_TWO = None
+PUZZLE_INPUT_FILE = "day01_floors_instructions.txt"
+ANSWER_PART_ONE = 74
+ANSWER_PART_TWO = 1795
 
 
 class Puzzle:
@@ -16,20 +17,34 @@ class Puzzle:
     def from_file(cls, filename):
         filepath = Path(__file__).parent / filename
         with open(filepath) as f:
-            # Edit input file parsing here
-            puzzle_input = [line.rstrip() for line in f]
+            puzzle_input = f.readline().strip()
         return cls(puzzle_input)
 
     def part_one(self):
-        return NotImplemented
+        parentheses = Counter(self.input)
+        return parentheses["("] - parentheses[")"]
 
     def part_two(self):
-        return NotImplemented
+        floor = 0
+        for i, p in enumerate(self.input):
+            floor = (floor + 1) if p == "(" else (floor - 1)
+            if floor == -1:
+                break
+        return i + 1
 
 
 def tests():
-    assert Puzzle().part_one() is NotImplemented
-    assert Puzzle().part_two() is NotImplemented
+    assert Puzzle("(())").part_one() == 0
+    assert Puzzle("()()").part_one() == 0
+    assert Puzzle("(((").part_one() == 3
+    assert Puzzle("(()(()(").part_one() == 3
+    assert Puzzle("))(((((").part_one() == 3
+    assert Puzzle("())").part_one() == -1
+    assert Puzzle("))(").part_one() == -1
+    assert Puzzle(")))").part_one() == -3
+    assert Puzzle(")())())").part_one() == -3
+    assert Puzzle(")").part_two() == 1
+    assert Puzzle("()())").part_two() == 5
 
 
 def solve(puzzle_input, answer_one, answer_two):
