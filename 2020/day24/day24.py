@@ -1,4 +1,4 @@
-"""Puzzle."""
+"""Day 24: Lobby Layout."""
 
 import re
 from pathlib import Path

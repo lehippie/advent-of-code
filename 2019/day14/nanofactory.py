@@ -5,7 +5,7 @@ from math import ceil
 
 class Factory:
     """Chemical factory.
-    
+
     Arguments:
         reactions           List of reactions the factory can perform.
         final_product       Chemical to fabricate.
@@ -100,22 +100,22 @@ class Factory:
 def tests():
     from pathlib import Path
     test_dir = Path(__file__).parent / "test_reactions"
-    
-    fac = Factory.from_file(test_dir / "1.txt")
+
+    fac = Factory.from_file(test_dir / "test_1.txt")
     assert fac.direct_reaction["ORE"] == 31
 
-    fac = Factory.from_file(test_dir / "2.txt")
+    fac = Factory.from_file(test_dir / "test_2.txt")
     assert fac.direct_reaction["ORE"] == 165
 
-    fac = Factory.from_file(test_dir / "3.txt")
+    fac = Factory.from_file(test_dir / "test_3.txt")
     assert fac.direct_reaction["ORE"] == 13312
     assert fac.produce() == 82892753
 
-    fac = Factory.from_file(test_dir / "4.txt")
+    fac = Factory.from_file(test_dir / "test_4.txt")
     assert fac.direct_reaction["ORE"] == 180697
     assert fac.produce() == 5586022
 
-    fac = Factory.from_file(test_dir / "5.txt")
+    fac = Factory.from_file(test_dir / "test_5.txt")
     assert fac.direct_reaction["ORE"] == 2210736
     assert fac.produce() == 460664
 
