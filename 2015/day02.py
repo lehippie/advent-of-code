@@ -1,35 +1,42 @@
-"""Puzzle."""
+"""Day 2: I Was Told There Would Be No Math."""
 
+from math import prod
 from pathlib import Path
 
 
-PUZZLE_INPUT_FILE = None
-ANSWER_PART_ONE = None
-ANSWER_PART_TWO = None
+PUZZLE_INPUT_FILE = "day02_presents.txt"
+ANSWER_PART_ONE = 1586300
+ANSWER_PART_TWO = 3737498
 
 
 class Puzzle:
     def __init__(self, puzzle_input=None):
-        self.input = puzzle_input
+        self.presents = puzzle_input
 
     @classmethod
     def from_file(cls, filename):
         filepath = Path(__file__).parent / filename
         with open(filepath) as f:
-            # Edit input file parsing here
-            puzzle_input = [line.rstrip() for line in f]
+            puzzle_input = [tuple(map(int, line.rstrip().split("x"))) for line in f]
         return cls(puzzle_input)
 
     def part_one(self):
-        return NotImplemented
+        faces = [(l * w, w * h, h * l) for l, w, h in self.presents]
+        return sum(2 * sum(f) + min(f) for f in faces)
 
     def part_two(self):
-        return NotImplemented
+        ribbons = 0
+        for present in self.presents:
+            lengths = sorted(present)
+            ribbons += 2 * sum(lengths[0:2]) + prod(lengths)
+        return ribbons
 
 
 def tests():
-    assert Puzzle().part_one() is NotImplemented
-    assert Puzzle().part_two() is NotImplemented
+    assert Puzzle([(2, 3, 4)]).part_one() == 58
+    assert Puzzle([(1, 1, 10)]).part_one() == 43
+    assert Puzzle([(2, 3, 4)]).part_two() == 34
+    assert Puzzle([(1, 1, 10)]).part_two() == 14
 
 
 def solve(puzzle_input, answer_one, answer_two):
