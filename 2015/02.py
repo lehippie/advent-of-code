@@ -4,7 +4,7 @@ from math import prod
 from pathlib import Path
 
 
-PUZZLE_INPUT_FILE = "day02_presents.txt"
+PUZZLE_INPUT_FILE = "inputs/02.txt"
 ANSWER_PART_ONE = 1586300
 ANSWER_PART_TWO = 3737498
 

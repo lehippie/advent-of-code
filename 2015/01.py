@@ -4,7 +4,7 @@ from pathlib import Path
 from collections import Counter
 
 
-PUZZLE_INPUT_FILE = "day01_floors_instructions.txt"
+PUZZLE_INPUT_FILE = "inputs/01.txt"
 ANSWER_PART_ONE = 74
 ANSWER_PART_TWO = 1795
 
