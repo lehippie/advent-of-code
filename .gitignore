@@ -1,5 +1,8 @@
-__pycache__
 .vscode
-*.sif
+
+__pycache__
+*.pyc
+*.egg-info
+
 *.txt
 !test*.txt
