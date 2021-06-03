@@ -1,5 +1,7 @@
 """Base puzzle class."""
 
+from aoc.inputs import load_input
+
 
 class Puzzle:
     def __init__(self, tests=None, solution_one=None, solution_two=None):
@@ -30,6 +32,7 @@ class Puzzle:
 
     def solve(self):
         """Run puzzle parts."""
+        self.input = load_input()
         answer_one = self.part_one()
         if self.solution_one is None:
             print("Part One answer:", answer_one, "?")
