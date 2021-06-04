@@ -1,14 +1,9 @@
 """Day 3: Perfectly Spherical Houses in a Vacuum."""
 
-from pathlib import Path
+from aoc.puzzle import Puzzle
 
 
-PUZZLE_INPUT_FILE = "inputs/03.txt"
-ANSWER_PART_ONE = 2572
-ANSWER_PART_TWO = 2631
-
-
-class Santa():
+class Santa:
     def __init__(self):
         self.x, self.y = 0, 0
 
@@ -28,17 +23,7 @@ class Santa():
         return self.position
 
 
-class Puzzle:
-    def __init__(self, puzzle_input=None):
-        self.input = puzzle_input
-
-    @classmethod
-    def from_file(cls, filename):
-        filepath = Path(__file__).parent / filename
-        with open(filepath) as f:
-            puzzle_input = f.readline().rstrip()
-        return cls(puzzle_input)
-
+class TodayPuzzle(Puzzle):
     def part_one(self):
         santa = Santa()
         houses = {santa.position}
@@ -58,33 +43,15 @@ class Puzzle:
         return len(houses)
 
 
-def tests():
-    assert Puzzle(">").part_one() == 2
-    assert Puzzle("^>v<").part_one() == 4
-    assert Puzzle("^v^v^v^v^v").part_one() == 2
-    assert Puzzle("^v").part_two() == 3
-    assert Puzzle("^>v<").part_two() == 3
-    assert Puzzle("^v^v^v^v^v").part_two() == 11
-
-
-def solve(puzzle_input, answer_one, answer_two):
-    puzzle = Puzzle.from_file(puzzle_input)
-    result_one = puzzle.part_one()
-    if answer_one is None:
-        print("Part One answer:", result_one, "?")
-    else:
-        assert result_one == answer_one
-        result_two = puzzle.part_two()
-        if answer_two is None:
-            print("Part Two answer:", result_two, "?")
-        else:
-            assert result_two == answer_two
-            print("Day completed \o/")
-
-
 if __name__ == "__main__":
-    tests()
-    if PUZZLE_INPUT_FILE:
-        solve(PUZZLE_INPUT_FILE, ANSWER_PART_ONE, ANSWER_PART_TWO)
-    else:
-        print("No input given.")
+    puzzle = TodayPuzzle(
+        tests={
+            "part_one": [(">", 2), ("^>v<", 4), ("^v^v^v^v^v", 2)],
+            "part_two": [("^v", 3), ("^>v<", 3), ("^v^v^v^v^v", 11)],
+        },
+        solution_one=2572,
+        solution_two=2631,
+    )
+
+    if puzzle.test():
+        puzzle.solve()
