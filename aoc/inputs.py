@@ -68,11 +68,9 @@ def load_input(year: int = None, day: int = None):
         year = int(script.parts[-2])
         day = int(script.stem)
     input_path = INPUTS_DIR / f"{year}" / f"{day:02}.txt"
-    if input_path.exists():
-        return read_file(input_path)
-    else:
+    if not input_path.exists():
         puzzle_input = download_input(year, day)
         input_path.parent.mkdir(parents=True, exist_ok=True)
         input_path.write_text(puzzle_input)
         print(f"Input saved in {input_path}.")
-        return puzzle_input
+    return read_file(input_path)

@@ -60,7 +60,8 @@ class Puzzle:
         """apply <line_parser> to each line of the input."""
         if isinstance(self.input, str):
             self.input = self.line_parser(self.input)
-        self.input = [self.line_parser(line) for line in self.input]
+        else:
+            self.input = [self.line_parser(line) for line in self.input]
 
     def test(self):
         """Run tests against their solution."""
