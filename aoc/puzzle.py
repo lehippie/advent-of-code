@@ -67,9 +67,6 @@ class Puzzle:
         """Run tests against their solution."""
         parts = (self.part_one, self.part_two)
         for p, part in enumerate(self.tests):
-            if not self.tests[part]:
-                print("No test defined for {part}.")
-                return
             for test, solution in self.tests[part]:
                 self.input = test
                 self.parse_input()
