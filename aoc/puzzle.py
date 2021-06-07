@@ -72,8 +72,8 @@ class Puzzle:
                 self.parse_input()
                 answer = parts[p]()
                 if not answer == solution:
-                    print("Test failed in", part)
-                    print(f"{test} gives {answer} instead of {solution}.")
+                    print(f"Test failed in {part}:")
+                    print(f"  {test} gives {answer} instead of {solution}.")
                     return False
         print("Tests passed!")
         return True
