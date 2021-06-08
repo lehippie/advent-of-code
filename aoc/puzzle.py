@@ -12,8 +12,8 @@ class Puzzle:
     Methods:
         part_one, part_two -- placeholders to be surcharged in
             child classes.
-        parse_input -- apply callable defined by <line_parser> to
-            each line of the input.
+        parse_input -- apply callable defined by <parser> argument
+            to each element of the input.
         tests -- perform tests for both parts.
         solve -- print answers for both parts and compare them to
             previously found solutions.
@@ -25,7 +25,7 @@ class Puzzle:
 
     def __init__(
         self,
-        line_parser=lambda x: x,
+        parser=lambda x: x,
         tests={"part_one": [], "part_two": []},
         solution_one=None,
         solution_two=None,
@@ -33,35 +33,32 @@ class Puzzle:
         """Puzzle class constructor.
 
         Arguments:
-            line_parser [optionnal] -- callable to be applied to each
-                line of the puzzle input.
-                Default is to do nothing.
+            parser -- callable to be applied to each element of the
+                puzzle input. Default is to do nothing.
             tests -- dictionnary containing tests for both parts. Values
-                for each part must be a list of tuples, each containing
-                the input ad its corresponding solution.
-            solution_one, solution_two -- already found solutions, tested
-                at runtime to detect regression.
+                must be a list of tuples, each containing a test input
+                and its corresponding solution.
+            solution_one, solution_two -- already found solutions, used
+                by the "solve" method to check for regression.
         """
         self.input = None
-        self.line_parser = line_parser
+        self.parser = parser
         self.tests = tests
         self.solution_one = solution_one
         self.solution_two = solution_two
 
     def part_one(self):
-        """Give answer to part one."""
         return NotImplemented
 
     def part_two(self):
-        """Give answer to part two."""
         return NotImplemented
 
     def parse_input(self):
-        """apply <line_parser> to each line of the input."""
+        """Apply defined parser to the input."""
         if isinstance(self.input, str):
-            self.input = self.line_parser(self.input)
+            self.input = self.parser(self.input)
         else:
-            self.input = [self.line_parser(line) for line in self.input]
+            self.input = list(map(self.parser, self.input))
 
     def test(self):
         """Run tests against their solution."""
@@ -78,7 +75,7 @@ class Puzzle:
         return True
 
     def solve(self):
-        """Run both puzzle parts and print puzzle status."""
+        """Run puzzle parts and print status."""
         # --- Puzzle input ---
         self.input = load_input()
         self.parse_input()

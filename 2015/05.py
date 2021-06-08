@@ -1,9 +1,9 @@
 """Day 5: Doesn't He Have Intern-Elves For This?"""
 
-from aoc.puzzle import Puzzle
-
 import re
 from collections import Counter
+
+from aoc.puzzle import Puzzle
 
 
 def is_nice(string, forbidden=("ab", "cd", "pq", "xy")):
@@ -17,7 +17,7 @@ def is_nice(string, forbidden=("ab", "cd", "pq", "xy")):
 
 
 def is_better(string):
-    if not re.search(r"(.{2}).*\1", string):
+    if not re.search(r"(..).*\1", string):
         return False
     if not re.search(r"(.).\1", string):
         return False
@@ -52,6 +52,5 @@ if __name__ == "__main__":
         solution_one=255,
         solution_two=55,
     )
-
     if puzzle.test():
         puzzle.solve()

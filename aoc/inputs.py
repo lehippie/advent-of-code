@@ -9,7 +9,8 @@ from urllib.request import Request, urlopen
 
 from aoc import root, config
 
-INPUTS_DIR = root / "inputs"
+
+INPUTS_FOLDER = root / "inputs"
 
 
 def read_file(filepath):
@@ -40,16 +41,15 @@ def download_input(year: int, day: int) -> str:
     Returns:
         String containing the response from the website.
 
-    Authentification is done with the session cookie to copy in the
-    configuration file parsed by this package.
+    Authentification is done with the session cookie parsed from
+    configuration file.
     """
     request = Request(
         url=f"https://adventofcode.com/{year}/day/{day}/input",
         headers={"cookie": f"session={config['www']['session']}"},
     )
     with urlopen(request) as response:
-        puzzle_input = response.read().decode("utf-8")
-    return puzzle_input
+        return response.read().decode("utf-8")
 
 
 def load_input(year: int = None, day: int = None):
@@ -67,7 +67,7 @@ def load_input(year: int = None, day: int = None):
         script = Path(inspect.stack()[-1].filename)
         year = int(script.parts[-2])
         day = int(script.stem)
-    input_path = INPUTS_DIR / f"{year}" / f"{day:02}.txt"
+    input_path = INPUTS_FOLDER / f"{year}" / f"{day:02}.txt"
     if not input_path.exists():
         puzzle_input = download_input(year, day)
         input_path.parent.mkdir(parents=True, exist_ok=True)

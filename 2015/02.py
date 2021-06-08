@@ -20,7 +20,7 @@ class TodayPuzzle(Puzzle):
 
 if __name__ == "__main__":
     puzzle = TodayPuzzle(
-        line_parser=lambda line: tuple(map(int, line.split("x"))),
+        parser=lambda line: tuple(map(int, line.split("x"))),
         tests={
             "part_one": [(["2x3x4"], 58), (["1x1x10"], 43)],
             "part_two": [(["2x3x4"], 34), (["1x1x10"], 14)],
