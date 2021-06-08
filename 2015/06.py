@@ -14,39 +14,30 @@ def line_parser(line):
     return (words[0], xmin, xmax, ymin, ymax)
 
 
-class Lights:
-    def __init__(self, shape=(1000, 1000)):
-        self.grid = np.zeros(shape, dtype=int)
-
-    @property
-    def brightness(self):
-        return self.grid.sum()
-
-
 class TodayPuzzle(Puzzle):
     def part_one(self):
-        lights = Lights()
+        lights = np.zeros((1000, 1000), dtype=int)
         for instruction, xmin, xmax, ymin, ymax in self.input:
             if instruction == "on":
-                lights.grid[xmin:xmax, ymin:ymax] = 1
+                lights[xmin:xmax, ymin:ymax] = 1
             elif instruction == "off":
-                lights.grid[xmin:xmax, ymin:ymax] = 0
+                lights[xmin:xmax, ymin:ymax] = 0
             elif instruction == "toggle":
-                lights.grid[xmin:xmax, ymin:ymax] += 1
-                lights.grid[xmin:xmax, ymin:ymax] %= 2
-        return lights.brightness
+                lights[xmin:xmax, ymin:ymax] += 1
+                lights[xmin:xmax, ymin:ymax] %= 2
+        return lights.sum()
 
     def part_two(self):
-        lights = Lights()
+        lights = np.zeros((1000, 1000), dtype=int)
         for instruction, xmin, xmax, ymin, ymax in self.input:
             if instruction == "on":
-                lights.grid[xmin:xmax, ymin:ymax] += 1
+                lights[xmin:xmax, ymin:ymax] += 1
             elif instruction == "off":
-                lights.grid[xmin:xmax, ymin:ymax] -= 1
-                lights.grid[lights.grid < 0] = 0
+                lights[xmin:xmax, ymin:ymax] -= 1
+                lights[lights < 0] = 0
             elif instruction == "toggle":
-                lights.grid[xmin:xmax, ymin:ymax] += 2
-        return lights.brightness
+                lights[xmin:xmax, ymin:ymax] += 2
+        return lights.sum()
 
 
 if __name__ == "__main__":
