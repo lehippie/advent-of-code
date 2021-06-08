@@ -75,7 +75,6 @@ class Puzzle:
                     print(f"Test failed in {part}:")
                     print(f"  {test} gives {answer} instead of {solution}.")
                     return False
-        print("Tests passed!")
         return True
 
     def solve(self):
