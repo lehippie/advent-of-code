@@ -20,7 +20,7 @@ class Puzzle:
         self,
         puzzle_input=None,
         parser=None,
-        parse_lines=True,
+        parse_lines=False,
         solutions=(None, None),
     ):
         """Puzzle class constructor.
@@ -32,7 +32,7 @@ class Puzzle:
             parser -- optionnal callable to be applied to each line of
                 the puzzle input. Default is to do nothing.
             parse_lines -- flag applying the <parser> to each line
-                instead of the entire input. Default is True.
+                instead of the entire input. Default is False.
             solutions -- already found solutions, used by the "solve"
                 method to check for regression.
         """

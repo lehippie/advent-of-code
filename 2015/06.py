@@ -41,4 +41,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=parser, solutions=(377891, 14110788)).solve()
+    TodayPuzzle(parser=parser, parse_lines=True, solutions=(377891, 14110788)).solve()

@@ -21,5 +21,6 @@ class TodayPuzzle(Puzzle):
 if __name__ == "__main__":
     TodayPuzzle(
         parser=lambda line: tuple(map(int, line.split("x"))),
+        parse_lines=True,
         solutions=(1586300, 3737498),
     ).solve()
