@@ -10,9 +10,6 @@ from urllib.request import Request, urlopen
 from aoc import root, config
 
 
-INPUTS_FOLDER = root / "inputs"
-
-
 def read_file(filepath):
     """Read file content.
 
@@ -58,16 +55,20 @@ def load_input(year: int = None, day: int = None):
     Arguments:
         year, day -- integers representing the date of the puzzle to load.
 
-    If <year> or <day> is missing, tries to infer them from the name
+    If <year> or <day> is missing, tries to infer them from the path
     of the calling script.
     If the file is not already in the inputs folder, it will be saved
     for future use.
     """
     if None in (year, day):
         script = Path(inspect.stack()[-1].filename)
-        year = int(script.parts[-2])
-        day = int(script.stem)
-    input_path = INPUTS_FOLDER / f"{year}" / f"{day:02}.txt"
+        try:
+            year = int(script.parts[-2])
+            day = int(script.stem)
+        except ValueError:
+            print(f"Cannot infer puzzle date from puzzle path: {script}")
+            exit()
+    input_path = root / "inputs" / f"{year}" / f"{day:02}.txt"
     if not input_path.exists():
         puzzle_input = download_input(year, day)
         input_path.parent.mkdir(parents=True, exist_ok=True)

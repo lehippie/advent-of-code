@@ -12,15 +12,8 @@ class TodayPuzzle(Puzzle):
         return n
 
     def part_two(self):
-        return self.part_one(n=self.solution_one, z=6)
+        return self.part_one(n=self.solutions[0], z=6)
 
 
 if __name__ == "__main__":
-    puzzle = TodayPuzzle(
-        tests={"part_one": [("abcdef", 609043), ("pqrstuv", 1048970)]},
-        solution_one=254575,
-        solution_two=1038736,
-    )
-
-    if puzzle.test():
-        puzzle.solve()
+    TodayPuzzle(solutions=(254575, 1038736)).solve()

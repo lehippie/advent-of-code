@@ -44,14 +44,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    puzzle = TodayPuzzle(
-        tests={
-            "part_one": [(">", 2), ("^>v<", 4), ("^v^v^v^v^v", 2)],
-            "part_two": [("^v", 3), ("^>v<", 3), ("^v^v^v^v^v", 11)],
-        },
-        solution_one=2572,
-        solution_two=2631,
-    )
-
-    if puzzle.test():
-        puzzle.solve()
+    TodayPuzzle(solutions=(2572, 2631)).solve()

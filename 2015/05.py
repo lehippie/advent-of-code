@@ -33,24 +33,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    puzzle = TodayPuzzle(
-        tests={
-            "part_one": [
-                (["ugknbfddgicrmopn"], 1),
-                (["aaa"], 1),
-                (["jchzalrnumimnmhp"], 0),
-                (["haegwjzuvuyypxyu"], 0),
-                (["dvszwmarrgswjxmb"], 0),
-            ],
-            "part_two": [
-                (["qjhvhtzxzqqjkmpb"], 1),
-                (["xxyxx"], 1),
-                (["uurcxstgmygtbstg"], 0),
-                (["ieodomkazucvgmuy"], 0),
-            ],
-        },
-        solution_one=255,
-        solution_two=55,
-    )
-    if puzzle.test():
-        puzzle.solve()
+    TodayPuzzle(solutions=(255, 55)).solve()

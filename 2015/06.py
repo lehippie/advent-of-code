@@ -5,7 +5,7 @@ from numpy import zeros
 from aoc.puzzle import Puzzle
 
 
-def input_parser(line):
+def parser(line):
     words = line.split(" ")
     if words[0] == "turn":
         words.pop(0)
@@ -41,20 +41,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    puzzle = TodayPuzzle(
-        parser=input_parser,
-        tests={
-            "part_one": [
-                (["turn on 0,0 through 999,999"], 1000000),
-                (["turn on 0,0 through 0,0", "toggle 0,0 through 999,0"], 999),
-            ],
-            "part_two": [
-                (["turn on 0,0 through 0,0"], 1),
-                (["toggle 0,0 through 999,999"], 2000000),
-            ],
-        },
-        solution_one=377891,
-        solution_two=14110788,
-    )
-    if puzzle.test():
-        puzzle.solve()
+    TodayPuzzle(parser=parser, solutions=(377891, 14110788)).solve()
