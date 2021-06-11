@@ -7,7 +7,7 @@ import inspect
 from pathlib import Path
 from urllib.request import Request, urlopen
 
-from aoc import root, config
+from aoc import ROOT, CONFIG
 
 
 def read_file(filepath):
@@ -43,7 +43,7 @@ def download_input(year: int, day: int) -> str:
     """
     request = Request(
         url=f"https://adventofcode.com/{year}/day/{day}/input",
-        headers={"cookie": f"session={config['www']['session']}"},
+        headers={"cookie": f"session={CONFIG['www']['session']}"},
     )
     with urlopen(request) as response:
         return response.read().decode("utf-8")
@@ -68,7 +68,7 @@ def load_input(year: int = None, day: int = None):
         except ValueError:
             print(f"Cannot infer puzzle date from puzzle path: {script}")
             exit()
-    input_path = root / "inputs" / f"{year}" / f"{day:02}.txt"
+    input_path = ROOT / "inputs" / f"{year}" / f"{day:02}.txt"
     if not input_path.exists():
         puzzle_input = download_input(year, day)
         input_path.parent.mkdir(parents=True, exist_ok=True)
