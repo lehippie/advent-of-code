@@ -1,7 +1,6 @@
 """Day 5: Doesn't He Have Intern-Elves For This?"""
 
 import re
-from collections import Counter
 
 from aoc.puzzle import Puzzle
 
@@ -26,10 +25,10 @@ def is_better(string):
 
 class TodayPuzzle(Puzzle):
     def part_one(self):
-        return Counter(is_nice(s) for s in self.input)[True]
+        return sum(is_nice(s) for s in self.input)
 
     def part_two(self):
-        return Counter(is_better(s) for s in self.input)[True]
+        return sum(is_better(s) for s in self.input)
 
 
 if __name__ == "__main__":
