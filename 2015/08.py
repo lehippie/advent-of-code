@@ -10,16 +10,16 @@ def char_len(string):
 
 
 def encoded_len(string):
-    chars = Counter(string)
-    return len(string) + chars['"'] + chars["\\"] + 2
+    chars_count = Counter(string)
+    return len(string) + chars_count['"'] + chars_count["\\"] + 2
 
 
 class TodayPuzzle(Puzzle):
     def part_one(self):
-        return sum(len(s) for s in self.input) - sum(char_len(s) for s in self.input)
+        return sum(len(s) - char_len(s) for s in self.input)
 
     def part_two(self):
-        return sum(encoded_len(s) for s in self.input) - sum(len(s) for s in self.input)
+        return sum(encoded_len(s) - len(s) for s in self.input)
 
 
 if __name__ == "__main__":
