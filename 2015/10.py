@@ -10,18 +10,14 @@ def look_and_say(look):
 
 
 class TodayPuzzle(Puzzle):
-    def part_one(self, steps=40, first_look=None):
-        if first_look is None:
-            self.last_said = self.input
-        else:
-            self.last_said = first_look
-
+    def part_one(self, steps=40):
+        last_said = self.input
         for _ in range(steps):
-            self.last_said = look_and_say(self.last_said)
-        return len(self.last_said)
+            last_said = look_and_say(last_said)
+        return len(last_said)
 
     def part_two(self):
-        return self.part_one(10, first_look=self.last_said)
+        return self.part_one(50)
 
 
 if __name__ == "__main__":
