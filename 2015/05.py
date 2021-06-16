@@ -5,10 +5,16 @@ import re
 from aoc.puzzle import Puzzle
 
 
+VOWELS = re.compile(r"[aeiou]")
+DOUBLES = re.compile(r"(.)\1")
+DOUBLE_PAIRS = re.compile(r"(..).*\1")
+ALTERNATED = re.compile(r"(.).\1")
+
+
 def is_nice(string, forbidden=("ab", "cd", "pq", "xy")):
-    if len(re.findall(r"[aeiou]", string)) < 3:
+    if len(VOWELS.findall(string)) < 3:
         return False
-    if not re.search(r"(.)\1", string):
+    if not DOUBLES.search(string):
         return False
     if any(f in string for f in forbidden):
         return False
@@ -16,9 +22,9 @@ def is_nice(string, forbidden=("ab", "cd", "pq", "xy")):
 
 
 def is_better(string):
-    if not re.search(r"(..).*\1", string):
+    if not DOUBLE_PAIRS.search(string):
         return False
-    if not re.search(r"(.).\1", string):
+    if not ALTERNATED.search(string):
         return False
     return True
 
