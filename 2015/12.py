@@ -7,15 +7,13 @@ from aoc.puzzle import Puzzle
 
 
 def almost_sum(db, discard="red"):
-    if isinstance(db, dict):
-        if discard in db.values():
-            return 0
-        else:
-            return almost_sum(list(db.values()))
     if isinstance(db, list):
         return sum(almost_sum(v) for v in db)
     if isinstance(db, int):
         return db
+    if isinstance(db, dict):
+        if discard not in db.values():
+            return almost_sum(list(db.values()))
     return 0
 
 
