@@ -67,7 +67,7 @@ def load_input(year: int = None, day: int = None):
             day = int(script.stem)
         except ValueError:
             print(f"Cannot infer puzzle date from puzzle path: {script}")
-            exit()
+            raise
     input_path = ROOT / "inputs" / f"{year}" / f"{day:02}.txt"
     if not input_path.exists():
         puzzle_input = download_input(year, day)
