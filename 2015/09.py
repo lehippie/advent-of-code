@@ -18,9 +18,6 @@ def parser(puzzle_input):
 class Locations:
     def __init__(self, graph: dict):
         self.graph = graph
-        self.calculate_routes()
-
-    def calculate_routes(self):
         self.routes = {}
         for route in permutations(self.graph.keys()):
             self.routes[" -> ".join(route)] = sum(
