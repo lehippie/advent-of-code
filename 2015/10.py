@@ -1,4 +1,4 @@
-"""Puzzle template."""
+"""Day 10: Elves Look, Elves Say."""
 
 from itertools import groupby
 
