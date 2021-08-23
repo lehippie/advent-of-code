@@ -14,6 +14,11 @@ class Puzzle:
             classes.
         solve -- run both parts and compare them to already found
             solutions.
+
+    Attributes:
+        solutions -- stores puzzle solutions as a tuple.
+        input -- stores puzzle input as a list of strings or as a
+            string if there is only one line.
     """
 
     def __init__(
@@ -29,8 +34,8 @@ class Puzzle:
             puzzle_input -- str or list of str used to store puzzle
                 inputs. If set to None, it is fetched from default
                 inputs folder.
-            parser -- optionnal callable to be applied to each line of
-                the puzzle input. Default is to do nothing.
+            parser -- optionnal callable to be applied to the puzzle
+                input. Default is to do nothing.
             parse_lines -- flag applying the <parser> to each line
                 instead of the entire input. Default is False.
             solutions -- already found solutions, used by the "solve"
