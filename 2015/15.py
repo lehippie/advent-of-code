@@ -7,7 +7,7 @@ from aoc.puzzle import Puzzle
 
 
 def parser(puzzle_line):
-    name, rest = puzzle_line.strip().split(":")
+    name, rest = puzzle_line.split(":")
     return (name, *map(int, re.findall(r"-?\d+", rest)))
 
 

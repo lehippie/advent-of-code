@@ -9,7 +9,7 @@ from aoc.puzzle import Puzzle
 def parser(puzzle_input):
     graph = defaultdict(dict)
     for line in puzzle_input:
-        words = line.strip().split()
+        words = line.split()
         if "gain" in line:
             graph[words[0]][words[-1][:-1]] = int(words[3])
         else:
