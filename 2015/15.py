@@ -21,31 +21,21 @@ def combi_sum(total, size):
 
 
 class TodayPuzzle(Puzzle):
-    def part_one(self, teaspoons=100):
-        best_cookie = 0
-        for spoons in combi_sum(teaspoons, len(self.input)):
-            stats = [0] * 4
-            for spoon, ingredient in zip(spoons, self.input):
-                for k in range(4):
-                    stats[k] += spoon * ingredient[k + 1]
-            if all(s > 0 for s in stats) and prod(stats) > best_cookie:
-                best_cookie = prod(stats)
-        return best_cookie
-
-    def part_two(self, teaspoons=100, calories=500):
+    def part_one(self, teaspoons=100, calories=None):
         best_cookie = 0
         for spoons in combi_sum(teaspoons, len(self.input)):
             stats = [0] * 5
             for spoon, ingredient in zip(spoons, self.input):
                 for k in range(5):
                     stats[k] += spoon * ingredient[k + 1]
-            if (
-                all(s > 0 for s in stats[:4])
-                and stats[4] == calories
-                and prod(stats[:4]) > best_cookie
-            ):
-                best_cookie = prod(stats[:4])
+            cookie_cal = stats.pop()
+            if calories is None or cookie_cal == calories:
+                if all(s > 0 for s in stats) and prod(stats) > best_cookie:
+                    best_cookie = prod(stats)
         return best_cookie
+
+    def part_two(self, teaspoons=100, calories=500):
+        return self.part_one(teaspoons, calories)
 
 
 if __name__ == "__main__":
