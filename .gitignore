@@ -6,4 +6,5 @@ __pycache__
 
 *.txt
 !requirements.txt
+!requirements-dev.txt
 !test*.txt
