@@ -2,19 +2,7 @@
 
 from collections import defaultdict
 from itertools import permutations
-
 from aoc.puzzle import Puzzle
-
-
-def parser(puzzle_input):
-    graph = defaultdict(dict)
-    for line in puzzle_input:
-        words = line.split()
-        if "gain" in line:
-            graph[words[0]][words[-1][:-1]] = int(words[3])
-        else:
-            graph[words[0]][words[-1][:-1]] = -int(words[3])
-    return graph
 
 
 class DinnerTable:
@@ -33,7 +21,17 @@ class DinnerTable:
                 self.arrangements[arrangement] += self.graph[attendee][left]
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle13(Puzzle):
+    def parser(self):
+        graph = defaultdict(dict)
+        for line in self.input:
+            words = line.split()
+            if "gain" in line:
+                graph[words[0]][words[-1][:-1]] = int(words[3])
+            else:
+                graph[words[0]][words[-1][:-1]] = -int(words[3])
+        return graph
+
     def part_one(self):
         table = DinnerTable(self.input)
         return max(table.arrangements.values())
@@ -48,4 +46,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=parser, solutions=(664, 640)).solve()
+    Puzzle13(solutions=(664, 640)).solve()

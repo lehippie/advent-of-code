@@ -2,17 +2,7 @@
 
 from collections import defaultdict
 from itertools import permutations
-
 from aoc.puzzle import Puzzle
-
-
-def parser(puzzle_input):
-    graph = defaultdict(dict)
-    for line in puzzle_input:
-        loc1, _, loc2, _, distance = line.split()
-        graph[loc1][loc2] = int(distance)
-        graph[loc2][loc1] = int(distance)
-    return graph
 
 
 class Locations:
@@ -25,7 +15,15 @@ class Locations:
             )
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle09(Puzzle):
+    def parser(self):
+        graph = defaultdict(dict)
+        for line in self.input:
+            loc1, _, loc2, _, distance = line.split()
+            graph[loc1][loc2] = int(distance)
+            graph[loc2][loc1] = int(distance)
+        return graph
+
     def part_one(self):
         self.locations = Locations(self.input)
         return min(self.locations.routes.values())
@@ -35,4 +33,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=parser, solutions=(251, 898)).solve()
+    Puzzle09(solutions=(251, 898)).solve()

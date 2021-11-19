@@ -2,7 +2,6 @@
 
 import re
 from string import ascii_lowercase
-
 from aoc.puzzle import Puzzle
 
 
@@ -38,7 +37,7 @@ def is_valid(password):
     return True
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle11(Puzzle):
     def part_one(self):
         password = self.input
         while not is_valid(password := increment(password)):
@@ -53,4 +52,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=("hepxxyzz", "heqaabcc")).solve()
+    Puzzle11(solutions=("hepxxyzz", "heqaabcc")).solve()

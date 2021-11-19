@@ -1,14 +1,7 @@
 """Day 14: Reindeer Olympics."""
 
 import re
-
 from aoc.puzzle import Puzzle
-
-
-def parser(puzzle_line):
-    name = puzzle_line.split()[0]
-    stats = list(map(int, re.findall(r"\d+", puzzle_line)))
-    return Reindeer(name, *stats)
 
 
 class Reindeer:
@@ -25,7 +18,15 @@ class Reindeer:
         return distance
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle14(Puzzle):
+    def parser(self):
+        def parse(line):
+            name = line.split()[0]
+            stats = list(map(int, re.findall(r"\d+", line)))
+            return Reindeer(name, *stats)
+
+        return [parse(line) for line in self.input]
+
     def part_one(self, race_duration=2503):
         return max(reindeer.fly(race_duration) for reindeer in self.input)
 
@@ -40,4 +41,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=parser, parse_lines=True, solutions=(2660, 1256)).solve()
+    Puzzle14(solutions=(2660, 1256)).solve()

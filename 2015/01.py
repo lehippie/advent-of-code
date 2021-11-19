@@ -1,11 +1,10 @@
 """Day 1: Not Quite Lisp."""
 
 from collections import Counter
-
 from aoc.puzzle import Puzzle
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle01(Puzzle):
     def part_one(self):
         parentheses = Counter(self.input)
         return parentheses["("] - parentheses[")"]
@@ -20,4 +19,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=(74, 1795)).solve()
+    Puzzle01(solutions=(74, 1795)).solve()

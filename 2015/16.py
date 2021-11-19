@@ -1,7 +1,6 @@
 """Day 16: Aunt Sue."""
 
 import re
-
 from aoc.puzzle import Puzzle
 
 
@@ -19,14 +18,16 @@ THE_SUE = {
 }
 
 
-def parser(puzzle_line):
-    name, things = puzzle_line.split(":", maxsplit=1)
-    sue = {"number": int(re.findall(r"\d+", name)[0])}
-    sue.update({k: int(v) for k, v in re.findall(r"(\w+): (\d+)", things)})
-    return sue
+class Puzzle16(Puzzle):
+    def parser(self):
+        def parse(line):
+            name, things = line.split(":", maxsplit=1)
+            sue = {"number": int(re.findall(r"\d+", name)[0])}
+            sue.update({k: int(v) for k, v in re.findall(r"(\w+): (\d+)", things)})
+            return sue
 
+        return [parse(line) for line in self.input]
 
-class TodayPuzzle(Puzzle):
     def part_one(self):
         for sue in self.input:
             if all(sue[k] == THE_SUE[k] for k in sue if k != "number"):
@@ -46,4 +47,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=parser, parse_lines=True, solutions=(373, 260)).solve()
+    Puzzle16(solutions=(373, 260)).solve()

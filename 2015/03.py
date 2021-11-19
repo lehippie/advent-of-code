@@ -23,7 +23,7 @@ class Santa:
         return self.position
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle03(Puzzle):
     def part_one(self):
         santa = Santa()
         houses = {santa.position}
@@ -44,4 +44,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=(2572, 2631)).solve()
+    Puzzle03(solutions=(2572, 2631)).solve()

@@ -1,20 +1,21 @@
 """Day 6: Probably a Fire Hazard."""
 
 from numpy import zeros
-
 from aoc.puzzle import Puzzle
 
 
-def parser(line):
-    words = line.split(" ")
-    if words[0] == "turn":
-        words.pop(0)
-    xmin, ymin = map(int, words[1].split(","))
-    xmax, ymax = map(lambda x: int(x) + 1, words[3].split(","))
-    return (words[0], xmin, xmax, ymin, ymax)
+class Puzzle06(Puzzle):
+    def parser(self):
+        def parse(line):
+            words = line.split(" ")
+            if words[0] == "turn":
+                words.pop(0)
+            xmin, ymin = map(int, words[1].split(","))
+            xmax, ymax = map(lambda x: int(x) + 1, words[3].split(","))
+            return (words[0], xmin, xmax, ymin, ymax)
 
+        return [parse(line) for line in self.input]
 
-class TodayPuzzle(Puzzle):
     def part_one(self):
         lights = zeros((1000, 1000), dtype=int)
         for instruction, xmin, xmax, ymin, ymax in self.input:
@@ -41,4 +42,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=parser, parse_lines=True, solutions=(377891, 14110788)).solve()
+    Puzzle06(solutions=(377891, 14110788)).solve()

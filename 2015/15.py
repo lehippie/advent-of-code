@@ -2,13 +2,7 @@
 
 import re
 from math import prod
-
 from aoc.puzzle import Puzzle
-
-
-def parser(puzzle_line):
-    name, rest = puzzle_line.split(":")
-    return (name, *map(int, re.findall(r"-?\d+", rest)))
 
 
 def combi_sum(total, size):
@@ -20,7 +14,14 @@ def combi_sum(total, size):
                 yield (spoon,) + remaining
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle15(Puzzle):
+    def parser(self):
+        def parse(line):
+            name, rest = line.split(":")
+            return (name, *map(int, re.findall(r"-?\d+", rest)))
+
+        return [parse(line) for line in self.input]
+
     def part_one(self, teaspoons=100, calories=None):
         best_cookie = 0
         for spoons in combi_sum(teaspoons, len(self.input)):
@@ -39,4 +40,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=parser, parse_lines=True, solutions=(13882464, 11171160)).solve()
+    Puzzle15(solutions=(13882464, 11171160)).solve()

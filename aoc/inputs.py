@@ -14,7 +14,7 @@ def read_file(filepath):
     """Read file content.
 
     Arguments:
-        filepath -- str OR Path object.
+        filepath  --  str OR Path object.
 
     Returns:
         List of string, one for each line in the file.
@@ -32,7 +32,7 @@ def download_input(year: int, day: int) -> str:
     """Get puzzle input from advent of code website.
 
     Arguments:
-        year, day -- integers representing the date of the puzzle
+        year, day  --  integers representing the date of the puzzle
             that needs to be downloaded.
 
     Returns:
@@ -53,7 +53,8 @@ def load_input(year: int = None, day: int = None):
     """Get puzzle input from inputs folder for given date.
 
     Arguments:
-        year, day -- integers representing the date of the puzzle to load.
+        year, day  --  integers representing the date of the puzzle
+            to load.
 
     If <year> or <day> is missing, tries to infer them from the path
     of the calling script.
@@ -66,7 +67,7 @@ def load_input(year: int = None, day: int = None):
             year = int(script.parts[-2])
             day = int(script.stem)
         except ValueError:
-            print(f"Cannot infer puzzle date from puzzle path: {script}")
+            print(f"Cannot infer puzzle date from puzzle path '{script}'")
             raise
     input_path = ROOT / "inputs" / f"{year}" / f"{day:02}.txt"
     if not input_path.exists():

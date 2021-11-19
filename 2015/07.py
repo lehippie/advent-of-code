@@ -3,14 +3,6 @@
 from aoc.puzzle import Puzzle
 
 
-def parser(connections):
-    parsed_connections = {}
-    for connection in connections:
-        value, wire = connection.split(" -> ")
-        parsed_connections[wire] = value
-    return parsed_connections
-
-
 class Circuit:
     def __init__(self, connections: dict):
         self.connections = connections
@@ -44,7 +36,14 @@ class Circuit:
         self._wires[key] = value
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle07(Puzzle):
+    def parser(self):
+        parsed_connections = {}
+        for connection in self.input:
+            value, wire = connection.split(" -> ")
+            parsed_connections[wire] = value
+        return parsed_connections
+
     def part_one(self):
         return Circuit(self.input)["a"]
 
@@ -55,4 +54,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=parser, solutions=(3176, 14710)).solve()
+    Puzzle07(solutions=(3176, 14710)).solve()

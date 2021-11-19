@@ -1,7 +1,6 @@
 """Day 5: Doesn't He Have Intern-Elves For This?"""
 
 import re
-
 from aoc.puzzle import Puzzle
 
 
@@ -29,7 +28,7 @@ def is_better(string):
     return True
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle05(Puzzle):
     def part_one(self):
         return sum(is_nice(s) for s in self.input)
 
@@ -38,4 +37,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=(255, 55)).solve()
+    Puzzle05(solutions=(255, 55)).solve()

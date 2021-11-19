@@ -1,11 +1,13 @@
 """Day 2: I Was Told There Would Be No Math."""
 
 from math import prod
-
 from aoc.puzzle import Puzzle
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle02(Puzzle):
+    def parser(self):
+        return [tuple(map(int, line.split("x"))) for line in self.input]
+
     def part_one(self):
         faces = [(l * w, w * h, h * l) for l, w, h in self.input]
         return sum(2 * sum(f) + min(f) for f in faces)
@@ -19,8 +21,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(
-        parser=lambda line: tuple(map(int, line.split("x"))),
-        parse_lines=True,
-        solutions=(1586300, 3737498),
-    ).solve()
+    Puzzle02(solutions=(1586300, 3737498)).solve()

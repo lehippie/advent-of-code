@@ -2,7 +2,6 @@
 
 import json
 import re
-
 from aoc.puzzle import Puzzle
 
 
@@ -17,7 +16,7 @@ def almost_sum(db, discard="red"):
     return 0
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle12(Puzzle):
     def part_one(self):
         return sum(map(int, re.findall(r"-?\d+", self.input)))
 
@@ -26,4 +25,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=(111754, 65402)).solve()
+    Puzzle12(solutions=(111754, 65402)).solve()

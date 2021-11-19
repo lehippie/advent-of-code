@@ -1,7 +1,6 @@
 """Day 10: Elves Look, Elves Say."""
 
 from itertools import groupby
-
 from aoc.puzzle import Puzzle
 
 
@@ -9,7 +8,7 @@ def look_and_say(look):
     return "".join(f"{len(list(g))}{n}" for n, g in groupby(look))
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle10(Puzzle):
     def part_one(self, steps=40):
         last_said = self.input
         for _ in range(steps):
@@ -21,4 +20,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=(492982, 6989950)).solve()
+    Puzzle10(solutions=(492982, 6989950)).solve()

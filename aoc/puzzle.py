@@ -10,46 +10,41 @@ class Puzzle:
     puzzles.
 
     Methods:
-        part_one, part_two -- placeholders to be surcharged in child
-            classes.
-        solve -- run both parts and compare them to already found
+        parser  --  placeholder for optional method to manipulate
+            puzzle input at class init.
+        part_one, part_two  --  placeholders for solutions of both
+            parts of the puzzle.
+        solve  --  run both parts and compare them to already found
             solutions.
 
     Attributes:
-        solutions -- stores puzzle solutions as a tuple.
-        input -- stores puzzle input as a list of strings or as a
+        solutions  --  stores puzzle solutions as a tuple.
+        input  --  stores puzzle input as a list of strings or as a
             string if there is only one line.
     """
 
     def __init__(
         self,
         puzzle_input=None,
-        parser=None,
-        parse_lines=False,
         solutions=(None, None),
     ):
         """Puzzle class constructor.
 
         Arguments:
-            puzzle_input -- str or list of str used to store puzzle
+            puzzle_input  --  str or list of str used to store puzzle
                 inputs. If set to None, it is fetched from default
                 inputs folder.
-            parser -- optionnal callable to be applied to the puzzle
-                input. Default is to do nothing.
-            parse_lines -- flag applying the <parser> to each line
-                instead of the entire input. Default is False.
-            solutions -- already found solutions, used by the "solve"
-                method to check for regression.
+            solutions  --  already found solutions used by the "solve"
+                method to prevent regression.
         """
         if puzzle_input is None:
             puzzle_input = load_input()
-        if parser is not None:
-            if parse_lines:
-                puzzle_input = [parser(line) for line in puzzle_input]
-            else:
-                puzzle_input = parser(puzzle_input)
         self.input = puzzle_input
+        self.input = self.parser()
         self.solutions = solutions
+
+    def parser(self):
+        return self.input
 
     def part_one(self):
         return NotImplemented

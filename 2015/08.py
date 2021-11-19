@@ -1,7 +1,6 @@
 """Day 8: Matchsticks."""
 
 from collections import Counter
-
 from aoc.puzzle import Puzzle
 
 
@@ -14,7 +13,7 @@ def encoded_len(string):
     return len(string) + chars_count['"'] + chars_count["\\"] + 2
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle08(Puzzle):
     def part_one(self):
         return sum(len(s) - char_len(s) for s in self.input)
 
@@ -23,4 +22,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=(1371, 2117)).solve()
+    Puzzle08(solutions=(1371, 2117)).solve()

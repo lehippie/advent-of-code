@@ -1,9 +1,9 @@
-"""Puzzle template."""
+"""Puzzle name."""
 
 from aoc.puzzle import Puzzle
 
 
-class TodayPuzzle(Puzzle):
+class PuzzleXX(Puzzle):
     def part_one(self):
         return super().part_one()
 
@@ -12,4 +12,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=(None, None)).solve()
+    PuzzleXX(solutions=(None, None)).solve()

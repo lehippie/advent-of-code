@@ -1,7 +1,6 @@
 """Day 18: Like a GIF For Your Yard."""
 
 from itertools import product
-
 from aoc.puzzle import Puzzle
 
 
@@ -39,7 +38,7 @@ class Grid:
             self.on = next_on
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle18(Puzzle):
     def part_one(self, steps=100):
         grid = Grid(self.input)
         grid.run_step(steps)
@@ -52,4 +51,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(solutions=(768, 781)).solve()
+    Puzzle18(solutions=(768, 781)).solve()

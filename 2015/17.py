@@ -2,11 +2,13 @@
 
 from collections import Counter
 from itertools import combinations
-
 from aoc.puzzle import Puzzle
 
 
-class TodayPuzzle(Puzzle):
+class Puzzle17(Puzzle):
+    def parser(self):
+        return list(map(int, self.input))
+
     def part_one(self, eggnog=150):
         self.combinations = [
             combination
@@ -22,4 +24,4 @@ class TodayPuzzle(Puzzle):
 
 
 if __name__ == "__main__":
-    TodayPuzzle(parser=int, parse_lines=True, solutions=(654, 57)).solve()
+    Puzzle17(solutions=(654, 57)).solve()
