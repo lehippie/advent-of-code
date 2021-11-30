@@ -32,8 +32,7 @@ NONE = (0, 0, 0)
 
 
 class Character:
-    def __init__(self, name="", hp=100, damage=0, armor=0):
-        self.name = name
+    def __init__(self, hp=100, damage=0, armor=0):
         self.full_hp = hp
         self.hp = hp
         self.damage = damage
@@ -42,7 +41,7 @@ class Character:
     def attack(self, other):
         other.hp -= max(1, self.damage - other.armor)
 
-    def beats(self, other, verbose=False):
+    def beats(self, other):
         step = 1
         while self.hp > 0 and other.hp > 0:
             if step % 2:
@@ -50,15 +49,13 @@ class Character:
             else:
                 other.attack(self)
             step += 1
-            if verbose:
-                print(f"{self.name}: {self.hp} HP, {other.name}: {other.hp} HP")
         return other.hp <= 0
 
     def revive(self):
-        self.hp = self.full_hp
+        self.__init__(self.full_hp, self.damage, self.armor)
 
 
-def contenders():
+def equipped_player():
     for cw, dw, aw in SHOP["Weapons"].values():
         for ca, da, aa in chain([NONE], SHOP["Armor"].values()):
             for (cr1, dr1, ar1), (cr2, dr2, ar2) in chain(
@@ -66,18 +63,21 @@ def contenders():
                 [(r, NONE) for r in SHOP["Rings"].values()],
                 combinations(SHOP["Rings"].values(), 2),
             ):
-                yield cw+ca+cr1+cr2, Character(damage=dw+da+dr1+dr2, armor=aw+aa+ar1+ar2)
+                yield cw + ca + cr1 + cr2, Character(
+                    damage=dw + da + dr1 + dr2,
+                    armor=aw + aa + ar1 + ar2,
+                )
 
 
 class Puzzle21(Puzzle):
     def parser(self):
         boss_stats = list(map(lambda x: int(x.split(" ")[-1]), self.input))
-        return Character("boss", *boss_stats)
+        return Character(*boss_stats)
 
     def part_one(self):
         boss = self.input
         costs = set()
-        for cost, player in contenders():
+        for cost, player in equipped_player():
             boss.revive()
             if player.beats(boss):
                 costs.add(cost)
@@ -86,9 +86,9 @@ class Puzzle21(Puzzle):
     def part_two(self):
         boss = self.input
         costs = set()
-        for cost, player in contenders():
+        for cost, player in equipped_player():
             boss.revive()
-            if boss.beats(player):
+            if not player.beats(boss):
                 costs.add(cost)
         return max(costs)
 
