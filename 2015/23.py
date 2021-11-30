@@ -67,8 +67,4 @@ class Puzzle23(Puzzle):
 
 
 if __name__ == "__main__":
-    p = Computer(["inc a", "jio a, +2", "tpl a", "inc a"])
-    p.run()
-    assert p.reg["a"] == 2
-
     Puzzle23(solutions=(307, 160)).solve()
