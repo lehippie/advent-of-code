@@ -1,0 +1,8 @@
+# HOW TO USE:
+# 1. Copy this file and remove the ".example" extension
+# 2. Replace the session field by AoC cookie from your web browser
+# 3. ???
+# 4. Profit
+
+[www]
+session = PASTE_YOUR_SESSION_COOKIE_HERE
