@@ -1,7 +1,6 @@
 """Day 22: Wizard Simulator 20XX."""
 
 from copy import deepcopy
-from math import inf
 from aoc.puzzle import Puzzle
 
 
@@ -43,7 +42,7 @@ class Wizard(Character):
         return spells
 
 
-class Combat:
+class Fight:
     def __init__(self, hero: Wizard, boss: Character, hard_mode=False):
         self.hero = hero
         self.boss = boss
@@ -99,14 +98,15 @@ class Combat:
         return " > ".join(self.spells)
 
 
-def least_mana_combat(initial_combat: Combat):
-    fights = [initial_combat]
+def least_mana_fight(initial_fight: Fight):
+    fights = [initial_fight]
     while fights:
         current_fight = fights.pop(0)
         for spell in current_fight.hero.available_spells():
             fight = deepcopy(current_fight)
             result = fight.next_turn(spell)
             if result == "won":
+                # print(fight.mana_spent, fight)
                 return fight.mana_spent
             elif result is None:
                 fights.append(fight)
@@ -118,8 +118,8 @@ class Puzzle22(Puzzle):
         return {"hp": stats[0], "damage": stats[1]}
 
     def part_one(self, hard_mode=False):
-        combat = Combat(Wizard(), Character(**self.input), hard_mode=hard_mode)
-        return least_mana_combat(combat)
+        fight = Fight(Wizard(), Character(**self.input), hard_mode)
+        return least_mana_fight(fight)
 
     def part_two(self):
         return self.part_one(hard_mode=True)
