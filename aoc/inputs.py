@@ -74,5 +74,5 @@ def load_input(year: int = None, day: int = None):
         puzzle_input = download_input(year, day)
         input_path.parent.mkdir(parents=True, exist_ok=True)
         input_path.write_text(puzzle_input)
-        print(f"Input saved in {input_path}.")
+        print(f"Input saved in {input_path}")
     return read_file(input_path)
