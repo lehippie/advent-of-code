@@ -1,13 +1,9 @@
-"""Puzzle inputs management.
+"""Puzzle inputs management."""
 
-Inputs are saved in a single folder defined here.
-"""
-
-import inspect
-from pathlib import Path
 from urllib.request import Request, urlopen
-
 from aoc import ROOT, CONFIG
+
+INPUTS_DIR = ROOT / "inputs"
 
 
 def read_file(filepath):
@@ -28,48 +24,38 @@ def read_file(filepath):
     return content
 
 
-def download_input(year: int, day: int) -> str:
-    """Get puzzle input from advent of code website.
+def download_input(year: str, day: str) -> str:
+    """Get puzzle input from Advent of Code website.
+
+    Authentification is done with the session cookie parsed from
+    configuration file (see "config.txt.example").
 
     Arguments:
-        year, day  --  integers representing the date of the puzzle
-            that needs to be downloaded.
+        year, day  --  strings representing the date of the puzzle
+            to download.
 
     Returns:
         String containing the response from the website.
-
-    Authentification is done with the session cookie parsed from
-    configuration file.
     """
     request = Request(
-        url=f"https://adventofcode.com/{year}/day/{day}/input",
+        url=f"https://adventofcode.com/{year}/day/{int(day)}/input",
         headers={"cookie": f"session={CONFIG['www']['session']}"},
     )
     with urlopen(request) as response:
         return response.read().decode("utf-8")
 
 
-def load_input(year: int = None, day: int = None):
+def load_input(year: str, day: str):
     """Get puzzle input from inputs folder for given date.
 
     Arguments:
-        year, day  --  integers representing the date of the puzzle
+        year, day  --  strings representing the date of the puzzle
             to load.
 
-    If <year> or <day> is missing, tries to infer them from the path
-    of the calling script.
     If the file is not already in the inputs folder, it will be saved
     for future use.
     """
-    if None in (year, day):
-        script = Path(inspect.stack()[-1].filename)
-        try:
-            year = int(script.parts[-2])
-            day = int(script.stem)
-        except ValueError:
-            print(f"Cannot infer puzzle date from puzzle path '{script}'")
-            raise
-    input_path = ROOT / "inputs" / f"{year}" / f"{day:02}.txt"
+    input_path = INPUTS_DIR / f"{year}" / f"{day.zfill(2)}.txt"
     if not input_path.exists():
         puzzle_input = download_input(year, day)
         input_path.parent.mkdir(parents=True, exist_ok=True)

@@ -1,5 +1,7 @@
 """Advent of Code puzzle solver."""
 
+import inspect
+from pathlib import Path
 from aoc.inputs import load_input
 
 
@@ -32,13 +34,16 @@ class Puzzle:
 
         Arguments:
             puzzle_input  --  str or list of str used to store puzzle
-                inputs. If set to None, it is fetched from default
-                inputs folder.
+                inputs.
+                If set to None, it is fetched from default inputs
+                folder based on the name of the file where the class
+                instance is created (ex: "2020/05.py").
             solutions  --  already found solutions used by the "solve"
                 method to prevent regression.
         """
         if puzzle_input is None:
-            puzzle_input = load_input()
+            f = Path(inspect.getmodule(self).__file__)
+            puzzle_input = load_input(f.parts[-2], f.stem)
         self.input = puzzle_input
         self.input = self.parser()
         self.solutions = solutions
