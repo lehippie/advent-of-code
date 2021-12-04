@@ -5,10 +5,10 @@ from aoc.puzzle import Puzzle
 
 class Puzzle01(Puzzle):
     def parser(self):
-        return list(map(int, self.input))
+        self.depths = list(map(int, self.input))
 
     def part_one(self, n=1):
-        return sum(x < y for x, y in zip(self.input, self.input[n:]))
+        return sum(x < y for x, y in zip(self.depths, self.depths[n:]))
 
     def part_two(self):
         return self.part_one(3)

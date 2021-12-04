@@ -32,15 +32,15 @@ class Submarine:
 
 class Puzzle02(Puzzle):
     def parser(self):
-        return [(c, int(v)) for c, v in map(str.split, self.input)]
+        self.commands = [(c, int(v)) for c, v in map(str.split, self.input)]
 
     def part_one(self):
-        sub = Submarine(self.input)
+        sub = Submarine(self.commands)
         sub.go()
         return sub.position * sub.depth
 
     def part_two(self):
-        sub = Submarine(self.input)
+        sub = Submarine(self.commands)
         sub.go_with_aim()
         return sub.position * sub.depth
 
