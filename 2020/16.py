@@ -1,6 +1,7 @@
 """Day 16: Ticket Translation."""
 
 import re
+from copy import deepcopy
 from math import prod
 from aoc.puzzle import Puzzle
 
@@ -42,16 +43,17 @@ class Puzzle16(Puzzle):
     def part_two(self):
         values_per_position = [set(v) for v in zip(*self.nearby)]
         my_ticket = {}
-        while self.rules:
+        rules = deepcopy(self.rules)
+        while rules:
             for position, values in enumerate(values_per_position):
                 possible_rules = [
                     rule
-                    for rule, accepted_values in self.rules.items()
+                    for rule, accepted_values in rules.items()
                     if values.issubset(accepted_values)
                 ]
                 if len(possible_rules) == 1:
                     my_ticket[possible_rules[0]] = self.me[position]
-                    del self.rules[possible_rules[0]]
+                    del rules[possible_rules[0]]
         return prod(v for rule, v in my_ticket.items() if rule.startswith("departure"))
 
 

@@ -45,19 +45,20 @@ class Puzzle24(Puzzle):
         return len(self.blacks)
 
     def part_two(self):
+        blacks = set(self.blacks)
         for _ in range(100):
             next_blacks = set()
             whites_to_check = set()
-            for black in self.blacks:
+            for black in blacks:
                 around = neighbors(*black)
-                if len(around.intersection(self.blacks)) in {1, 2}:
+                if len(around.intersection(blacks)) in {1, 2}:
                     next_blacks.add(black)
-                whites_to_check.update(around.difference(self.blacks))
+                whites_to_check.update(around.difference(blacks))
             for white in whites_to_check:
-                if len(neighbors(*white).intersection(self.blacks)) == 2:
+                if len(neighbors(*white).intersection(blacks)) == 2:
                     next_blacks.add(white)
-            self.blacks = next_blacks
-        return len(self.blacks)
+            blacks = next_blacks
+        return len(blacks)
 
 
 if __name__ == "__main__":

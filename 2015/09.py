@@ -25,11 +25,12 @@ class Puzzle09(Puzzle):
         return graph
 
     def part_one(self):
-        self.locations = Locations(self.input)
-        return min(self.locations.routes.values())
+        locations = Locations(self.input)
+        return min(locations.routes.values())
 
     def part_two(self):
-        return max(self.locations.routes.values())
+        locations = Locations(self.input)
+        return max(locations.routes.values())
 
 
 if __name__ == "__main__":

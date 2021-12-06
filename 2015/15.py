@@ -20,7 +20,7 @@ class Puzzle15(Puzzle):
             name, rest = line.split(":")
             return (name, *map(int, re.findall(r"-?\d+", rest)))
 
-        return [parse(line) for line in self.input]
+        return list(map(parse, self.input))
 
     def part_one(self, teaspoons=100, calories=None):
         best_cookie = 0
@@ -35,8 +35,8 @@ class Puzzle15(Puzzle):
                     best_cookie = prod(stats)
         return best_cookie
 
-    def part_two(self, teaspoons=100, calories=500):
-        return self.part_one(teaspoons, calories)
+    def part_two(self):
+        return self.part_one(calories=500)
 
 
 if __name__ == "__main__":

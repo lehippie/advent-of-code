@@ -1,5 +1,6 @@
 """Day 21: Allergen Assessment."""
 
+from copy import deepcopy
 from aoc.puzzle import Puzzle
 
 
@@ -16,7 +17,6 @@ class Puzzle21(Puzzle):
             self.ingredients.update(ingr)
             for a in alrg:
                 self.allergens[a] = self.allergens.get(a, ingr).intersection(ingr)
-        print(sorted(self.allergens))
 
     def part_one(self):
         possibly_unsafe = set().union(*self.allergens.values())
@@ -27,14 +27,15 @@ class Puzzle21(Puzzle):
         return safe_count
 
     def part_two(self):
-        while any(len(i) > 1 for i in self.allergens.values()):
-            for allergen, ingredients in self.allergens.items():
+        allergens = deepcopy(self.allergens)
+        while any(len(i) > 1 for i in allergens.values()):
+            for allergen, ingredients in allergens.items():
                 if len(ingredients) > 1:
                     continue
                 found = next(iter(ingredients))
-                for other_allergen in (a for a in self.allergens if a != allergen):
-                    self.allergens[other_allergen].discard(found)
-        return ",".join(next(iter(self.allergens[a])) for a in sorted(self.allergens))
+                for other_allergen in (a for a in allergens if a != allergen):
+                    allergens[other_allergen].discard(found)
+        return ",".join(next(iter(allergens[a])) for a in sorted(allergens))
 
 
 if __name__ == "__main__":
