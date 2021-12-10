@@ -10,7 +10,7 @@ class Puzzle07(Puzzle):
 
     def part_one(self):
         crabs = sorted(self.crabs)
-        median = crabs[(len(crabs) + 1) // 2]
+        median = crabs[(len(crabs) - 1) // 2]
         return sum(abs(crab - median) for crab in crabs)
 
     def part_two(self):
