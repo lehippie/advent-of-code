@@ -51,4 +51,4 @@ class Puzzle10(Puzzle):
 
 
 if __name__ == "__main__":
-    Puzzle10(solutions=(319233, None)).solve()
+    Puzzle10(solutions=(319233, 1118976874)).solve()
