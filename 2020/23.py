@@ -20,8 +20,7 @@ class Puzzle23(Puzzle):
         return int("".join(str(c) for c in cups[one + 1 :] + cups[:one]))
 
     def part_two(self, moves=10000000, maxi=1000000):
-        cups = self.input
-        init = cups + list(range(max(cups) + 1, maxi + 1))
+        init = self.input + list(range(max(self.input) + 1, maxi + 1))
         cups = [None for _ in range(maxi + 1)]
         for c, n in zip(init, init[1:] + [init[0]]):
             cups[c] = n

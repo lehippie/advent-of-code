@@ -31,7 +31,7 @@ class Puzzle14(Puzzle):
         return max(reindeer.fly(race_duration) for reindeer in self.input)
 
     def part_two(self, race_duration=2503):
-        points = [0 for _ in self.input]
+        points = [0] * len(self.input)
         for t in range(1, race_duration + 1):
             distances = [reindeer.fly(t) for reindeer in self.input]
             for k, distance in enumerate(distances):

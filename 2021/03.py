@@ -20,9 +20,9 @@ class Puzzle03(Puzzle):
         counts = [Counter() for _ in range(len(self.input[0]))]
         for number in self.input:
             [counts[k].update(n) for k, n in enumerate(number)]
-        self.gamma = "".join(max(count, key=count.get) for count in counts)
-        self.epsilon = "".join(min(count, key=count.get) for count in counts)
-        return int(self.gamma, base=2) * int(self.epsilon, base=2)
+        gamma = "".join(max(count, key=count.get) for count in counts)
+        epsilon = "".join(min(count, key=count.get) for count in counts)
+        return int(gamma, base=2) * int(epsilon, base=2)
 
     def part_two(self):
         ox = filtering(self.input, method=max)

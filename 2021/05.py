@@ -16,29 +16,21 @@ class Puzzle05(Puzzle):
             else:
                 self.diagonals.append(((x1, y1), (x2, y2)))
 
-    def part_one(self):
+    def part_one(self, count_diagonals=False):
         count = Counter()
         for (x1, y1), (x2, y2) in self.straights:
             x1, x2 = sorted((x1, x2))
             y1, y2 = sorted((y1, y2))
-            count.update(
-                (x, y) for x in range(x1, x2 + 1) for y in range(y1, y2 + 1)
-            )
+            count.update((x, y) for x in range(x1, x2 + 1) for y in range(y1, y2 + 1))
+        if count_diagonals:
+            for (x1, y1), (x2, y2) in self.diagonals:
+                rx = range(x1, x2 + 1) if x1 < x2 else range(x1, x2 - 1, -1)
+                ry = range(y1, y2 + 1) if y1 < y2 else range(y1, y2 - 1, -1)
+                count.update((x, y) for x, y in zip(rx, ry))
         return sum(c > 1 for c in count.values())
 
     def part_two(self):
-        count = Counter()
-        for (x1, y1), (x2, y2) in self.straights:
-            x1, x2 = sorted((x1, x2))
-            y1, y2 = sorted((y1, y2))
-            count.update(
-                (x, y) for x in range(x1, x2 + 1) for y in range(y1, y2 + 1)
-            )
-        for (x1, y1), (x2, y2) in self.diagonals:
-            rx = range(x1, x2 + 1) if x1 < x2 else range(x1, x2 - 1, -1)
-            ry = range(y1, y2 + 1) if y1 < y2 else range(y1, y2 - 1, -1)
-            count.update((x, y) for x, y in zip(rx, ry))
-        return sum(c > 1 for c in count.values())
+        return self.part_one(count_diagonals=True)
 
 
 if __name__ == "__main__":

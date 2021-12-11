@@ -152,22 +152,22 @@ class Puzzle20(Puzzle):
 
     def part_two(self):
         sea = Tile(0, self.image.image)
-        monsters_found = []
+        sizemon = (len(MONSTER), len(MONSTER[0]))
+        hashesmon = set(
+            (r, c)
+            for r, c in product(range(sizemon[0]), range(sizemon[1]))
+            if MONSTER[r][c] == "#"
+        )
+        monsters_found = False
         rotations_tested = 0
         while True:
-            size = (len(MONSTER), len(MONSTER[0]))
-            hashes = [
-                [r, c]
-                for r, c in product(range(size[0]), range(size[1]))
-                if MONSTER[r][c] == "#"
-            ]
             for r, c in product(
-                range(0, len(sea.tile) - size[0] + 1),
-                range(0, len(sea.tile[0]) - size[1] + 1),
+                range(0, len(sea.tile) - sizemon[0] + 1),
+                range(0, len(sea.tile[0]) - sizemon[1] + 1),
             ):
-                coords = [[r + x, c + y] for x, y in hashes]
-                if "".join(sea.tile[x][y] for x, y in coords) == "#" * len(hashes):
-                    monsters_found.append((r, c))
+                coords = set((r + x, c + y) for x, y in hashesmon)
+                if all(sea.tile[x][y] == "#" for x, y in coords):
+                    monsters_found = True
                     for x, y in coords:
                         sea.tile[x] = f"{sea.tile[x][:y]}O{sea.tile[x][y+1:]}"
             if monsters_found:

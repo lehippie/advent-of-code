@@ -11,14 +11,12 @@ class Octopuses:
         self.flash_count = 0
 
     def neighbors(self, position):
-        around = set(product(*((p, p - 1, p + 1) for p in position)))
-        around.remove(position)
-        return around.difference(
-            set(
-                (x, y)
-                for x, y in around
-                if not 0 <= x < self.grid.shape[0] or not 0 <= y < self.grid.shape[1]
-            )
+        return set(
+            (x, y)
+            for x, y in product(*((p, p - 1, p + 1) for p in position))
+            if (x, y) != position
+            and 0 <= x < self.grid.shape[0]
+            and 0 <= y < self.grid.shape[1]
         )
 
     def do_step(self):

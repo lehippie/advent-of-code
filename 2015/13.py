@@ -1,6 +1,7 @@
 """Day 13: Knights of the Dinner Table."""
 
 from collections import defaultdict
+from copy import deepcopy
 from itertools import permutations
 from aoc.puzzle import Puzzle
 
@@ -37,11 +38,11 @@ class Puzzle13(Puzzle):
         return max(table.arrangements.values())
 
     def part_two(self):
-        self.input_with_me = self.input.copy()
+        input_with_me = deepcopy(self.input)
         for attendee in self.input:
-            self.input_with_me[attendee]["me"] = 0
-            self.input_with_me["me"][attendee] = 0
-        table = DinnerTable(self.input_with_me)
+            input_with_me[attendee]["me"] = 0
+            input_with_me["me"][attendee] = 0
+        table = DinnerTable(input_with_me)
         return max(table.arrangements.values())
 
 

@@ -38,18 +38,19 @@ class Circuit:
 
 class Puzzle07(Puzzle):
     def parser(self):
-        parsed_connections = {}
-        for connection in self.input:
-            value, wire = connection.split(" -> ")
-            parsed_connections[wire] = value
-        return parsed_connections
+        connections = {}
+        for line in self.input:
+            value, wire = line.split(" -> ")
+            connections[wire] = value
+        return connections
 
     def part_one(self):
-        return Circuit(self.input)["a"]
+        self.signal = Circuit(self.input)["a"]
+        return self.signal
 
     def part_two(self):
         circuit = Circuit(self.input)
-        circuit["b"] = self.solutions[0]
+        circuit["b"] = self.signal
         return circuit["a"]
 
 

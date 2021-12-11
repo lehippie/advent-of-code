@@ -29,24 +29,22 @@ class Puzzle04(Puzzle):
                 [list(map(int, row.split())) for row in self.input[k : k + 5]]
             )
 
-    def part_one(self):
+    def part_one(self, get="winner"):
         boards = [Board(grid) for grid in self.grids]
         for draw in self.draws:
             [board.mark(draw) for board in boards]
             winners = [board.wins() for board in boards]
             if any(winners):
-                return boards[winners.index(True)].score() * draw
+                if get == "winner":
+                    return boards[winners.index(True)].score() * draw
+                elif get == "loser":
+                    if len(boards) > 1:
+                        boards = [board for board, win in zip(boards, winners) if not win]
+                    else:
+                        return boards[0].score() * draw
 
     def part_two(self):
-        boards = [Board(grid) for grid in self.grids]
-        for draw in self.draws:
-            [board.mark(draw) for board in boards]
-            winners = [board.wins() for board in boards]
-            if any(winners):
-                if len(boards) > 1:
-                    boards = [board for board, win in zip(boards, winners) if not win]
-                else:
-                    return boards[0].score() * draw
+        return self.part_one("loser")
 
 
 if __name__ == "__main__":

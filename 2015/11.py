@@ -39,13 +39,13 @@ def is_valid(password):
 
 class Puzzle11(Puzzle):
     def part_one(self):
-        password = increment(self.input)
-        while not is_valid(password):
-            password = increment(password)
-        return password
+        self.pwd = increment(self.input)
+        while not is_valid(self.pwd):
+            self.pwd = increment(self.pwd)
+        return self.pwd
 
     def part_two(self):
-        password = increment(self.part_one())
+        password = increment(self.pwd)
         while not is_valid(password):
             password = increment(password)
         return password
