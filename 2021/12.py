@@ -13,32 +13,30 @@ class Puzzle12(Puzzle):
             self.caves[cb].append(ca)
 
     def part_one(self):
-        paths = []
+        paths_count = 0
         exploration = [["start"]]
         while exploration:
             path = exploration.pop(0)
-            if path[-1] == "end":
-                paths.append(path)
-                continue
-            for connection in self.caves[path[-1]]:
-                if connection not in path or connection.isupper():
-                    exploration.append(path + [connection])
-        return len(paths)
+            for cave in self.caves[path[-1]]:
+                if cave == "end":
+                    paths_count += 1
+                elif cave not in path or cave.isupper():
+                    exploration.append(path + [cave])
+        return paths_count
 
     def part_two(self):
-        paths = []
+        paths_count = 0
         exploration = [(["start"], True)]
         while exploration:
-            path, small_allowed_twice = exploration.pop(0)
-            if path[-1] == "end":
-                paths.append(path)
-                continue
-            for connection in self.caves[path[-1]]:
-                if connection not in path or connection.isupper():
-                    exploration.append((path + [connection], small_allowed_twice))
-                elif small_allowed_twice and connection != "start":
-                    exploration.append((path + [connection], False))
-        return len(paths)
+            path, twice_small_allowed = exploration.pop(0)
+            for cave in self.caves[path[-1]]:
+                if cave == "end":
+                    paths_count += 1
+                elif cave not in path or cave.isupper():
+                    exploration.append((path + [cave], twice_small_allowed))
+                elif twice_small_allowed and cave != "start":
+                    exploration.append((path + [cave], False))
+        return paths_count
 
 
 if __name__ == "__main__":
