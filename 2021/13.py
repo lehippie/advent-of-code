@@ -1,6 +1,6 @@
 """Day 13: Transparent Origami."""
 
-from itertools import product
+from hashlib import md5
 from aoc.puzzle import Puzzle
 
 
@@ -49,9 +49,10 @@ class Puzzle13(Puzzle):
         paper = Origami(self.dots)
         for fold in self.folds:
             paper.folds(*fold)
-        # print(paper)
-        return "EFJKZLBL"
+        code = str(paper)
+        # print(code)
+        return md5(code.encode()).hexdigest()
 
 
 if __name__ == "__main__":
-    Puzzle13(solutions=(664, "EFJKZLBL")).solve()
+    Puzzle13(solutions=(664, "185cfe412e2e8fd08c2eecfc9d96a469")).solve()
