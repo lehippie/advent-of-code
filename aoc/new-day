@@ -27,6 +27,9 @@ from aoc.puzzle import Puzzle
 
 
 class Puzzle%s(Puzzle):
+    def parser(self):
+        return self.input
+
     def part_one(self):
         return super().part_one()
 
