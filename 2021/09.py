@@ -15,7 +15,7 @@ def adjacents(r, c, maxr, maxc):
 
 class Puzzle09(Puzzle):
     def parser(self):
-        self.floor = [list(map(int, list(line))) for line in self.input]
+        self.floor = [list(map(int, line)) for line in self.input]
 
     def part_one(self):
         self.rlen = len(self.floor)
@@ -34,7 +34,7 @@ class Puzzle09(Puzzle):
     def part_two(self):
         self.sizes = []
         for low_r, low_c in self.lows:
-            bassin = set([(low_r, low_c)])
+            bassin = {(low_r, low_c)}
             locations_to_check = [(low_r, low_c)]
             while locations_to_check:
                 r, c = locations_to_check.pop()
