@@ -41,11 +41,12 @@ class Packet:
             self.size = 18 + sum(packet.size for packet in content)
         return content
 
-    def vsum(self):
+    @property
+    def versions_sum(self):
         if self.id == 4:
             return self.version
         else:
-            return self.version + sum(packet.vsum() for packet in self.content)
+            return self.version + sum(p.versions_sum for p in self.content)
 
     @property
     def value(self):
@@ -72,12 +73,11 @@ class Puzzle16(Puzzle):
         return "".join(f"{int(f'0x{x}', 16):04b}" for x in self.input)
 
     def part_one(self):
-        transmission = Packet(self.input)
-        return transmission.vsum()
+        self.transmission = Packet(self.input)
+        return self.transmission.versions_sum
 
     def part_two(self):
-        transmission = Packet(self.input)
-        return transmission.value
+        return self.transmission.value
 
 
 if __name__ == "__main__":
