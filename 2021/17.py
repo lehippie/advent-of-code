@@ -28,11 +28,11 @@ class Puzzle17(Puzzle):
     def part_one(self):
         """No need to worry about x because the best height
         is the same for any vx value ending up stabilizing
-        the probe in target xrange.
+        the probe in target range.
 
-        Best height is vy * (vy + 1) / 2 so we need to max
+        Max height is vy * (vy + 1) / 2 so we need to max
         vy. As the probe always comes back to y = 0, its
-        first depth is -(vy + 1) that is limeted by target
+        first depth is -(vy + 1) that is limited by target
         low bound.
         """
         self.vymax = -self.target[2] - 1
