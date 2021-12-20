@@ -57,16 +57,17 @@ class SnailN(str):
 
 class Puzzle18(Puzzle):
     def part_one(self):
-        result = SnailN(self.input[0])
+        number = SnailN(self.input[0])
         for n in self.input[1:]:
-            result += SnailN(n)
-        return result.magnitude()
+            number += n
+        return number.magnitude()
 
     def part_two(self):
+        numbers = [SnailN(n) for n in self.input]
         return max(
-            (SnailN(x) + SnailN(y)).magnitude() for x, y in permutations(self.input, 2)
+            (x + y).magnitude() for x, y in permutations(numbers, 2)
         )
 
 
 if __name__ == "__main__":
-    Puzzle18(solutions=(3486, None)).solve()
+    Puzzle18(solutions=(3486, 4747)).solve()
