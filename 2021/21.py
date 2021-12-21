@@ -8,17 +8,16 @@ from aoc.puzzle import Puzzle
 class DiracDice:
     def __init__(self, starting_positions):
         self.positions = list(starting_positions)
-        self.scores = [0, 0]
+        self.scores = [0] * len(self.positions)
         self.turn = 0
         self.dice = cycle(range(1, 101))
 
     def has_ended(self):
         return max(self.scores) >= 1000
 
-    def next_turn(self, roll=None):
-        if roll is None:
-            roll = sum(next(self.dice) for _ in range(3))
-        player = self.turn % 2
+    def next_turn(self):
+        roll = sum(next(self.dice) for _ in range(3))
+        player = self.turn % len(self.positions)
         self.positions[player] = (self.positions[player] + roll) % 10 or 10
         self.scores[player] += self.positions[player]
         self.turn += 1
@@ -36,21 +35,21 @@ class Puzzle21(Puzzle):
 
     def part_two(self):
         quantum_rolls = Counter(sum(rolls) for rolls in product(range(1, 4), repeat=3))
-        wins = [0, 0]
-        games = {self.input + (0, 0, 0): 1}
+        wins = [0] * len(self.input)
+        games = {self.input + (0,) * len(wins) + (0,): 1}
         while games:
             _games = defaultdict(int)
             for state, n_games in games.items():
-                player = state[4]
+                player = state[-1]
                 for roll, n_roll in quantum_rolls.items():
-                    positions = list(state[0:2])
-                    scores = list(state[2:4])
+                    positions = list(state[0 : len(wins)])
+                    scores = list(state[len(wins) : -1])
                     positions[player] = (positions[player] + roll) % 10 or 10
                     scores[player] += positions[player]
                     if scores[player] >= 21:
                         wins[player] += n_games * n_roll
                     else:
-                        _state = tuple(positions + scores + [(player + 1) % 2])
+                        _state = tuple(positions + scores + [(player + 1) % len(wins)])
                         _games[_state] += n_games * n_roll
             games = _games
         return max(wins)
