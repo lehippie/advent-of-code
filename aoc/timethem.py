@@ -25,12 +25,12 @@ def write_timeing_file(timings, filepath=TIMING_FILE):
         json.dump(timings, f, indent=4)
 
 
-def timing(year, day):
+def timing(year, day, repeats=REPEATS):
     m = import_module(f"{year}.{day:>02}")
     p = m.__dict__[f"Puzzle{day:>02}"]()
     out = [None, None]
     for k, part in enumerate((p.part_one, p.part_two)):
-        out[k] = repeat(part, repeat=REPEATS, number=1)
+        out[k] = repeat(part, repeat=repeats, number=1)
         out[k] = round(1000 * min(out[k]), 3)
     return out
 

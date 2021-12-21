@@ -14,16 +14,16 @@ class Image:
         self.img = np.pad(self.img, 1, constant_values=self.outside)
         pad = np.pad(self.img, 1, constant_values=self.outside)
         for (r, c), _ in np.ndenumerate(self.img):
-            binary = "".join(str(p) for p in pad[r: r + 3, c: c + 3].flatten())
-            self.img[r,c] = self.algo[int(binary, base=2)]
+            binary = "".join(
+                "1" if i else "0" for i in pad[r : r + 3, c : c + 3].flat
+            )
+            self.img[r, c] = self.algo[int(binary, base=2)]
         self.outside = self.algo[int(str(self.outside) * 9, base=2)]
 
 
 class Puzzle20(Puzzle):
     def parser(self):
-        self.input = [
-            list(map(int, l.replace("#", "1").replace(".", "0"))) for l in self.input
-        ]
+        self.input = [[int(l == "#") for l in line] for line in self.input]
         self.algo = self.input[0]
         self.img = np.array(self.input[2:])
 
