@@ -8,7 +8,7 @@ from aoc.puzzle import Puzzle
 
 PAIR = re.compile(r"\[\d+,\d+\]")
 FIRST_NUMBER = re.compile(r"\d+")
-LAST_NUMBER = re.compile(r".*[^\d](\d+)")
+LAST_NUMBER = re.compile(r"(\d+)[^\d]*$")
 NUMBER_OVER_TEN = re.compile(r"\d\d+")
 
 
