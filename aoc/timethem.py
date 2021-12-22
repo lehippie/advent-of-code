@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Computation time of solved puzzles."""
 
 import json
