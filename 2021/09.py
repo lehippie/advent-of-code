@@ -37,7 +37,7 @@ class Puzzle09(Puzzle):
             bassin = {(low_r, low_c)}
             locations_to_check = [(low_r, low_c)]
             while locations_to_check:
-                r, c = locations_to_check.pop()
+                r, c = locations_to_check.pop(0)
                 new_locs = adjacents(r, c, self.rlen, self.clen).difference(bassin)
                 for adj_r, adj_c in new_locs:
                     if self.floor[adj_r][adj_c] != 9:
