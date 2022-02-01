@@ -13,7 +13,7 @@ def adjacents(r, c, maxr, maxc):
     return adj
 
 
-class Puzzle09(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.floor = [list(map(int, line)) for line in self.input]
 
@@ -47,5 +47,7 @@ class Puzzle09(Puzzle):
         return prod(sorted(self.sizes)[-3:])
 
 
+solutions = (468, 1280496)
+
 if __name__ == "__main__":
-    Puzzle09(solutions=(468, 1280496)).solve()
+    Today(solutions=solutions).solve()

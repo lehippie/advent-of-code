@@ -68,7 +68,7 @@ class Packet:
             return 1 if self.content[0].value == self.content[1].value else 0
 
 
-class Puzzle16(Puzzle):
+class Today(Puzzle):
     def parser(self):
         return "".join(f"{int(f'0x{x}', 16):04b}" for x in self.input)
 
@@ -80,5 +80,7 @@ class Puzzle16(Puzzle):
         return self.transmission.value
 
 
+solutions = (977, 101501020883)
+
 if __name__ == "__main__":
-    Puzzle16(solutions=(977, 101501020883)).solve()
+    Today(solutions=solutions).solve()

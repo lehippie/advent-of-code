@@ -21,7 +21,7 @@ class Probe:
         self.positions.add((self.x, self.y))
 
 
-class Puzzle17(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.target = list(map(int, re.findall(r"-?\d+", self.input)))
 
@@ -54,5 +54,7 @@ class Puzzle17(Puzzle):
         return count
 
 
+solutions = (15400, 5844)
+
 if __name__ == "__main__":
-    Puzzle17(solutions=(15400, 5844)).solve()
+    Today(solutions=solutions).solve()

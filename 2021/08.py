@@ -35,7 +35,7 @@ class Display:
         return "".join(str(self.signals.index(d)) for d in self.output)
 
 
-class Puzzle08(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.displays = []
         for entry in self.input:
@@ -58,5 +58,7 @@ class Puzzle08(Puzzle):
         return outputs
 
 
+solutions = (383, 998900)
+
 if __name__ == "__main__":
-    Puzzle08(solutions=(383, 998900)).solve()
+    Today(solutions=solutions).solve()

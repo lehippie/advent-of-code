@@ -21,7 +21,7 @@ class Image:
         self.outside = self.algo[int(str(self.outside) * 9, base=2)]
 
 
-class Puzzle20(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.input = [[int(l == "#") for l in line] for line in self.input]
         self.algo = self.input[0]
@@ -37,5 +37,7 @@ class Puzzle20(Puzzle):
         return self.part_one(steps=50)
 
 
+solutions = (5347, 17172)
+
 if __name__ == "__main__":
-    Puzzle20(solutions=(5347, 17172)).solve()
+    Today(solutions=solutions).solve()

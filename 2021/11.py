@@ -32,7 +32,7 @@ class Octopuses:
         self.grid[self.grid > 9] = 0
 
 
-class Puzzle11(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.grid = [list(map(int, line)) for line in self.input]
 
@@ -51,5 +51,7 @@ class Puzzle11(Puzzle):
         return sync_step
 
 
+solutions = (1665, 235)
+
 if __name__ == "__main__":
-    Puzzle11(solutions=(1665, 235)).solve()
+    Today(solutions=solutions).solve()

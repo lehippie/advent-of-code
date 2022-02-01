@@ -5,7 +5,7 @@ from collections import Counter
 from aoc.puzzle import Puzzle
 
 
-class Puzzle05(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.straights = []
         self.diagonals = []
@@ -33,5 +33,7 @@ class Puzzle05(Puzzle):
         return self.part_one(count_diagonals=True)
 
 
+solutions = (5585, 17193)
+
 if __name__ == "__main__":
-    Puzzle05(solutions=(5585, 17193)).solve()
+    Today(solutions=solutions).solve()

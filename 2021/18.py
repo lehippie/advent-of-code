@@ -55,7 +55,7 @@ class SnailN(str):
         return eval(self.replace("[", "(3*").replace("]", "*2)").replace(",", "+"))
 
 
-class Puzzle18(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         number = SnailN(self.input[0])
         for n in self.input[1:]:
@@ -69,5 +69,7 @@ class Puzzle18(Puzzle):
         )
 
 
+solutions = (3486, 4747)
+
 if __name__ == "__main__":
-    Puzzle18(solutions=(3486, 4747)).solve()
+    Today(solutions=solutions).solve()

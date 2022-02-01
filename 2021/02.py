@@ -30,7 +30,7 @@ class Submarine:
                 self.aim -= v
 
 
-class Puzzle02(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.commands = [(c, int(v)) for c, v in map(str.split, self.input)]
 
@@ -45,5 +45,7 @@ class Puzzle02(Puzzle):
         return sub.position * sub.depth
 
 
+solutions = (2272262, 2134882034)
+
 if __name__ == "__main__":
-    Puzzle02(solutions=(2272262, 2134882034)).solve()
+    Today(solutions=solutions).solve()

@@ -36,7 +36,7 @@ def completion_score(completion):
     return score
 
 
-class Puzzle10(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         lines = [Line(line) for line in self.input]
         corruptions = Counter(line.err for line in lines if line.status == "corrupted")
@@ -50,5 +50,7 @@ class Puzzle10(Puzzle):
         return sorted(scores)[(len(scores) - 1) // 2]
 
 
+solutions = (319233, 1118976874)
+
 if __name__ == "__main__":
-    Puzzle10(solutions=(319233, 1118976874)).solve()
+    Today(solutions=solutions).solve()

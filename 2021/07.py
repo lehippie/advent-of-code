@@ -4,7 +4,7 @@ from math import floor, ceil
 from aoc.puzzle import Puzzle
 
 
-class Puzzle07(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.crabs = list(map(int, self.input.split(",")))
 
@@ -22,5 +22,7 @@ class Puzzle07(Puzzle):
         return min(fuels)
 
 
+solutions = (335271, 95851339)
+
 if __name__ == "__main__":
-    Puzzle07(solutions=(335271, 95851339)).solve()
+    Today(solutions=solutions).solve()

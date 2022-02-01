@@ -20,7 +20,7 @@ def volume(cuboid):
     return prod((M - m + 1 for m, M in zip(cuboid[::2], cuboid[1::2])))
 
 
-class Puzzle22(Puzzle):
+class Today(Puzzle):
     def parser(self):
         def parse_line(line):
             on, cuboid = line.split(" ")
@@ -53,5 +53,7 @@ class Puzzle22(Puzzle):
         return sum(flag * volume(c) for c, flag in cuboids.items())
 
 
+solutions = (601104, 1262883317822267)
+
 if __name__ == "__main__":
-    Puzzle22(solutions=(601104, 1262883317822267)).solve()
+    Today(solutions=solutions).solve()

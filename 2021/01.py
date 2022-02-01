@@ -3,7 +3,7 @@
 from aoc.puzzle import Puzzle
 
 
-class Puzzle01(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.depths = list(map(int, self.input))
 
@@ -14,5 +14,7 @@ class Puzzle01(Puzzle):
         return self.part_one(3)
 
 
+solutions = (1448, 1471)
+
 if __name__ == "__main__":
-    Puzzle01(solutions=(1448, 1471)).solve()
+    Today(solutions=solutions).solve()

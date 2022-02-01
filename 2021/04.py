@@ -20,7 +20,7 @@ class Board:
         return sum(n for n in self.grid.flatten() if n > 0)
 
 
-class Puzzle04(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.draws = list(map(int, self.input[0].split(",")))
         self.grids = []
@@ -47,5 +47,7 @@ class Puzzle04(Puzzle):
         return self.part_one("loser")
 
 
+solutions = (87456, 15561)
+
 if __name__ == "__main__":
-    Puzzle04(solutions=(87456, 15561)).solve()
+    Today(solutions=solutions).solve()

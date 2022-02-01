@@ -4,7 +4,7 @@ from collections import defaultdict, deque
 from aoc.puzzle import Puzzle
 
 
-class Puzzle12(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.caves = defaultdict(list)
         for line in self.input:
@@ -45,5 +45,7 @@ class Puzzle12(Puzzle):
         return paths_count
 
 
+solutions = (5254, 149385)
+
 if __name__ == "__main__":
-    Puzzle12(solutions=(5254, 149385)).solve()
+    Today(solutions=solutions).solve()

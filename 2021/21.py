@@ -24,7 +24,7 @@ class DiracDice:
         self.turn += 1
 
 
-class Puzzle21(Puzzle):
+class Today(Puzzle):
     def parser(self):
         return tuple(int(line.split()[-1]) for line in self.input)
 
@@ -57,5 +57,7 @@ class Puzzle21(Puzzle):
         return max(wins)
 
 
+solutions = (503478, 716241959649754)
+
 if __name__ == "__main__":
-    Puzzle21(solutions=(503478, 716241959649754)).solve()
+    Today(solutions=solutions).solve()

@@ -29,7 +29,7 @@ class Origami:
         )
 
 
-class Puzzle13(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.dots = set()
         self.folds = []
@@ -54,5 +54,7 @@ class Puzzle13(Puzzle):
         return md5(code.encode()).hexdigest()
 
 
+solutions = (664, "185cfe412e2e8fd08c2eecfc9d96a469")
+
 if __name__ == "__main__":
-    Puzzle13(solutions=(664, "185cfe412e2e8fd08c2eecfc9d96a469")).solve()
+    Today(solutions=solutions).solve()

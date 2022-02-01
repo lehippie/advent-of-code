@@ -20,7 +20,7 @@ class Polymer:
         self.pairs = new_pairs
 
 
-class Puzzle14(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.template = self.input[0]
         self.rules = {}
@@ -38,5 +38,7 @@ class Puzzle14(Puzzle):
         return self.part_one(40)
 
 
+solutions = (3906, 4441317262452)
+
 if __name__ == "__main__":
-    Puzzle14(solutions=(3906, 4441317262452)).solve()
+    Today(solutions=solutions).solve()

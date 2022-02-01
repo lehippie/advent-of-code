@@ -3,7 +3,7 @@
 from aoc.puzzle import Puzzle
 
 
-class Puzzle06(Puzzle):
+class Today(Puzzle):
     def part_one(self, days=80):
         ages = [self.input.count(str(k)) for k in range(9)]
         for _ in range(days):
@@ -15,5 +15,7 @@ class Puzzle06(Puzzle):
         return self.part_one(256)
 
 
+solutions = (379414, 1705008653296)
+
 if __name__ == "__main__":
-    Puzzle06(solutions=(379414, 1705008653296)).solve()
+    Today(solutions=solutions).solve()

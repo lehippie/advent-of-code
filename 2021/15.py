@@ -32,7 +32,7 @@ class RiskGrid:
         return 1 + (base_risk + row_mult + col_mult - 1) % 9
 
 
-class Puzzle15(Puzzle):
+class Today(Puzzle):
     def parser(self):
         return [list(map(int, line)) for line in self.input]
 
@@ -53,5 +53,7 @@ class Puzzle15(Puzzle):
         return self.part_one(extended=5)
 
 
+solutions = (390, 2814)
+
 if __name__ == "__main__":
-    Puzzle15(solutions=(390, 2814)).solve()
+    Today(solutions=solutions).solve()

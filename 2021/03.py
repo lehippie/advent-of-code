@@ -15,7 +15,7 @@ def filtering(numbers, method):
     return numbers[0]
 
 
-class Puzzle03(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         counts = [Counter() for _ in range(len(self.input[0]))]
         for number in self.input:
@@ -30,5 +30,7 @@ class Puzzle03(Puzzle):
         return int(ox, base=2) * int(co2, base=2)
 
 
+solutions = (1082324, 1353024)
+
 if __name__ == "__main__":
-    Puzzle03(solutions=(1082324, 1353024)).solve()
+    Today(solutions=solutions).solve()
