@@ -24,15 +24,14 @@ def read_file(filepath):
     return content
 
 
-def download_input(year: str, day: str) -> str:
+def download_input(year, day):
     """Get puzzle input from Advent of Code website.
 
     Authentification is done with the session cookie parsed from
     configuration file (see "config.txt.example").
 
     Arguments:
-        year, day  --  strings representing the date of the puzzle
-            to download.
+        year, day  --  date of the puzzle to download.
 
     Returns:
         String containing the response from the website.
@@ -45,15 +44,16 @@ def download_input(year: str, day: str) -> str:
         return response.read().decode("utf-8")
 
 
-def load_input(year: str, day: str):
-    """Get puzzle input from inputs folder for given date.
+def load_input(year, day):
+    """Get puzzle input. Download and save it if missing from inputs folder.
 
     Arguments:
-        year, day  --  strings representing the date of the puzzle
-            to load.
+        year, day  --  date of the puzzle to load.
 
-    If the file is not already in the inputs folder, it will be saved
-    for future use.
+    Returns:
+        List of string, one for each line in the puzzle input.
+            OR
+        String if the puzzle input is only one line.
     """
     input_path = INPUTS_DIR / f"{year}" / f"{day.zfill(2)}.txt"
     if not input_path.exists():
