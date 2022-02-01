@@ -8,43 +8,44 @@ from aoc.inputs import load_input
 class Puzzle:
     """Puzzle class.
 
-    This class is made to be inherited from, to solve Advent of Code
+    This class is made to be inherited from to solve Advent of Code
     puzzles.
 
     Methods:
-        parser  --  placeholder for optional method to manipulate
-            puzzle input at class init.
-        part_one, part_two  --  placeholders for solutions of both
-            parts of the puzzle.
-        solve  --  run both parts and compare them to already found
-            solutions.
+        parser  --  method called at instance init to manipulate the
+            puzzle input stored in <input> attribute. Returned object
+            is stored in  <input> attribute.
+        part_one, part_two  --  placeholders for solving parts of the
+            puzzle. Solutions have to be returned for <solve> method
+            to do its verification job.
+        solve  --  run puzzle parts and compare answers to already
+            found solutions.
 
-    Attributes:
-        solutions  --  stores puzzle solutions as a tuple.
+    Attributes defined at init:
         input  --  stores puzzle input as a list of strings or as a
             string if there is only one line.
+        solutions  --  stores puzzle solutions as a tuple.
     """
 
     def __init__(
         self,
-        puzzle_input=None,
+        input_data=None,
         solutions=(None, None),
     ):
         """Puzzle class constructor.
 
         Arguments:
-            puzzle_input  --  str or list of str used to store puzzle
-                inputs.
-                If set to None, it is fetched from default inputs
-                folder based on the name of the file where the class
-                instance is created (ex: "2020/05.py").
-            solutions  --  already found solutions used by the "solve"
-                method to prevent regression.
+            input_data  --  list of str OR str.
+                If set to None, tries to fetch it from default inputs
+                folder based on the name of the file where the
+                instance is created (ex: "2020/01.py").
+            solutions  --  already found solutions used by <solve>
+                method to prevent regressions.
         """
-        if puzzle_input is None:
+        if input_data is None:
             f = Path(inspect.getmodule(self).__file__)
-            puzzle_input = load_input(f.parts[-2], f.stem)
-        self.input = puzzle_input
+            input_data = load_input(f.parts[-2], f.stem)
+        self.input = input_data
         self.input = self.parser()
         self.solutions = solutions
 
@@ -57,18 +58,22 @@ class Puzzle:
     def part_two(self):
         return NotImplemented
 
-    def solve(self):
-        """Run puzzle parts and print status."""
+    def solve(self, verbose=True):
+        """Run puzzle parts and warn for regressions."""
         parts = (self.part_one, self.part_two)
         for k, (part, solution) in enumerate(zip(parts, self.solutions)):
             answer = part()
             if solution is None:
-                print(f"Part {k+1} answer: {answer} ?")
-                return
+                if verbose:
+                    print(f"Part {k + 1} answer: {answer} ?")
+                return False
             elif answer != solution:
-                print(
-                    f"Regression in part {k+1}:",
-                    f"got {answer} instead of {solution}.",
-                )
-                return
-        print("Day completed \o/")
+                if verbose:
+                    print(
+                        f"Regression in part {k + 1}:",
+                        f"got {answer} instead of {solution}.",
+                    )
+                return False
+        if verbose:
+            print("Day completed \o/")
+        return True
