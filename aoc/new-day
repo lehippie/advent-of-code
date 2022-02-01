@@ -9,6 +9,7 @@ Usage:
 
 Arguments:
     <year>, <day>   Date of the new day.
+                    Default is today.
 
 Options:
     -h, --help      Show this help.
@@ -26,7 +27,7 @@ TEMPLATE = '''"""%s."""
 from aoc.puzzle import Puzzle
 
 
-class Puzzle%s(Puzzle):
+class Today(Puzzle):
     def parser(self):
         return self.input
 
@@ -37,8 +38,10 @@ class Puzzle%s(Puzzle):
         return super().part_two()
 
 
+solutions = (None, None)
+
 if __name__ == "__main__":
-    Puzzle%s(solutions=(None, None)).solve()
+    Today(solutions=solutions).solve()
 '''
 
 
@@ -48,7 +51,7 @@ def create_file(year, day):
     if puzzle_path.exists():
         raise IOError("Puzzle file already exists.")
     puzzle_path.parent.mkdir(parents=True, exist_ok=True)
-    puzzle_path.write_text(TEMPLATE % (day_title(year, day), day, day))
+    puzzle_path.write_text(TEMPLATE % day_title(year, day))
 
 
 def day_title(year, day):
@@ -64,6 +67,7 @@ def day_title(year, day):
 if __name__ == "__main__":
     args = docopt(__doc__)
     if args["<year>"] is None:
-        args["<year>"] = datetime.now().year
-        args["<day>"] = datetime.now().day
+        now = datetime.now()
+        args["<year>"] = now.year
+        args["<day>"] = now.day
     create_file(args["<year>"], args["<day>"])
