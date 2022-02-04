@@ -9,15 +9,16 @@ class Board:
         self.grid = np.array(grid)
 
     def mark(self, number):
-        self.grid[self.grid == number] = -self.grid[self.grid == number]
+        """Mark a number by switching it to '-1'."""
+        self.grid[self.grid == number] = -1
 
     def wins(self):
-        if any((self.grid < 0).all(axis=0)) or any((self.grid < 0).all(axis=1)):
-            return True
-        return False
+        """Check if a row or a column is completely marked."""
+        return any((self.grid < 0).all(axis=0)) or any((self.grid < 0).all(axis=1))
 
-    def score(self):
-        return sum(n for n in self.grid.flatten() if n > 0)
+    def score(self, winning_draw):
+        """Sum of unmarked numbers."""
+        return sum(n for n in self.grid.flatten() if n != -1) * winning_draw
 
 
 class Today(Puzzle):
@@ -29,22 +30,23 @@ class Today(Puzzle):
                 [list(map(int, row.split())) for row in self.input[k : k + 5]]
             )
 
-    def part_one(self, get="winner"):
+    def part_one(self):
         boards = [Board(grid) for grid in self.grids]
         for draw in self.draws:
-            [board.mark(draw) for board in boards]
+            for board in boards:
+                board.mark(draw)
             winners = [board.wins() for board in boards]
             if any(winners):
-                if get == "winner":
-                    return boards[winners.index(True)].score() * draw
-                elif get == "loser":
-                    if len(boards) > 1:
-                        boards = [board for board, win in zip(boards, winners) if not win]
-                    else:
-                        return boards[0].score() * draw
+                return boards[winners.index(True)].score(draw)
 
     def part_two(self):
-        return self.part_one("loser")
+        boards = [Board(grid) for grid in self.grids]
+        for draw in self.draws:
+            for board in boards:
+                board.mark(draw)
+            if len(boards) == 1 and boards[0].wins():
+                return boards[0].score(draw)
+            boards = [board for board in boards if not board.wins()]
 
 
 solutions = (87456, 15561)

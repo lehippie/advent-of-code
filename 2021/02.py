@@ -4,45 +4,46 @@ from aoc.puzzle import Puzzle
 
 
 class Submarine:
-    def __init__(self, course):
-        self.course = course
+    def __init__(self):
         self.position = 0
         self.depth = 0
+
+    def go(self, command, unit):
+        if command == "forward":
+            self.position += unit
+        elif command == "down":
+            self.depth += unit
+        elif command == "up":
+            self.depth -= unit
+
+
+class AimingSubmarine(Submarine):
+    def __init__(self):
+        super().__init__()
         self.aim = 0
 
-    def go(self):
-        for c, v in self.course:
-            if c == "forward":
-                self.position += v
-            elif c == "down":
-                self.depth += v
-            elif c == "up":
-                self.depth -= v
-
-    def go_with_aim(self):
-        for c, v in self.course:
-            if c == "forward":
-                self.position += v
-                self.depth += self.aim * v
-            elif c == "down":
-                self.aim += v
-            elif c == "up":
-                self.aim -= v
+    def go(self, command, unit):
+        if command == "forward":
+            self.position += unit
+            self.depth += self.aim * unit
+        elif command == "down":
+            self.aim += unit
+        elif command == "up":
+            self.aim -= unit
 
 
 class Today(Puzzle):
     def parser(self):
         self.commands = [(c, int(v)) for c, v in map(str.split, self.input)]
 
-    def part_one(self):
-        sub = Submarine(self.commands)
-        sub.go()
+    def part_one(self, submarine=Submarine):
+        sub = submarine()
+        for command, unit in self.commands:
+            sub.go(command, unit)
         return sub.position * sub.depth
 
     def part_two(self):
-        sub = Submarine(self.commands)
-        sub.go_with_aim()
-        return sub.position * sub.depth
+        return self.part_one(AimingSubmarine)
 
 
 solutions = (2272262, 2134882034)
