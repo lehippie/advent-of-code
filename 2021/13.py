@@ -8,7 +8,7 @@ class Origami:
     def __init__(self, dots):
         self.dots = dots
 
-    def folds(self, ax, n):
+    def fold(self, ax, n):
         ax = 0 if ax == "x" else 1
         dots = set()
         for dot in self.dots:
@@ -32,24 +32,23 @@ class Origami:
 class Today(Puzzle):
     def parser(self):
         self.dots = set()
-        self.folds = []
+        self.fold_instructions = []
         for line in self.input:
-            if line[0:1].isnumeric():
+            if "," in line:
                 self.dots.add(tuple(map(int, line.split(","))))
             elif line.startswith("fold"):
                 ax, n = line.split("=")
-                self.folds.append((ax[-1], int(n)))
+                self.fold_instructions.append((ax[-1], int(n)))
 
     def part_one(self):
-        paper = Origami(self.dots)
-        paper.folds(*self.folds[0])
-        return len(paper.dots)
+        self.paper = Origami(self.dots)
+        self.paper.fold(*self.fold_instructions[0])
+        return len(self.paper.dots)
 
     def part_two(self):
-        paper = Origami(self.dots)
-        for fold in self.folds:
-            paper.folds(*fold)
-        code = str(paper)
+        for fold in self.fold_instructions[1:]:
+            self.paper.fold(*fold)
+        code = str(self.paper)
         # print(code)
         return md5(code.encode()).hexdigest()
 

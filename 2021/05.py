@@ -8,7 +8,7 @@ from aoc.puzzle import Puzzle
 def get_range(x1, y1, x2, y2):
     """Calculate points covered between points (x1, y1) and (x2, y2).
 
-    For a straight lines, we iterate along each sorted coordinate.
+    For straight lines, we iterate along each sorted coordinate.
     For diagonals, the direction of iteration depends on the relative
     positions along each coordinate.
     """

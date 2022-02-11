@@ -4,56 +4,59 @@ from aoc.puzzle import Puzzle
 
 
 class Display:
-    def __init__(self, digits, output):
-        self.digits = digits
+    def __init__(self, segments, output):
+        self.segments = sorted(segments, key=len)
         self.output = output
-        self.signals = [None] * 10
+        self.digits = [None] * 10
 
-    def deduce_signals(self):
-        unknown = sorted(self.digits, key=len)
-        self.signals[1] = unknown.pop(0)
-        self.signals[7] = unknown.pop(0)
-        self.signals[4] = unknown.pop(0)
-        self.signals[8] = unknown.pop()
-        for digit in unknown:
+    def repair(self):
+        """Associate sets of segments with their digit. 1, 7, 4 and 8
+        have unique lengths. 7 is included in 3, 4 in 9, etc...
+        """
+        self.digits[1] = self.segments.pop(0)
+        self.digits[7] = self.segments.pop(0)
+        self.digits[4] = self.segments.pop(0)
+        self.digits[8] = self.segments.pop()
+        for digit in self.segments:
             if len(digit) == 5:
-                if digit.issuperset(self.signals[7]):
-                    self.signals[3] = digit
-                elif len(digit.intersection(self.signals[4])) == 3:
-                    self.signals[5] = digit
+                if digit.issuperset(self.digits[7]):
+                    self.digits[3] = digit
+                elif len(digit.intersection(self.digits[4])) == 3:
+                    self.digits[5] = digit
                 else:
-                    self.signals[2] = digit
+                    self.digits[2] = digit
             else:
-                if digit.issuperset(self.signals[4]):
-                    self.signals[9] = digit
-                elif digit.issuperset(self.signals[1]):
-                    self.signals[0] = digit
+                if digit.issuperset(self.digits[4]):
+                    self.digits[9] = digit
+                elif digit.issuperset(self.digits[1]):
+                    self.digits[0] = digit
                 else:
-                    self.signals[6] = digit
+                    self.digits[6] = digit
 
     def decode_output(self):
-        return "".join(str(self.signals.index(d)) for d in self.output)
+        return "".join(str(self.digits.index(d)) for d in self.output)
 
 
 class Today(Puzzle):
     def parser(self):
+        """Store display's visible segments and output in sets."""
         self.displays = []
         for entry in self.input:
-            digits, output = map(str.split, entry.split(" | "))
-            digits = [set(d) for d in digits]
+            segments, output = map(str.split, entry.split(" | "))
+            segments = [set(d) for d in segments]
             output = [set(out) for out in output]
-            self.displays.append(Display(digits, output))
+            self.displays.append(Display(segments, output))
 
     def part_one(self):
-        unique_count = 0
+        easy_digits_count = 0
         for display in self.displays:
-            unique_count += sum(len(d) in {2, 3, 4, 7} for d in display.output)
-        return unique_count
+            easy_digits_count += sum(len(d) in {2, 3, 4, 7} for d in display.output)
+        return easy_digits_count
 
     def part_two(self):
         outputs = 0
         for display in self.displays:
-            display.deduce_signals()
+            display.repair()
             outputs += int(display.decode_output())
         return outputs
 

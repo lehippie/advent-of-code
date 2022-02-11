@@ -1,52 +1,45 @@
 """Day 10: Syntax Scoring."""
 
 import re
-from collections import Counter
 from aoc.puzzle import Puzzle
 
 
-MINI_CHUNKS = r"\(\)|\[\]|{}|<>"
+LEGAL_PAIRS = r"\(\)|\[\]|{}|<>"
 CLOSERS = {"(": ")", "[": "]", "{": "}", "<": ">"}
-SYNTAX_SCORES = {")": 3, "]": 57, "}": 1197, ">": 25137}
-COMPLETION_SCORES = {")": 1, "]": 2, "}": 3, ">": 4}
+SYNTAX_POINTS = {")": 3, "]": 57, "}": 1197, ">": 25137}
+AUTOCOMPLETE_POINTS = {")": 1, "]": 2, "}": 3, ">": 4}
 
 
-class Line:
-    def __init__(self, line):
-        self.line = line
-        self.status = None
-        self.err = None
-        self.analyze()
+def check_syntax(line):
+    """Analyze a line and return its status and score.
 
-    def analyze(self):
-        while re.search(MINI_CHUNKS, self.line):
-            self.line = re.sub(MINI_CHUNKS, "", self.line)
-        if set(self.line).intersection(CLOSERS.values()):
-            self.status = "corrupted"
-            self.err = next(char for char in self.line if char in CLOSERS.values())
-        else:
-            self.status = "incomplete"
-            self.err = "".join(CLOSERS[char] for char in self.line[::-1])
-
-
-def completion_score(completion):
-    score = 0
-    for char in completion:
-        score = 5 * score + COMPLETION_SCORES[char]
-    return score
+    First, all legal pairs are removed iteratively. Then, if a closing
+    character remains, it means it's not correctly preceded by its
+    opening counterpart. The first illegal closer is considered to
+    calculate the score.
+    Incomplete lines are corrected by following the remaining openers
+    from right to left.
+    """
+    while re.search(LEGAL_PAIRS, line):
+        line = re.sub(LEGAL_PAIRS, "", line)
+    if set(line).intersection(CLOSERS.values()):
+        status = "corrupted"
+        score = SYNTAX_POINTS[next(c for c in line if c in CLOSERS.values())]
+    else:
+        status = "incomplete"
+        score = 0
+        for character in (CLOSERS[c] for c in line[::-1]):
+            score = 5 * score + AUTOCOMPLETE_POINTS[character]
+    return status, score
 
 
 class Today(Puzzle):
     def part_one(self):
-        lines = [Line(line) for line in self.input]
-        corruptions = Counter(line.err for line in lines if line.status == "corrupted")
-        return sum(SYNTAX_SCORES[char] * corruptions[char] for char in corruptions)
+        self.lines = [check_syntax(line) for line in self.input]
+        return sum(score for status, score in self.lines if status == "corrupted")
 
     def part_two(self):
-        lines = [Line(line) for line in self.input]
-        scores = [
-            completion_score(line.err) for line in lines if line.status == "incomplete"
-        ]
+        scores = [score for status, score in self.lines if status == "incomplete"]
         return sorted(scores)[(len(scores) - 1) // 2]
 
 

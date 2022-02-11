@@ -1,50 +1,57 @@
 """Day 9: Smoke Basin."""
 
+from collections import deque
 from itertools import product
 from math import prod
 from aoc.puzzle import Puzzle
 
 
-def adjacents(r, c, maxr, maxc):
-    adj = set()
-    for row, col in zip([r, r, r - 1, r + 1], [c - 1, c + 1, c, c]):
-        if (0 <= row < maxr) and (0 <= col < maxc):
-            adj.add((row, col))
-    return adj
+class Floor:
+    def __init__(self, heightmap):
+        self.heightmap = heightmap
+        self.nrows = len(heightmap)
+        self.ncols = len(heightmap[0])
+
+    def __getitem__(self, location):
+        return self.heightmap[location[0]][location[1]]
+
+    def adjacents(self, location):
+        r, c = location
+        for row, col in [(r, c - 1), (r, c + 1), (r - 1, c), (r + 1, c)]:
+            if 0 <= row < self.nrows and 0 <= col < self.ncols:
+                yield row, col
 
 
 class Today(Puzzle):
     def parser(self):
-        self.floor = [list(map(int, line)) for line in self.input]
+        self.floor = Floor([list(map(int, line)) for line in self.input])
 
     def part_one(self):
-        self.rlen = len(self.floor)
-        self.clen = len(self.floor[0])
         self.lows = set()
         risk = 0
-        for r, c in product(range(self.rlen), range(self.clen)):
+        for location in product(range(self.floor.nrows), range(self.floor.ncols)):
             if all(
-                self.floor[r][c] < self.floor[adj_r][adj_c]
-                for adj_r, adj_c in adjacents(r, c, self.rlen, self.clen)
+                self.floor[location] < self.floor[adjascent]
+                for adjascent in self.floor.adjacents(location)
             ):
-                self.lows.add((r, c))
-                risk += 1 + self.floor[r][c]
+                self.lows.add(location)
+                risk += 1 + self.floor[location]
         return risk
 
     def part_two(self):
-        self.sizes = []
-        for low_r, low_c in self.lows:
-            bassin = {(low_r, low_c)}
-            locations_to_check = [(low_r, low_c)]
-            while locations_to_check:
-                r, c = locations_to_check.pop(0)
-                new_locs = adjacents(r, c, self.rlen, self.clen).difference(bassin)
-                for adj_r, adj_c in new_locs:
-                    if self.floor[adj_r][adj_c] != 9:
-                        bassin.add((adj_r, adj_c))
-                        locations_to_check.append((adj_r, adj_c))
-            self.sizes.append(len(bassin))
-        return prod(sorted(self.sizes)[-3:])
+        """BFS from each low points to locations of height 9."""
+        self.basin_sizes = []
+        for low in self.lows:
+            basin = {low}
+            frontier = deque([low])
+            while frontier:
+                location = frontier.popleft()
+                for adjacent in self.floor.adjacents(location):
+                    if adjacent not in basin and self.floor[adjacent] != 9:
+                        basin.add(adjacent)
+                        frontier.append(adjacent)
+            self.basin_sizes.append(len(basin))
+        return prod(sorted(self.basin_sizes)[-3:])
 
 
 solutions = (468, 1280496)
