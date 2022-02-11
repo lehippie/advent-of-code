@@ -6,17 +6,25 @@ from aoc.puzzle import Puzzle
 
 class Polymer:
     def __init__(self, template, rules):
+        """As for lanternfishes in day 6, only the amount of pairs in
+        the polymer matters, not their positions. Another counter
+        keeps track of the polymer's constitutive elements.
+        """
+        self.pairs = Counter(a + b for a, b in zip(template, template[1:]))
         self.elements = Counter(template)
-        self.pairs = Counter(a + b for a, b in zip(template[:-1], template[1:]))
         self.rules = rules
 
-    def run_step(self):
+    def step(self):
+        """Each pair of elements is converted in two new pairs and
+        the element created in the middle is added to the polymer's
+        elements counter.
+        """
         new_pairs = Counter()
-        for pair, count in self.pairs.items():
-            insert = self.rules[pair]
-            self.elements[insert] += count
-            new_pairs[pair[0] + insert] += count
-            new_pairs[insert + pair[1]] += count
+        for pair, amount in self.pairs.items():
+            inserted = self.rules[pair]
+            new_pairs[pair[0] + inserted] += amount
+            new_pairs[inserted + pair[1]] += amount
+            self.elements[inserted] += amount
         self.pairs = new_pairs
 
 
@@ -25,13 +33,13 @@ class Today(Puzzle):
         self.template = self.input[0]
         self.rules = {}
         for rule in self.input[2:]:
-            pair, insert = rule.split(" -> ")
-            self.rules[pair] = insert
+            pair, inserted = rule.split(" -> ")
+            self.rules[pair] = inserted
 
     def part_one(self, steps=10):
         poly = Polymer(self.template, self.rules)
         for _ in range(steps):
-            poly.run_step()
+            poly.step()
         return max(poly.elements.values()) - min(poly.elements.values())
 
     def part_two(self):

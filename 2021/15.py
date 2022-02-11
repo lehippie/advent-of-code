@@ -4,53 +4,57 @@ from heapq import heappush, heappop
 from aoc.puzzle import Puzzle
 
 
-class RiskGrid:
-    def __init__(self, risk, extended):
-        self.risk = risk
-        self.extended = extended
-        self.h = len(risk)
-        self.w = len(risk[0])
-        self.start = (0, 0)
-        if extended is None:
-            self.end = (self.h - 1, self.w - 1)
-        else:
-            self.end = (extended * self.h - 1, extended * self.w - 1)
+class RiskLevelMap:
+    """Part one use the input directly as the risk level map.
+    The <extension_factor> is used for part two and its extended
+    grid. It modifies the more distant goal and the way risk level
+    is calculated outside of the base tile.
+    """
+
+    def __init__(self, tile, extension_factor):
+        self.tile = tile
+        self.nrows = len(tile)
+        self.ncols = len(tile[0])
+        self.goal = (
+            self.nrows * extension_factor - 1,
+            self.ncols * extension_factor - 1,
+        )
 
     def neighbors(self, position):
         r, c = position
         for row, col in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
-            if 0 <= row <= self.end[0] and 0 <= col <= self.end[1]:
+            if 0 <= row <= self.goal[0] and 0 <= col <= self.goal[1]:
                 yield row, col
 
     def __getitem__(self, position):
         r, c = position
-        if self.extended is None:
-            return self.risk[r][c]
-        base_risk = self.risk[r % self.h][c % self.w]
-        row_mult = r // self.h
-        col_mult = c // self.w
-        return 1 + (base_risk + row_mult + col_mult - 1) % 9
+        base_risk = self.tile[r % self.nrows][c % self.ncols]
+        row_offset = r // self.nrows
+        col_offset = c // self.ncols
+        return (base_risk + row_offset + col_offset) % 9 or 9
 
 
 class Today(Puzzle):
     def parser(self):
         return [list(map(int, line)) for line in self.input]
 
-    def part_one(self, extended=None):
-        risk = RiskGrid(self.input, extended)
-        exploration = [(0, risk.start)]
-        visited = {risk.start}
-        while exploration:
-            local_risk, position = heappop(exploration)
-            for p in risk.neighbors(position):
-                if p == risk.end:
-                    return local_risk + risk[p]
-                if p not in visited:
-                    heappush(exploration, (local_risk + risk[p], p))
-                    visited.add(p)
+    def part_one(self, extension_factor=1):
+        """Dijkstra applied on the risk level grid."""
+        risks = RiskLevelMap(self.input, extension_factor)
+        reached = {(0, 0)}
+        frontier = [(0, (0, 0))]
+        while frontier:
+            risk, position = heappop(frontier)
+            for neighbor in risks.neighbors(position):
+                if neighbor == risks.goal:
+                    return risk + risks[neighbor]
+                if neighbor not in reached:
+                    reached.add(neighbor)
+                    heappush(frontier, (risk + risks[neighbor], neighbor))
 
     def part_two(self):
-        return self.part_one(extended=5)
+        """Same algorithm as part one but with an extended grid."""
+        return self.part_one(extension_factor=5)
 
 
 solutions = (390, 2814)
