@@ -7,15 +7,15 @@ from aoc.puzzle import Puzzle
 
 
 PAIR = re.compile(r"\[\d+,\d+\]")
+NUMBER_OVER_TEN = re.compile(r"\d\d+")
 FIRST_NUMBER = re.compile(r"\d+")
 LAST_NUMBER = re.compile(r"(\d+)[^\d]*$")
-NUMBER_OVER_TEN = re.compile(r"\d\d+")
 
 
 def explode(pair: re.Match):
-    x, y = [int(d) for d in re.findall("\d+", pair[0])]
     before = pair.string[: pair.start()]
     after = pair.string[pair.end() :]
+    x, y = [int(d) for d in re.findall("\d+", pair[0])]
     if (n := LAST_NUMBER.search(before)) is not None:
         before = before[: n.start(1)] + f"{int(n[1]) + x}" + before[n.end(1) :]
     if (n := FIRST_NUMBER.search(after)) is not None:
@@ -24,18 +24,24 @@ def explode(pair: re.Match):
 
 
 def split(number: re.Match):
-    n = int(number[0])
     before = number.string[: number.start()]
     after = number.string[number.end() :]
+    n = int(number[0])
     return before + f"[{n // 2},{n - n // 2}]" + after
 
 
 def reduce(number):
+    """To check for explosions, the amounts of "[" and "]" characters
+    present before pair are computed.
+
+    If a number explodes, we must restart the process and resolve any
+    new explosion before checking for splits.
+    """
     while True:
         has_exploded = False
         for pair in PAIR.finditer(number):
-            nested = Counter(number[: pair.start()])
-            if nested["["] - nested["]"] > 3:
+            chars_before = Counter(number[: pair.start()])
+            if chars_before["["] - chars_before["]"] > 3:
                 number = explode(pair)
                 has_exploded = True
                 break
@@ -47,9 +53,9 @@ def reduce(number):
             return number
 
 
-class SnailN(str):
+class SnailfishNumber(str):
     def __add__(self, other):
-        return SnailN(reduce(f"[{self},{other}]"))
+        return SnailfishNumber(reduce(f"[{self},{other}]"))
 
     def magnitude(self):
         return eval(self.replace("[", "(3*").replace("]", "*2)").replace(",", "+"))
@@ -57,16 +63,14 @@ class SnailN(str):
 
 class Today(Puzzle):
     def part_one(self):
-        number = SnailN(self.input[0])
+        number = SnailfishNumber(self.input[0])
         for n in self.input[1:]:
             number += n
         return number.magnitude()
 
     def part_two(self):
-        numbers = [SnailN(n) for n in self.input]
-        return max(
-            (x + y).magnitude() for x, y in permutations(numbers, 2)
-        )
+        numbers = list(map(SnailfishNumber, self.input))
+        return max((x + y).magnitude() for x, y in permutations(numbers, 2))
 
 
 solutions = (3486, 4747)
