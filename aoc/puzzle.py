@@ -11,20 +11,19 @@ class Puzzle:
     This class is made to be inherited from to solve Advent of Code
     puzzles.
 
+    Attributes defined at init:
+        input  --  stores puzzle input as a list of strings or as a
+            string if there is only one line.
+        solutions  --  stores puzzle solutions as a tuple.
+
     Methods:
         parser  --  method called at instance init to manipulate the
-            puzzle input stored in <input> attribute. Returned object
-            is stored in  <input> attribute.
+            puzzle input stored in <input> attribute.
         part_one, part_two  --  placeholders for solving parts of the
             puzzle. Solutions have to be returned for <solve> method
             to do its verification job.
         solve  --  run puzzle parts and compare answers to already
             found solutions.
-
-    Attributes defined at init:
-        input  --  stores puzzle input as a list of strings or as a
-            string if there is only one line.
-        solutions  --  stores puzzle solutions as a tuple.
     """
 
     def __init__(
@@ -46,11 +45,11 @@ class Puzzle:
             f = Path(inspect.getmodule(self).__file__)
             input_data = load_input(f.parts[-2], f.stem)
         self.input = input_data
-        self.input = self.parser()
+        self.parser()
         self.solutions = solutions
 
     def parser(self):
-        return self.input
+        pass
 
     def part_one(self):
         return NotImplemented

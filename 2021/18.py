@@ -62,15 +62,17 @@ class SnailfishNumber(str):
 
 
 class Today(Puzzle):
+    def parser(self):
+        self.numbers = list(map(SnailfishNumber, self.input))
+
     def part_one(self):
-        number = SnailfishNumber(self.input[0])
-        for n in self.input[1:]:
-            number += n
-        return number.magnitude()
+        result = self.numbers[0]
+        for n in self.numbers[1:]:
+            result += n
+        return result.magnitude()
 
     def part_two(self):
-        numbers = list(map(SnailfishNumber, self.input))
-        return max((x + y).magnitude() for x, y in permutations(numbers, 2))
+        return max((x + y).magnitude() for x, y in permutations(self.numbers, 2))
 
 
 solutions = (3486, 4747)

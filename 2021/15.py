@@ -36,11 +36,11 @@ class RiskLevelMap:
 
 class Today(Puzzle):
     def parser(self):
-        return [list(map(int, line)) for line in self.input]
+        self.risk_level = [list(map(int, line)) for line in self.input]
 
     def part_one(self, extension_factor=1):
         """Dijkstra applied on the risk level grid."""
-        risks = RiskLevelMap(self.input, extension_factor)
+        risks = RiskLevelMap(self.risk_level, extension_factor)
         reached = {(0, 0)}
         frontier = [(0, (0, 0))]
         while frontier:
