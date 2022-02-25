@@ -12,18 +12,19 @@ class Puzzle:
     puzzles.
 
     Attributes defined at init:
-        input  --  stores puzzle input as a list of strings or as a
-            string if there is only one line.
-        solutions  --  stores puzzle solutions as a tuple.
+        input           Store the puzzle input as a list of strings
+                        or as a string if it contains only one line.
+        solutions       Solutions for both part.
 
     Methods:
-        parser  --  method called at instance init to manipulate the
-            puzzle input stored in <input> attribute.
-        part_one, part_two  --  placeholders for solving parts of the
-            puzzle. Solutions have to be returned for <solve> method
-            to do its verification job.
-        solve  --  run puzzle parts and compare answers to already
-            found solutions.
+        parser          Method called at instance init to manipulate
+                        the puzzle input.
+        part_one, part_two
+                        Placeholders for solving both parts of the
+                        puzzle.
+        solve           Run puzzle parts and compare their returned
+                        values to already found solutions to prevent
+                        regressions.
     """
 
     def __init__(
@@ -34,12 +35,12 @@ class Puzzle:
         """Puzzle class constructor.
 
         Arguments:
-            input_data  --  list of str OR str.
-                If set to None, tries to fetch it from default inputs
-                folder based on the name of the file where the
-                instance is created (ex: "2020/01.py").
-            solutions  --  already found solutions used by <solve>
-                method to prevent regressions.
+            input_data      List of strings OR string. If set to None,
+                            it is fetched from "inputs" folder based
+                            on the path to where the instance is
+                            created (ex: /.../2020/01.py).
+            solutions       Already found solutions used by <solve>
+                            classmethod to prevent regressions.
         """
         if input_data is None:
             f = Path(inspect.getmodule(self).__file__)

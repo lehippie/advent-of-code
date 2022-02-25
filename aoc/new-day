@@ -8,11 +8,10 @@ Usage:
     new-day --help
 
 Arguments:
-    <year>, <day>   Date of the new day.
-                    Default is today.
+    <year>, <day>       Date of the new day (default: today).
 
 Options:
-    -h, --help      Show this help.
+    -h, --help          Show this help.
 """
 
 import re

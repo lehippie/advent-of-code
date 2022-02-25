@@ -10,7 +10,7 @@ def read_file(filepath):
     """Read file content.
 
     Arguments:
-        filepath  --  str OR Path object.
+        filepath        String OR Path object.
 
     Returns:
         List of string, one for each line in the file.
@@ -31,7 +31,7 @@ def download_input(year, day):
     configuration file (see "config.txt.example").
 
     Arguments:
-        year, day  --  date of the puzzle to download.
+        year, day       Date of the puzzle to download.
 
     Returns:
         String containing the response from the website.
@@ -45,10 +45,10 @@ def download_input(year, day):
 
 
 def load_input(year, day):
-    """Get puzzle input. Download and save it if missing from inputs folder.
+    """Get puzzle input from inputs folder (download it if absent).
 
     Arguments:
-        year, day  --  date of the puzzle to load.
+        year, day       Date of the puzzle to load.
 
     Returns:
         List of string, one for each line in the puzzle input.
