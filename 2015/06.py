@@ -4,7 +4,7 @@ from numpy import zeros
 from aoc.puzzle import Puzzle
 
 
-class Puzzle06(Puzzle):
+class Today(Puzzle):
     def parser(self):
         def parse(line):
             words = line.split(" ")
@@ -14,11 +14,11 @@ class Puzzle06(Puzzle):
             xmax, ymax = map(lambda x: int(x) + 1, words[3].split(","))
             return (words[0], xmin, xmax, ymin, ymax)
 
-        return [parse(line) for line in self.input]
+        self.instructions = [parse(line) for line in self.input]
 
     def part_one(self):
         lights = zeros((1000, 1000), dtype=int)
-        for instruction, xmin, xmax, ymin, ymax in self.input:
+        for instruction, xmin, xmax, ymin, ymax in self.instructions:
             if instruction == "on":
                 lights[xmin:xmax, ymin:ymax] = 1
             elif instruction == "off":
@@ -30,7 +30,7 @@ class Puzzle06(Puzzle):
 
     def part_two(self):
         lights = zeros((1000, 1000), dtype=int)
-        for instruction, xmin, xmax, ymin, ymax in self.input:
+        for instruction, xmin, xmax, ymin, ymax in self.instructions:
             if instruction == "on":
                 lights[xmin:xmax, ymin:ymax] += 1
             elif instruction == "off":
@@ -41,5 +41,7 @@ class Puzzle06(Puzzle):
         return lights.sum()
 
 
+solutions = (377891, 14110788)
+
 if __name__ == "__main__":
-    Puzzle06(solutions=(377891, 14110788)).solve()
+    Today(solutions=solutions).solve()

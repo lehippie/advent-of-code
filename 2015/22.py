@@ -112,18 +112,20 @@ def least_mana_fight(initial_fight: Fight):
                 fights.append(fight)
 
 
-class Puzzle22(Puzzle):
+class Today(Puzzle):
     def parser(self):
         stats = list(map(lambda x: int(x.split(" ")[-1]), self.input))
-        return {"hp": stats[0], "damage": stats[1]}
+        self.boss_stats = {"hp": stats[0], "damage": stats[1]}
 
     def part_one(self, hard_mode=False):
-        fight = Fight(Wizard(), Character(**self.input), hard_mode)
+        fight = Fight(Wizard(), Character(**self.boss_stats), hard_mode)
         return least_mana_fight(fight)
 
     def part_two(self):
         return self.part_one(hard_mode=True)
 
 
+solutions = (1269, 1309)
+
 if __name__ == "__main__":
-    Puzzle22(solutions=(1269, 1309)).solve()
+    Today(solutions=solutions).solve()

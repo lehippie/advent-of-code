@@ -4,7 +4,7 @@ import re
 from aoc.puzzle import Puzzle
 
 
-class Puzzle19(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.reactions = []
         for line in self.input:
@@ -36,5 +36,7 @@ class Puzzle19(Puzzle):
         return n
 
 
+solutions = (518, 200)
+
 if __name__ == "__main__":
-    Puzzle19(solutions=(518, 200)).solve()
+    Today(solutions=solutions).solve()

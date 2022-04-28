@@ -16,7 +16,7 @@ def almost_sum(db, discard="red"):
     return 0
 
 
-class Puzzle12(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         return sum(map(int, re.findall(r"-?\d+", self.input)))
 
@@ -24,5 +24,7 @@ class Puzzle12(Puzzle):
         return almost_sum(json.loads(self.input))
 
 
+solutions = (111754, 65402)
+
 if __name__ == "__main__":
-    Puzzle12(solutions=(111754, 65402)).solve()
+    Today(solutions=solutions).solve()

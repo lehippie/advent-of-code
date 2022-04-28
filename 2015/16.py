@@ -18,7 +18,7 @@ THE_SUE = {
 }
 
 
-class Puzzle16(Puzzle):
+class Today(Puzzle):
     def parser(self):
         def parse(line):
             name, things = line.split(":", maxsplit=1)
@@ -26,10 +26,10 @@ class Puzzle16(Puzzle):
             sue.update({k: int(v) for k, v in re.findall(r"(\w+): (\d+)", things)})
             return sue
 
-        return [parse(line) for line in self.input]
+        self.sues = [parse(line) for line in self.input]
 
     def part_one(self):
-        for sue in self.input:
+        for sue in self.sues:
             if all(sue[k] == THE_SUE[k] for k in sue if k != "number"):
                 return sue["number"]
 
@@ -37,7 +37,7 @@ class Puzzle16(Puzzle):
         greater = {"cats", "trees"}
         fewer = {"pomeranians", "goldfish"}
         equals = set(THE_SUE).difference(greater.union(fewer))
-        for sue in self.input:
+        for sue in self.sues:
             if (
                 all(sue[k] == THE_SUE[k] for k in equals.intersection(sue))
                 and all(sue[k] > THE_SUE[k] for k in greater.intersection(sue))
@@ -46,5 +46,7 @@ class Puzzle16(Puzzle):
                 return sue["number"]
 
 
+solutions = (373, 260)
+
 if __name__ == "__main__":
-    Puzzle16(solutions=(373, 260)).solve()
+    Today(solutions=solutions).solve()

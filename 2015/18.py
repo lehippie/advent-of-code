@@ -38,7 +38,7 @@ class Grid:
             self.on = next_on
 
 
-class Puzzle18(Puzzle):
+class Today(Puzzle):
     def part_one(self, steps=100):
         grid = Grid(self.input)
         grid.run_step(steps)
@@ -50,5 +50,7 @@ class Puzzle18(Puzzle):
         return len(grid.on)
 
 
+solutions = (768, 781)
+
 if __name__ == "__main__":
-    Puzzle18(solutions=(768, 781)).solve()
+    Today(solutions=solutions).solve()

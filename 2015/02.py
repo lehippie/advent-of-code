@@ -4,21 +4,23 @@ from math import prod
 from aoc.puzzle import Puzzle
 
 
-class Puzzle02(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        return [tuple(map(int, line.split("x"))) for line in self.input]
+        self.boxes = [tuple(map(int, line.split("x"))) for line in self.input]
 
     def part_one(self):
-        faces = [(l * w, w * h, h * l) for l, w, h in self.input]
+        faces = [(l * w, w * h, h * l) for l, w, h in self.boxes]
         return sum(2 * sum(f) + min(f) for f in faces)
 
     def part_two(self):
         ribbons = 0
-        for present in self.input:
+        for present in self.boxes:
             lengths = sorted(present)
             ribbons += 2 * sum(lengths[0:2]) + prod(lengths)
         return ribbons
 
 
+solutions = (1586300, 3737498)
+
 if __name__ == "__main__":
-    Puzzle02(solutions=(1586300, 3737498)).solve()
+    Today(solutions=solutions).solve()

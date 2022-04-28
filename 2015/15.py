@@ -14,19 +14,19 @@ def combi_sum(total, size):
                 yield (spoon,) + remaining
 
 
-class Puzzle15(Puzzle):
+class Today(Puzzle):
     def parser(self):
         def parse(line):
             name, rest = line.split(":")
             return (name, *map(int, re.findall(r"-?\d+", rest)))
 
-        return list(map(parse, self.input))
+        self.ingredients = list(map(parse, self.input))
 
     def part_one(self, teaspoons=100, calories=None):
         best_cookie = 0
-        for spoons in combi_sum(teaspoons, len(self.input)):
+        for spoons in combi_sum(teaspoons, len(self.ingredients)):
             stats = [0] * 5
-            for spoon, ingredient in zip(spoons, self.input):
+            for spoon, ingredient in zip(spoons, self.ingredients):
                 for k in range(5):
                     stats[k] += spoon * ingredient[k + 1]
             cookie_cal = stats.pop()
@@ -39,5 +39,7 @@ class Puzzle15(Puzzle):
         return self.part_one(calories=500)
 
 
+solutions = (13882464, 11171160)
+
 if __name__ == "__main__":
-    Puzzle15(solutions=(13882464, 11171160)).solve()
+    Today(solutions=solutions).solve()

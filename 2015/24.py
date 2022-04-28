@@ -5,14 +5,14 @@ from math import prod
 from aoc.puzzle import Puzzle
 
 
-class Puzzle24(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        return list(map(int, self.input))
+        self.weights = list(map(int, self.input))
 
     def part_one(self):
-        for k in range(1, len(self.input) - 1):
-            for g1 in sorted(combinations(self.input, k), key=prod):
-                others = set(self.input).difference(g1)
+        for k in range(1, len(self.weights) - 1):
+            for g1 in sorted(combinations(self.weights, k), key=prod):
+                others = set(self.weights).difference(g1)
                 if sum(others) != 2 * sum(g1):
                     continue
                 for l in range(1, len(others)):
@@ -21,9 +21,9 @@ class Puzzle24(Puzzle):
                             return prod(g1)
 
     def part_two(self):
-        for k in range(1, len(self.input) - 2):
-            for g1 in sorted(combinations(self.input, k), key=prod):
-                others = set(self.input).difference(g1)
+        for k in range(1, len(self.weights) - 2):
+            for g1 in sorted(combinations(self.weights, k), key=prod):
+                others = set(self.weights).difference(g1)
                 if sum(others) != 3 * sum(g1):
                     continue
                 for l in range(1, len(others) - 1):
@@ -37,5 +37,7 @@ class Puzzle24(Puzzle):
                                     return prod(g1)
 
 
+solutions = (11266889531, 77387711)
+
 if __name__ == "__main__":
-    Puzzle24(solutions=(11266889531, 77387711)).solve()
+    Today(solutions=solutions).solve()

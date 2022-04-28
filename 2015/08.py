@@ -13,7 +13,7 @@ def encoded_len(string):
     return len(string) + chars_count['"'] + chars_count["\\"] + 2
 
 
-class Puzzle08(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         return sum(len(s) - char_len(s) for s in self.input)
 
@@ -21,5 +21,7 @@ class Puzzle08(Puzzle):
         return sum(encoded_len(s) - len(s) for s in self.input)
 
 
+solutions = (1371, 2117)
+
 if __name__ == "__main__":
-    Puzzle08(solutions=(1371, 2117)).solve()
+    Today(solutions=solutions).solve()

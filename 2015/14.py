@@ -18,27 +18,29 @@ class Reindeer:
         return distance
 
 
-class Puzzle14(Puzzle):
+class Today(Puzzle):
     def parser(self):
         def parse(line):
             name = line.split()[0]
             stats = list(map(int, re.findall(r"\d+", line)))
             return Reindeer(name, *stats)
 
-        return [parse(line) for line in self.input]
+        self.reindeers = [parse(line) for line in self.input]
 
     def part_one(self, race_duration=2503):
-        return max(reindeer.fly(race_duration) for reindeer in self.input)
+        return max(reindeer.fly(race_duration) for reindeer in self.reindeers)
 
     def part_two(self, race_duration=2503):
-        points = [0] * len(self.input)
+        points = [0] * len(self.reindeers)
         for t in range(1, race_duration + 1):
-            distances = [reindeer.fly(t) for reindeer in self.input]
+            distances = [reindeer.fly(t) for reindeer in self.reindeers]
             for k, distance in enumerate(distances):
                 if distance == max(distances):
                     points[k] += 1
         return max(points)
 
 
+solutions = (2660, 1256)
+
 if __name__ == "__main__":
-    Puzzle14(solutions=(2660, 1256)).solve()
+    Today(solutions=solutions).solve()

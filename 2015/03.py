@@ -23,7 +23,7 @@ class Santa:
         return self.position
 
 
-class Puzzle03(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         santa = Santa()
         houses = {santa.position}
@@ -43,5 +43,7 @@ class Puzzle03(Puzzle):
         return len(houses)
 
 
+solutions = (2572, 2631)
+
 if __name__ == "__main__":
-    Puzzle03(solutions=(2572, 2631)).solve()
+    Today(solutions=solutions).solve()

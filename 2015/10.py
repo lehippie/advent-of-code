@@ -8,7 +8,7 @@ def look_and_say(look):
     return "".join(f"{len(list(g))}{n}" for n, g in groupby(look))
 
 
-class Puzzle10(Puzzle):
+class Today(Puzzle):
     def part_one(self, steps=40):
         last_said = self.input
         for _ in range(steps):
@@ -19,5 +19,7 @@ class Puzzle10(Puzzle):
         return self.part_one(50)
 
 
+solutions = (492982, 6989950)
+
 if __name__ == "__main__":
-    Puzzle10(solutions=(492982, 6989950)).solve()
+    Today(solutions=solutions).solve()

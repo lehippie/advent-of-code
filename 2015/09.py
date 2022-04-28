@@ -15,23 +15,24 @@ class Locations:
             )
 
 
-class Puzzle09(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        graph = defaultdict(dict)
+        self.graph = defaultdict(dict)
         for line in self.input:
             loc1, _, loc2, _, distance = line.split()
-            graph[loc1][loc2] = int(distance)
-            graph[loc2][loc1] = int(distance)
-        return graph
+            self.graph[loc1][loc2] = int(distance)
+            self.graph[loc2][loc1] = int(distance)
 
     def part_one(self):
-        locations = Locations(self.input)
+        locations = Locations(self.graph)
         return min(locations.routes.values())
 
     def part_two(self):
-        locations = Locations(self.input)
+        locations = Locations(self.graph)
         return max(locations.routes.values())
 
 
+solutions = (251, 898)
+
 if __name__ == "__main__":
-    Puzzle09(solutions=(251, 898)).solve()
+    Today(solutions=solutions).solve()

@@ -69,29 +69,29 @@ def equipped_player():
                 )
 
 
-class Puzzle21(Puzzle):
+class Today(Puzzle):
     def parser(self):
         boss_stats = list(map(lambda x: int(x.split(" ")[-1]), self.input))
-        return Character(*boss_stats)
+        self.boss = Character(*boss_stats)
 
     def part_one(self):
-        boss = self.input
         costs = set()
         for cost, player in equipped_player():
-            boss.revive()
-            if player.beats(boss):
+            self.boss.revive()
+            if player.beats(self.boss):
                 costs.add(cost)
         return min(costs)
 
     def part_two(self):
-        boss = self.input
         costs = set()
         for cost, player in equipped_player():
-            boss.revive()
-            if not player.beats(boss):
+            self.boss.revive()
+            if not player.beats(self.boss):
                 costs.add(cost)
         return max(costs)
 
 
+solutions = (121, 201)
+
 if __name__ == "__main__":
-    Puzzle21(solutions=(121, 201)).solve()
+    Today(solutions=solutions).solve()

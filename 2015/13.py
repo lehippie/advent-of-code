@@ -22,29 +22,30 @@ class DinnerTable:
                 self.arrangements[arrangement] += self.graph[attendee][left]
 
 
-class Puzzle13(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        graph = defaultdict(dict)
+        self.graph = defaultdict(dict)
         for line in self.input:
             words = line.split()
             if "gain" in line:
-                graph[words[0]][words[-1][:-1]] = int(words[3])
+                self.graph[words[0]][words[-1][:-1]] = int(words[3])
             else:
-                graph[words[0]][words[-1][:-1]] = -int(words[3])
-        return graph
+                self.graph[words[0]][words[-1][:-1]] = -int(words[3])
 
     def part_one(self):
-        table = DinnerTable(self.input)
+        table = DinnerTable(self.graph)
         return max(table.arrangements.values())
 
     def part_two(self):
-        input_with_me = deepcopy(self.input)
-        for attendee in self.input:
+        input_with_me = deepcopy(self.graph)
+        for attendee in self.graph:
             input_with_me[attendee]["me"] = 0
             input_with_me["me"][attendee] = 0
         table = DinnerTable(input_with_me)
         return max(table.arrangements.values())
 
 
+solutions = (664, 640)
+
 if __name__ == "__main__":
-    Puzzle13(solutions=(664, 640)).solve()
+    Today(solutions=solutions).solve()

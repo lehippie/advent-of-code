@@ -36,23 +36,24 @@ class Circuit:
         self._wires[key] = value
 
 
-class Puzzle07(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        connections = {}
+        self.connections = {}
         for line in self.input:
             value, wire = line.split(" -> ")
-            connections[wire] = value
-        return connections
+            self.connections[wire] = value
 
     def part_one(self):
-        self.signal = Circuit(self.input)["a"]
+        self.signal = Circuit(self.connections)["a"]
         return self.signal
 
     def part_two(self):
-        circuit = Circuit(self.input)
+        circuit = Circuit(self.connections)
         circuit["b"] = self.signal
         return circuit["a"]
 
 
+solutions = (3176, 14710)
+
 if __name__ == "__main__":
-    Puzzle07(solutions=(3176, 14710)).solve()
+    Today(solutions=solutions).solve()

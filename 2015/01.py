@@ -4,7 +4,7 @@ from collections import Counter
 from aoc.puzzle import Puzzle
 
 
-class Puzzle01(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         parentheses = Counter(self.input)
         return parentheses["("] - parentheses[")"]
@@ -18,5 +18,7 @@ class Puzzle01(Puzzle):
         return i + 1
 
 
+solutions = (74, 1795)
+
 if __name__ == "__main__":
-    Puzzle01(solutions=(74, 1795)).solve()
+    Today(solutions=solutions).solve()

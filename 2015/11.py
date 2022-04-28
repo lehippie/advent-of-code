@@ -37,7 +37,7 @@ def is_valid(password):
     return True
 
 
-class Puzzle11(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         self.pwd = increment(self.input)
         while not is_valid(self.pwd):
@@ -51,5 +51,7 @@ class Puzzle11(Puzzle):
         return password
 
 
+solutions = ("hepxxyzz", "heqaabcc")
+
 if __name__ == "__main__":
-    Puzzle11(solutions=("hepxxyzz", "heqaabcc")).solve()
+    Today(solutions=solutions).solve()

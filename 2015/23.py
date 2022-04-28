@@ -53,7 +53,7 @@ class Computer:
             self.instructions[inst](*args.split(", "))
 
 
-class Puzzle23(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         computer = Computer(self.input)
         computer.run()
@@ -66,5 +66,7 @@ class Puzzle23(Puzzle):
         return computer.reg["b"]
 
 
+solutions = (307, 160)
+
 if __name__ == "__main__":
-    Puzzle23(solutions=(307, 160)).solve()
+    Today(solutions=solutions).solve()

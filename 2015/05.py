@@ -28,7 +28,7 @@ def is_better(string):
     return True
 
 
-class Puzzle05(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         return sum(is_nice(s) for s in self.input)
 
@@ -36,5 +36,7 @@ class Puzzle05(Puzzle):
         return sum(is_better(s) for s in self.input)
 
 
+solutions = (255, 55)
+
 if __name__ == "__main__":
-    Puzzle05(solutions=(255, 55)).solve()
+    Today(solutions=solutions).solve()
