@@ -40,7 +40,7 @@ class PortComputerV2(PortComputer):
             self.memory[address | int(mask_bits, 2)] = value
 
 
-class Puzzle14(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         docking = PortComputer(self.input)
         docking.run()
@@ -52,5 +52,7 @@ class Puzzle14(Puzzle):
         return sum(docking.memory.values())
 
 
+solutions = (10885823581193, 3816594901962)
+
 if __name__ == "__main__":
-    Puzzle14(solutions=(10885823581193, 3816594901962)).solve()
+    Today(solutions=solutions).solve()

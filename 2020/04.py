@@ -39,24 +39,25 @@ def passport_validity(passport):
     return False
 
 
-class Puzzle04(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        data = [{}]
+        self.passeports = [{}]
         for line in self.input:
             if not line:
-                data.append({})
+                self.passeports.append({})
                 continue
             for field in line.split(" "):
                 key, value = field.split(":")
-                data[-1][key] = value
-        return data
+                self.passeports[-1][key] = value
 
     def part_one(self):
-        return sum(set(RULES).issubset(set(p)) for p in self.input)
+        return sum(set(RULES).issubset(set(p)) for p in self.passeports)
 
     def part_two(self):
-        return sum(passport_validity(p) for p in self.input)
+        return sum(passport_validity(p) for p in self.passeports)
 
+
+solutions = (222, 140)
 
 if __name__ == "__main__":
-    Puzzle04(solutions=(222, 140)).solve()
+    Today(solutions=solutions).solve()

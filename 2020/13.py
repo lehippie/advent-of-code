@@ -4,24 +4,24 @@ from math import prod
 from aoc.puzzle import Puzzle
 
 
-class Puzzle13(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        start = int(self.input[0])
-        buses = [int(b) if b != "x" else None for b in self.input[1].split(",")]
-        return start, buses
+        self.start = int(self.input[0])
+        self.buses = [int(b) if b != "x" else None for b in self.input[1].split(",")]
 
     def part_one(self):
-        start, buses = self.input
         ts = {}
-        for bus in buses:
+        for bus in self.buses:
             if bus is None:
                 continue
-            ts[bus] = next(t for t in range(start, start + bus + 1) if t % bus == 0)
+            ts[bus] = next(
+                t for t in range(self.start, self.start + bus + 1) if t % bus == 0
+            )
         earliest = min(ts, key=ts.get)
-        return earliest * (ts[earliest] - start)
+        return earliest * (ts[earliest] - self.start)
 
     def part_two(self):
-        buses = [[b, k] for k, b in enumerate(self.input[1]) if b is not None]
+        buses = [[b, k] for k, b in enumerate(self.buses) if b is not None]
         buses = sorted(buses, key=lambda x: x[0], reverse=True)
         cycle = buses[0][0]
         ts = buses[0][0] - buses[0][1]
@@ -33,5 +33,7 @@ class Puzzle13(Puzzle):
         return ts
 
 
+solutions = (3789, 667437230788118)
+
 if __name__ == "__main__":
-    Puzzle13(solutions=(3789, 667437230788118)).solve()
+    Today(solutions=solutions).solve()

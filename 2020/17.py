@@ -32,25 +32,26 @@ class Grid:
             self.run_one_cycle()
 
 
-class Puzzle17(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        data = set()
+        self.initial_state = set()
         for x, line in enumerate(self.input):
             ys = [i for i, c in enumerate(line) if c == "#"]
-            data.update((x, y, 0) for y in ys)
-        return data
+            self.initial_state.update((x, y, 0) for y in ys)
 
     def part_one(self):
-        grid = Grid(self.input)
+        grid = Grid(self.initial_state)
         grid.boot()
         return len(grid.active)
 
     def part_two(self):
-        grid4D = {(x, y, z, 0) for x, y, z in self.input}
+        grid4D = {(x, y, z, 0) for x, y, z in self.initial_state}
         grid = Grid(grid4D)
         grid.boot()
         return len(grid.active)
 
 
+solutions = (386, 2276)
+
 if __name__ == "__main__":
-    Puzzle17(solutions=(386, 2276)).solve()
+    Today(solutions=solutions).solve()

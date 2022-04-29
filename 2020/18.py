@@ -37,7 +37,7 @@ def evaluate(expression, precedence=left2right):
     return int(precedence(expression))
 
 
-class Puzzle18(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         return sum(evaluate(exp) for exp in self.input)
 
@@ -45,5 +45,7 @@ class Puzzle18(Puzzle):
         return sum(evaluate(exp, precedence=add_before_mult) for exp in self.input)
 
 
+solutions = (6923486965641, 70722650566361)
+
 if __name__ == "__main__":
-    Puzzle18(solutions=(6923486965641, 70722650566361)).solve()
+    Today(solutions=solutions).solve()

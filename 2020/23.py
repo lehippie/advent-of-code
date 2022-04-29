@@ -3,12 +3,12 @@
 from aoc.puzzle import Puzzle
 
 
-class Puzzle23(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        return list(map(int, self.input))
+        self.start_circle = list(map(int, self.input))
 
     def part_one(self, moves=100):
-        cups = self.input
+        cups = self.start_circle
         for _ in range(moves):
             try:
                 cup = next(c for c in range(cups[0] - 1, 0, -1) if c not in cups[1:4])
@@ -20,7 +20,7 @@ class Puzzle23(Puzzle):
         return int("".join(str(c) for c in cups[one + 1 :] + cups[:one]))
 
     def part_two(self, moves=10000000, maxi=1000000):
-        init = self.input + list(range(max(self.input) + 1, maxi + 1))
+        init = self.start_circle + list(range(max(self.start_circle) + 1, maxi + 1))
         cups = [None for _ in range(maxi + 1)]
         for c, n in zip(init, init[1:] + [init[0]]):
             cups[c] = n
@@ -43,5 +43,7 @@ class Puzzle23(Puzzle):
         return cups[1] * cups[cups[1]]
 
 
+solutions = (24987653, 442938711161)
+
 if __name__ == "__main__":
-    Puzzle23(solutions=(24987653, 442938711161)).solve()
+    Today(solutions=solutions).solve()

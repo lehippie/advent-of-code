@@ -6,7 +6,7 @@ from math import prod
 from aoc.puzzle import Puzzle
 
 
-class Puzzle16(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.rules = {}
         lines = iter(self.input)
@@ -57,5 +57,7 @@ class Puzzle16(Puzzle):
         return prod(v for rule, v in my_ticket.items() if rule.startswith("departure"))
 
 
+solutions = (18227, 2355350878831)
+
 if __name__ == "__main__":
-    Puzzle16(solutions=(18227, 2355350878831)).solve()
+    Today(solutions=solutions).solve()

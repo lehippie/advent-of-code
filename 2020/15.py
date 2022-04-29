@@ -3,16 +3,16 @@
 from aoc.puzzle import Puzzle
 
 
-class Puzzle15(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        return list(map(int, self.input.split(",")))
+        self.starting_numbers = list(map(int, self.input.split(",")))
 
     def part_one(self, limit=2020):
         spoken = [None] * limit
-        for i, n in enumerate(self.input[:-1]):
+        for i, n in enumerate(self.starting_numbers[:-1]):
             spoken[n] = i + 1
-        last = self.input[-1]
-        for turn in range(len(self.input), limit):
+        last = self.starting_numbers[-1]
+        for turn in range(len(self.starting_numbers), limit):
             if spoken[last] is None:
                 spoken[last] = turn
                 last = 0
@@ -26,5 +26,7 @@ class Puzzle15(Puzzle):
         return self.part_one(limit=30000000)
 
 
+solutions = (468, 1801753)
+
 if __name__ == "__main__":
-    Puzzle15(solutions=(468, 1801753)).solve()
+    Today(solutions=solutions).solve()

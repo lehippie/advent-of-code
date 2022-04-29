@@ -71,12 +71,12 @@ class Seats:
                 self.layout = new_layout
 
 
-class Puzzle11(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        return list(map(list, self.input))
+        self.grid = list(map(list, self.input))
 
     def part_one(self, limit=4, method="around"):
-        seats = Seats(self.input)
+        seats = Seats(self.grid)
         seats.stabilize(limit, method)
         return seats.occupied()
 
@@ -84,5 +84,7 @@ class Puzzle11(Puzzle):
         return self.part_one(limit=5, method="seen")
 
 
+solutions = (2251, 2019)
+
 if __name__ == "__main__":
-    Puzzle11(solutions=(2251, 2019)).solve()
+    Today(solutions=solutions).solve()

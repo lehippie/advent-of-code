@@ -12,7 +12,7 @@ def count_trees(trees, right, down):
     )["#"]
 
 
-class Puzzle03(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         return count_trees(self.input, 3, 1)
 
@@ -21,5 +21,7 @@ class Puzzle03(Puzzle):
         return prod(count_trees(self.input, *s) for s in slopes)
 
 
+solutions = (276, 7812180000)
+
 if __name__ == "__main__":
-    Puzzle03(solutions=(276, 7812180000)).solve()
+    Today(solutions=solutions).solve()

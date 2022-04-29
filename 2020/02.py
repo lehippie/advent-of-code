@@ -14,7 +14,7 @@ def is_valid(password_line, policy="sled"):
         return (password[v1 - 1] == letter) != (password[v2 - 1] == letter)
 
 
-class Puzzle02(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         return sum(is_valid(pwd) for pwd in self.input)
 
@@ -22,5 +22,7 @@ class Puzzle02(Puzzle):
         return sum(is_valid(pwd, "toboggan") for pwd in self.input)
 
 
+solutions = (628, 705)
+
 if __name__ == "__main__":
-    Puzzle02(solutions=(628, 705)).solve()
+    Today(solutions=solutions).solve()

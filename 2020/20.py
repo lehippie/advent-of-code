@@ -137,17 +137,16 @@ class Image:
             self.image.extend(["".join(lines) for lines in zip(*tiles)])
 
 
-class Puzzle20(Puzzle):
+class Today(Puzzle):
     def parser(self):
         data = "\n".join(self.input).split("\n\n")
-        tiles = {}
+        self.tiles = {}
         for d in data:
             lines = d.rstrip().split("\n")
-            tiles[int(re.findall(r"\d+", lines[0])[0])] = lines[1:]
-        return tiles
+            self.tiles[int(re.findall(r"\d+", lines[0])[0])] = lines[1:]
 
     def part_one(self):
-        self.image = Image(self.input)
+        self.image = Image(self.tiles)
         return self.image.checksum
 
     def part_two(self):
@@ -180,5 +179,7 @@ class Puzzle20(Puzzle):
         return Counter("".join(sea.tile))["#"]
 
 
+solutions = (54755174472007, 1692)
+
 if __name__ == "__main__":
-    Puzzle20(solutions=(54755174472007, 1692)).solve()
+    Today(solutions=solutions).solve()

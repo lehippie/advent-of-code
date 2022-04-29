@@ -95,7 +95,7 @@ class RealBoat(ProbableBoat):
                 self.move(value)
 
 
-class Puzzle12(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         boat = ProbableBoat(self.input)
         boat.navigate()
@@ -107,5 +107,7 @@ class Puzzle12(Puzzle):
         return boat.manhattan_distance()
 
 
+solutions = (508, 30761)
+
 if __name__ == "__main__":
-    Puzzle12(solutions=(508, 30761)).solve()
+    Today(solutions=solutions).solve()

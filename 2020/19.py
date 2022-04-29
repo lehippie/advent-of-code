@@ -12,7 +12,7 @@ def reduce_rule(rules, rule_id):
     return "^" + rule.replace(" ", "") + "$"
 
 
-class Puzzle19(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.rules = {}
         self.messages = []
@@ -36,5 +36,7 @@ class Puzzle19(Puzzle):
         return self.part_one()
 
 
+solutions = (239, 405)
+
 if __name__ == "__main__":
-    Puzzle19(solutions=(239, 405)).solve()
+    Today(solutions=solutions).solve()

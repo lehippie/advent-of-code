@@ -3,22 +3,23 @@
 from aoc.puzzle import Puzzle
 
 
-class Puzzle06(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        groups = [[]]
+        self.groups = [[]]
         for line in self.input:
             if line:
-                groups[-1].append(line)
+                self.groups[-1].append(line)
             else:
-                groups.append([])
-        return groups
+                self.groups.append([])
 
     def part_one(self):
-        return sum(len(set("".join(g))) for g in self.input)
+        return sum(len(set("".join(g))) for g in self.groups)
 
     def part_two(self):
-        return sum(len(set.intersection(*map(set, g))) for g in self.input)
+        return sum(len(set.intersection(*map(set, g))) for g in self.groups)
 
+
+solutions = (6763, 3512)
 
 if __name__ == "__main__":
-    Puzzle06(solutions=(6763, 3512)).solve()
+    Today(solutions=solutions).solve()

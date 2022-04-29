@@ -65,28 +65,29 @@ class RecursiveCombat(Combat):
         self.decks[win].append(cards[(win + 1) % 2])
 
 
-class Puzzle22(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        decks = [deque(), deque()]
+        self.decks = [deque(), deque()]
         lines = iter(self.input)
         line = next(lines)
         while line := next(lines):
-            decks[0].append(int(line))
+            self.decks[0].append(int(line))
         assert "Player 2" in next(lines)
         for line in lines:
-            decks[1].append(int(line))
-        return decks
+            self.decks[1].append(int(line))
 
     def part_one(self):
-        game = Combat(self.input)
+        game = Combat(self.decks)
         game.play()
         return game.score(game.winner)
 
     def part_two(self):
-        game = RecursiveCombat(self.input)
+        game = RecursiveCombat(self.decks)
         game.play()
         return game.score(game.winner)
 
 
+solutions = (32495, 32665)
+
 if __name__ == "__main__":
-    Puzzle22(solutions=(32495, 32665)).solve()
+    Today(solutions=solutions).solve()

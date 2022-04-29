@@ -4,18 +4,18 @@ from collections import Counter
 from aoc.puzzle import Puzzle
 
 
-class Puzzle10(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        return list(map(int, self.input))
+        self.adapters = list(map(int, self.input))
 
     def part_one(self):
-        joltages = sorted(self.input + [0, max(self.input) + 3])
+        joltages = sorted(self.adapters + [0, max(self.adapters) + 3])
         differences = Counter(a - b for a, b in zip(joltages[1:], joltages[:-1]))
         return differences[1] * differences[3]
 
     def part_two(self):
-        end_jolt = max(self.input) + 3
-        jolts = set(self.input + [0, end_jolt])
+        end_jolt = max(self.adapters) + 3
+        jolts = set(self.adapters + [0, end_jolt])
         tree = Counter({0: 1})
         arrangements_count = 0
         while tree:
@@ -27,5 +27,7 @@ class Puzzle10(Puzzle):
         return arrangements_count
 
 
+solutions = (2201, 169255295254528)
+
 if __name__ == "__main__":
-    Puzzle10(solutions=(2201, 169255295254528)).solve()
+    Today(solutions=solutions).solve()

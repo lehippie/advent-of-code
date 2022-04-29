@@ -10,7 +10,7 @@ def transform(subject_number, loop):
     return value
 
 
-class Puzzle25(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.keys = list(map(int, self.input))
 
@@ -23,5 +23,7 @@ class Puzzle25(Puzzle):
         return transform(self.keys[(self.keys.index(value) + 1) % 2], loop)
 
 
+solutions = (17673381, NotImplemented)
+
 if __name__ == "__main__":
-    Puzzle25(solutions=(17673381, NotImplemented)).solve()
+    Today(solutions=solutions).solve()

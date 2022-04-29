@@ -15,13 +15,13 @@ def neighbors(x, y):
     }
 
 
-class Puzzle24(Puzzle):
+class Today(Puzzle):
     def parser(self):
-        return [re.findall(r"[ns]?[ew]", line) for line in self.input]
+        self.tiles = [re.findall(r"[ns]?[ew]", line) for line in self.input]
 
     def part_one(self):
         self.blacks = set()
-        for tile in self.input:
+        for tile in self.tiles:
             x, y = 0, 0
             for step in tile:
                 if step == "e":
@@ -61,5 +61,7 @@ class Puzzle24(Puzzle):
         return len(blacks)
 
 
+solutions = (436, 4133)
+
 if __name__ == "__main__":
-    Puzzle24(solutions=(436, 4133)).solve()
+    Today(solutions=solutions).solve()

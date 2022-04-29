@@ -30,19 +30,19 @@ class Console:
         return True
 
 
-class Puzzle08(Puzzle):
+class Today(Puzzle):
     def parser(self):
         instructions = [line.split() for line in self.input]
-        return [[op, int(arg)] for op, arg in instructions]
+        self.boot = [[op, int(arg)] for op, arg in instructions]
 
     def part_one(self):
-        console = Console(self.input)
+        console = Console(self.boot)
         assert console.will_loop()
         return console.accumulator
 
     def part_two(self):
-        for k in range(len(self.input)):
-            modified_instructions = deepcopy(self.input)
+        for k in range(len(self.boot)):
+            modified_instructions = deepcopy(self.boot)
             if modified_instructions[k][0] == "jmp":
                 modified_instructions[k][0] = "nop"
             elif modified_instructions[k][0] == "nop":
@@ -54,5 +54,7 @@ class Puzzle08(Puzzle):
                 return console.accumulator
 
 
+solutions = (1179, 1089)
+
 if __name__ == "__main__":
-    Puzzle08(solutions=(1179, 1089)).solve()
+    Today(solutions=solutions).solve()

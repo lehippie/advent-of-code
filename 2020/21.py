@@ -4,7 +4,7 @@ from copy import deepcopy
 from aoc.puzzle import Puzzle
 
 
-class Puzzle21(Puzzle):
+class Today(Puzzle):
     def parser(self):
         self.foods = []
         self.ingredients = set()
@@ -38,5 +38,7 @@ class Puzzle21(Puzzle):
         return ",".join(next(iter(allergens[a])) for a in sorted(allergens))
 
 
+solutions = (2317, "kbdgs,sqvv,slkfgq,vgnj,brdd,tpd,csfmb,lrnz")
+
 if __name__ == "__main__":
-    Puzzle21(solutions=(2317, "kbdgs,sqvv,slkfgq,vgnj,brdd,tpd,csfmb,lrnz")).solve()
+    Today(solutions=solutions).solve()

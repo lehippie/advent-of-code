@@ -6,7 +6,7 @@ from aoc.puzzle import Puzzle
 TRANSTABLE = str.maketrans("BFRL", "1010")
 
 
-class Puzzle05(Puzzle):
+class Today(Puzzle):
     def part_one(self):
         self.seats = [int(p.translate(TRANSTABLE), base=2) for p in self.input]
         return max(self.seats)
@@ -19,5 +19,7 @@ class Puzzle05(Puzzle):
         )
 
 
+solutions = (928, 610)
+
 if __name__ == "__main__":
-    Puzzle05(solutions=(928, 610)).solve()
+    Today(solutions=solutions).solve()
