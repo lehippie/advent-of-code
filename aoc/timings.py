@@ -3,8 +3,11 @@
 """Computation time of solved puzzles."""
 
 import json
+import re
 from importlib import import_module
 from timeit import repeat
+
+from docopt import docopt
 
 from aoc import ROOT
 
@@ -22,8 +25,10 @@ def read_timing_file(filepath=TIMING_FILE):
 
 
 def write_timing_file(timings, filepath=TIMING_FILE):
+    s = json.dumps(timings, indent=2)
+    s = re.sub(r"\[\n\s+([0-9.]+),\n\s+([0-9.]+)\n\s+\]", r"[\1, \2]", s)
     with open(filepath, "w") as f:
-        json.dump(timings, f, indent=2)
+        f.write(s)
 
 
 def timing(year, day, repeats=REPEATS):
@@ -60,4 +65,5 @@ def main():
 
 
 if __name__ == "__main__":
+    args = docopt(__doc__)
     main()
