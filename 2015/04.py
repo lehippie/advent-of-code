@@ -5,14 +5,15 @@ from aoc.puzzle import Puzzle
 
 
 class Today(Puzzle):
-    def part_one(self, z=5):
-        n = 1
-        while not md5(f"{self.input}{n}".encode()).hexdigest().startswith("0" * z):
+    def part_one(self, start=1, leading_zeroes=5):
+        n = start
+        head = "0" * leading_zeroes
+        while not md5(f"{self.input}{n}".encode()).hexdigest().startswith(head):
             n += 1
         return n
 
     def part_two(self):
-        return self.part_one(6)
+        return self.part_one(start=self.solutions[0], leading_zeroes=6)
 
 
 solutions = (254575, 1038736)

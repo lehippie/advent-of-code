@@ -12,10 +12,14 @@ class Reindeer:
         self.rest_time = rest_time
         self.period = fly_time + rest_time
 
-    def fly(self, duration):
-        distance = (duration // self.period) * self.speed * self.fly_time
-        distance += self.speed * min(duration % self.period, self.fly_time)
-        return distance
+    def fly(self, time_limit):
+        """The reindeer will fly during an integer amount of
+        its period plus the remaining seconds of the incomplete
+        period (with a limit of its <fly_time>).
+        """
+        duration = (time_limit // self.period) * self.fly_time
+        duration += min(time_limit % self.period, self.fly_time)
+        return duration * self.speed
 
 
 class Today(Puzzle):
@@ -28,14 +32,21 @@ class Today(Puzzle):
         self.reindeers = [parse(line) for line in self.input]
 
     def part_one(self, race_duration=2503):
+        """Calculate the distance traveled by each reindeer and
+        return the maximum.
+        """
         return max(reindeer.fly(race_duration) for reindeer in self.reindeers)
 
     def part_two(self, race_duration=2503):
+        """Positions have to be determined at each second to
+        distribute the points.
+        """
         points = [0] * len(self.reindeers)
         for t in range(1, race_duration + 1):
             distances = [reindeer.fly(t) for reindeer in self.reindeers]
+            lead = max(distances)
             for k, distance in enumerate(distances):
-                if distance == max(distances):
+                if distance == lead:
                     points[k] += 1
         return max(points)
 

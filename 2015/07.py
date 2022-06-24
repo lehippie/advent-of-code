@@ -6,16 +6,19 @@ from aoc.puzzle import Puzzle
 class Circuit:
     def __init__(self, connections: dict):
         self.connections = connections
-        self._wires = {}
+        self.wires_values = {}
         self._mask = 0xFFFF
 
     def __getitem__(self, wire):
-        if wire.isdigit():
-            return int(wire)
-        if wire not in self._wires:
-            try:
-                result = int(self.connections[wire])
-            except ValueError:
+        """Recursively look back throuht connections from
+        needed wire to numerical values.
+
+        Calculated values are cached for next lookups.
+        """
+        if wire not in self.wires_values:
+            if wire.isdigit():
+                result = int(wire)
+            else:
                 operation = self.connections[wire].split()
                 if "AND" in operation:
                     result = self[operation[0]] & self[operation[2]]
@@ -29,11 +32,11 @@ class Circuit:
                     result = self[operation[0]] >> int(operation[2])
                 else:
                     result = self[operation[0]]
-            self._wires[wire] = result & self._mask
-        return self._wires[wire]
+            self.wires_values[wire] = result & self._mask
+        return self.wires_values[wire]
 
     def __setitem__(self, key, value):
-        self._wires[key] = value
+        self.wires_values[key] = value
 
 
 class Today(Puzzle):

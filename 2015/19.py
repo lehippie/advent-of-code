@@ -12,19 +12,20 @@ class Today(Puzzle):
                 old, new = line.split(" => ")
                 self.reactions.append((old, new))
             elif line:
-                self.medicine = line
+                self.molecule = line
 
     def part_one(self):
-        calibration = set()
+        products = set()
         for old, new in self.reactions:
-            for m in re.finditer(old, self.medicine):
-                calibration.add(
-                    self.medicine[: m.start()] + new + self.medicine[m.end() :]
+            for m in re.finditer(old, self.molecule):
+                products.add(
+                    self.molecule[: m.start()] + new + self.molecule[m.end() :]
                 )
-        return len(calibration)
+        return len(products)
 
     def part_two(self):
-        molecule = self.medicine
+        """Run known reactions backward until getting a single electron."""
+        molecule = self.molecule
         n = 0
         while molecule != "e":
             for old, new in self.reactions:

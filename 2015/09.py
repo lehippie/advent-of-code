@@ -5,14 +5,13 @@ from itertools import permutations
 from aoc.puzzle import Puzzle
 
 
-class Locations:
-    def __init__(self, graph: dict):
-        self.graph = graph
-        self.routes = {}
-        for route in permutations(self.graph.keys()):
-            self.routes[" -> ".join(route)] = sum(
-                self.graph[a][b] for a, b in zip(route[:-1], route[1:])
-            )
+def calculate_distances(graph):
+    routes = {}
+    for locations in permutations(graph):
+        routes[" -> ".join(locations)] = sum(
+            graph[a][b] for a, b in zip(locations, locations[1:])
+        )
+    return routes
 
 
 class Today(Puzzle):
@@ -24,12 +23,11 @@ class Today(Puzzle):
             self.graph[loc2][loc1] = int(distance)
 
     def part_one(self):
-        locations = Locations(self.graph)
-        return min(locations.routes.values())
+        self.routes = calculate_distances(self.graph)
+        return min(self.routes.values())
 
     def part_two(self):
-        locations = Locations(self.graph)
-        return max(locations.routes.values())
+        return max(self.routes.values())
 
 
 solutions = (251, 898)

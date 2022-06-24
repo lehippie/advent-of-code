@@ -19,8 +19,8 @@ class Today(Puzzle):
         return len(self.combinations)
 
     def part_two(self):
-        lens = Counter(len(c) for c in self.combinations)
-        return lens[min(lens)]
+        containers_counts = Counter(len(c) for c in self.combinations)
+        return containers_counts[min(containers_counts)]
 
 
 solutions = (654, 57)

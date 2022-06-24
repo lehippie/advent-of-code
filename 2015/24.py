@@ -5,36 +5,41 @@ from math import prod
 from aoc.puzzle import Puzzle
 
 
+def equally_dividable(weights, n):
+    """Check if <weights> can be separated in <n> equal groups."""
+    if n == 1:
+        return True
+    target = sum(weights) // n
+    for group_size in range(1, len(weights)):
+        for group in combinations(weights, group_size):
+            if sum(group) != target:
+                continue
+            if equally_dividable(weights.difference(group), n - 1):
+                return True
+    return False
+
+
 class Today(Puzzle):
     def parser(self):
-        self.weights = list(map(int, self.input))
+        self.weights = set(map(int, self.input))
 
-    def part_one(self):
-        for k in range(1, len(self.weights) - 1):
-            for g1 in sorted(combinations(self.weights, k), key=prod):
-                others = set(self.weights).difference(g1)
-                if sum(others) != 2 * sum(g1):
+    def part_one(self, n=3):
+        """The weight of each group must be the total weight divided
+        by the amount of groups (<n>). As the first group must contain
+        the least packages and have the minimum product, these
+        criteria are explored up until the rest of the packages can be
+        divided equally.
+        """
+        target = sum(self.weights) // n
+        for group1_size in range(1, len(self.weights)):
+            for group1 in sorted(combinations(self.weights, group1_size), key=prod):
+                if sum(group1) != target:
                     continue
-                for l in range(1, len(others)):
-                    for g2 in combinations(others, l):
-                        if sum(g2) == sum(others.difference(g2)):
-                            return prod(g1)
+                if equally_dividable(self.weights.difference(group1), n - 1):
+                    return prod(group1)
 
     def part_two(self):
-        for k in range(1, len(self.weights) - 2):
-            for g1 in sorted(combinations(self.weights, k), key=prod):
-                others = set(self.weights).difference(g1)
-                if sum(others) != 3 * sum(g1):
-                    continue
-                for l in range(1, len(others) - 1):
-                    for g2 in combinations(others, l):
-                        lasts = others.difference(g2)
-                        if sum(lasts) != 2 * sum(g2):
-                            continue
-                        for m in range(1, len(lasts)):
-                            for g3 in combinations(lasts, m):
-                                if sum(g3) == sum(lasts.difference(g3)):
-                                    return prod(g1)
+        return self.part_one(n=4)
 
 
 solutions = (11266889531, 77387711)

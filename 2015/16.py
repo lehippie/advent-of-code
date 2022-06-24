@@ -36,7 +36,7 @@ class Today(Puzzle):
     def part_two(self):
         greater = {"cats", "trees"}
         fewer = {"pomeranians", "goldfish"}
-        equals = set(THE_SUE).difference(greater.union(fewer))
+        equals = set(THE_SUE).difference(greater).difference(fewer)
         for sue in self.sues:
             if (
                 all(sue[k] == THE_SUE[k] for k in equals.intersection(sue))

@@ -5,14 +5,14 @@ import re
 from aoc.puzzle import Puzzle
 
 
-def almost_sum(db, discard="red"):
-    if isinstance(db, list):
-        return sum(almost_sum(v) for v in db)
-    if isinstance(db, int):
-        return db
-    if isinstance(db, dict):
-        if discard not in db.values():
-            return almost_sum(list(db.values()))
+def almost_sum(data, discard="red"):
+    if isinstance(data, int):
+        return data
+    if isinstance(data, list):
+        return sum(almost_sum(v) for v in data)
+    if isinstance(data, dict):
+        if discard not in data.values():
+            return almost_sum(list(data.values()))
     return 0
 
 

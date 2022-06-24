@@ -4,22 +4,23 @@ from itertools import chain, combinations
 from aoc.puzzle import Puzzle
 
 
-SHOP = {  # Cost, Damage, Armor
-    "Weapons": {
-        "Dagger": (8, 4, 0),
-        "Shortsword": (10, 5, 0),
-        "Warhammer": (25, 6, 0),
-        "Longsword": (40, 7, 0),
-        "Greataxe": (74, 8, 0),
+SHOP = {
+    "Weapons": {  # Cost, Damage
+        "Dagger": (8, 4),
+        "Shortsword": (10, 5),
+        "Warhammer": (25, 6),
+        "Longsword": (40, 7),
+        "Greataxe": (74, 8),
     },
-    "Armor": {
-        "Leather": (13, 0, 1),
-        "Chainmail": (31, 0, 2),
-        "Splintmail": (53, 0, 3),
-        "Bandedmail": (75, 0, 4),
-        "Platemail": (102, 0, 5),
+    "Armor": {  # Cost, Armor
+        "None": (0, 0),
+        "Leather": (13, 1),
+        "Chainmail": (31, 2),
+        "Splintmail": (53, 3),
+        "Bandedmail": (75, 4),
+        "Platemail": (102, 5),
     },
-    "Rings": {
+    "Rings": {  # Cost, Damage, Armor
         "Damage +1": (25, 1, 0),
         "Damage +2": (50, 2, 0),
         "Damage +3": (100, 3, 0),
@@ -28,7 +29,7 @@ SHOP = {  # Cost, Damage, Armor
         "Defense +3": (80, 0, 3),
     },
 }
-NONE = (0, 0, 0)
+NORING = (0, 0, 0)
 
 
 class Character:
@@ -42,30 +43,35 @@ class Character:
         other.hp -= max(1, self.damage - other.armor)
 
     def beats(self, other):
-        step = 1
+        """Calculate combat and return True in case of victory."""
+        turn = 1
         while self.hp > 0 and other.hp > 0:
-            if step % 2:
+            if turn % 2:
                 self.attack(other)
             else:
                 other.attack(self)
-            step += 1
+            turn += 1
         return other.hp <= 0
 
     def revive(self):
         self.__init__(self.full_hp, self.damage, self.armor)
 
 
-def equipped_player():
-    for cw, dw, aw in SHOP["Weapons"].values():
-        for ca, da, aa in chain([NONE], SHOP["Armor"].values()):
-            for (cr1, dr1, ar1), (cr2, dr2, ar2) in chain(
-                [(NONE, NONE)],
-                [(r, NONE) for r in SHOP["Rings"].values()],
+def equipments():
+    """Generator yielding possible combinations of damage, armor
+    and the corresponding amount of gold spent.
+    """
+    for weapon_cost, damage in SHOP["Weapons"].values():
+        for armor_cost, armor in SHOP["Armor"].values():
+            for (lr_cost, lr_dmg, lr_armor), (rr_cost, rr_dmg, rr_armor) in chain(
+                [(NORING, NORING)],
+                [(ring, NORING) for ring in SHOP["Rings"].values()],
                 combinations(SHOP["Rings"].values(), 2),
             ):
-                yield cw + ca + cr1 + cr2, Character(
-                    damage=dw + da + dr1 + dr2,
-                    armor=aw + aa + ar1 + ar2,
+                yield (
+                    damage + lr_dmg + rr_dmg,
+                    armor + lr_armor + rr_armor,
+                    weapon_cost + armor_cost + lr_cost + rr_cost,
                 )
 
 
@@ -76,18 +82,20 @@ class Today(Puzzle):
 
     def part_one(self):
         costs = set()
-        for cost, player in equipped_player():
+        for damage, armor, gold in equipments():
+            player = Character(damage=damage, armor=armor)
             self.boss.revive()
             if player.beats(self.boss):
-                costs.add(cost)
+                costs.add(gold)
         return min(costs)
 
     def part_two(self):
         costs = set()
-        for cost, player in equipped_player():
+        for damage, armor, gold in equipments():
+            player = Character(damage=damage, armor=armor)
             self.boss.revive()
             if not player.beats(self.boss):
-                costs.add(cost)
+                costs.add(gold)
         return max(costs)
 
 
