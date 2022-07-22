@@ -2,6 +2,7 @@
 
 import inspect
 from pathlib import Path
+
 from aoc.inputs import load_input
 
 
@@ -38,7 +39,7 @@ class Puzzle:
             input_data      List of strings OR string. If set to None,
                             it is fetched from "inputs" folder based
                             on the path to where the instance is
-                            created (ex: /.../2020/01.py).
+                            created (format: /.../2020/01.py).
             solutions       Already found solutions used by <solve>
                             classmethod to prevent regressions.
         """
@@ -65,15 +66,14 @@ class Puzzle:
             answer = part()
             if solution is None:
                 if verbose:
-                    print(f"Part {k + 1} answer: {answer} ?")
+                    print(f"Part {k+1} answer: {answer} ?")
                 return False
             elif answer != solution:
                 if verbose:
-                    print(
-                        f"Regression in part {k + 1}:",
-                        f"got {answer} instead of {solution}.",
-                    )
+                    print(f"Regression in part {k+1}: {answer} instead of {solution}.")
                 return False
+            elif verbose:
+                print(f"Part {k+1} solved!")
         if verbose:
             print("Day completed \o/")
         return True

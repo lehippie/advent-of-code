@@ -1,7 +1,9 @@
 """Puzzle inputs management."""
 
 from urllib.request import Request, urlopen
+
 from aoc import ROOT, CONFIG
+
 
 INPUTS_DIR = ROOT / "inputs"
 

@@ -1,19 +1,51 @@
 #!/usr/bin/env python
 
-"""Computation time of solved puzzles."""
+"""Compute time of solved puzzles.
+
+Usage:
+    {name} [(<year> <day>)]
+    {name} all [--erase]
+    {name} --help
+
+Arguments:
+    <year>, <day>       Date of the new day (default: today).
+    all                 Compute timing for all puzzles and save
+                        them in a file.
+
+Options:
+    -e, --erase         With argument <all>, erase previously
+                        calculated timings.
+    -h, --help          Show this help.
+"""
 
 import json
 import re
+from datetime import datetime
 from importlib import import_module
-from timeit import repeat
+from pathlib import Path
+from timeit import Timer
 
 from docopt import docopt
 
 from aoc import ROOT
 
 
-REPEATS = 10
 TIMING_FILE = ROOT / "timings.json"
+
+
+def timing(year, day):
+    day = f"{day:>02}"
+    module = import_module(f"{year}.{day}")
+    puzzle = module.Today(solutions=module.solutions)
+    if puzzle.solve(verbose=False):
+        out = [None, None]
+        for k, part in enumerate((puzzle.part_one, puzzle.part_two)):
+            timer = Timer(part)
+            loops, seconds = timer.autorange()
+            out[k] = round(1000 * seconds / loops, 3)
+        return out
+    else:
+        raise IOError(f"Unsolved puzzle: {year}.{day}")
 
 
 def read_timing_file(filepath=TIMING_FILE):
@@ -31,39 +63,38 @@ def write_timing_file(timings, filepath=TIMING_FILE):
         f.write(s)
 
 
-def timing(year, day, repeats=REPEATS):
-    day = f"{day:>02}"
-    module = import_module(f"{year}.{day}")
-    puzzle = module.Today(solutions=module.solutions)
-    if puzzle.solve(verbose=False):
-        out = [None, None]
-        for k, part in enumerate((puzzle.part_one, puzzle.part_two)):
-            out[k] = repeat(part, repeat=repeats, number=1)
-            out[k] = round(1000 * min(out[k]), 3)
-        return out
-    else:
-        raise IOError(f"Unsolved puzzle: {year}.{day}")
-
-
-def main():
-    timings = read_timing_file()
+def time_them_all(erase="False"):
+    times = read_timing_file()
     for year in sorted(ROOT.glob("20*")):
-        if year.name not in timings:
-            timings[year.name] = {}
+        y = year.name
+        print(y)
+        if y not in times:
+            times[y] = {}
         for day in sorted(year.glob("*.py")):
-            if day.stem not in timings[year.name]:
+            d = day.stem
+            if erase or d not in times[y]:
                 try:
-                    timings[year.name][day.stem] = timing(year.name, day.stem)
+                    times[y][d] = timing(y, d)
                 except:
                     continue
-                print(
-                    f"{year.name}.{day.stem} =",
-                    f"{timings[year.name][day.stem][0]:>8.3f} ms |",
-                    f"{timings[year.name][day.stem][1]:>8.3f} ms",
-                )
-    write_timing_file(timings)
+            print(f"  {d}: {times[y][d][0]:>8.3f} ms |{times[y][d][1]:>8.3f} ms")
+    write_timing_file(times)
 
 
 if __name__ == "__main__":
-    args = docopt(__doc__)
-    main()
+    args = docopt(__doc__.format(name=Path(__file__).name))
+
+    if args["all"]:
+        time_them_all(erase=args["--erase"])
+    else:
+        if args["<year>"] is None:
+            now = datetime.now()
+            args["<year>"] = str(now.year)
+            args["<day>"] = now.day
+
+        puzzle_path = ROOT / args["<year>"] / f"{args['<day>']:>02}.py"
+        if puzzle_path.exists():
+            for k, t in enumerate(timing(args["<year>"], args["<day>"])):
+                print(f"Part {k+1}: {t} ms")
+        else:
+            print(f"Puzzle not found: {puzzle_path}")
