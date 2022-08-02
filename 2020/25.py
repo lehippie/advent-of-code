@@ -3,24 +3,26 @@
 from aoc.puzzle import Puzzle
 
 
-def transform(subject_number, loop):
-    value = 1
-    for _ in range(loop):
-        value = (value * subject_number) % 20201227
-    return value
-
-
 class Today(Puzzle):
     def parser(self):
-        self.keys = list(map(int, self.input))
+        self.keys = set(map(int, self.input))
 
     def part_one(self):
+        """Transform the subject number 7 until the value becomes
+        one of the public keys. Then, transform the other public
+        key with the loop_size that was needed.
+        """
+        loop_size = 0
         value = 1
-        loop = 0
         while value not in self.keys:
             value = (value * 7) % 20201227
-            loop += 1
-        return transform(self.keys[(self.keys.index(value) + 1) % 2], loop)
+            loop_size += 1
+        
+        key = next(k for k in self.keys if k != value)
+        value = 1
+        for _ in range(loop_size):
+            value = (value * key) % 20201227
+        return value
 
 
 solutions = (17673381, NotImplemented)

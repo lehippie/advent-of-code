@@ -3,108 +3,86 @@
 from aoc.puzzle import Puzzle
 
 
-class ProbableBoat:
-    turn_right = {"north": "east", "east": "south", "south": "west", "west": "north"}
-    turn_left = {v: k for k, v in turn_right.items()}
+TURN_RIGHT = {"N": "E", "E": "S", "S": "W", "W": "N"}
+TURN_LEFT = {v: k for k, v in TURN_RIGHT.items()}
 
+
+class ProbableShip:
     def __init__(self, instructions):
-        self.instrutions = instructions.copy()
+        self.instrutions = instructions
         self.position = [0, 0]
-        self.direction = "east"
+        self.direction = "E"
+
+    def move(self, direction, value):
+        if direction == "N":
+            self.position[1] += value
+        elif direction == "S":
+            self.position[1] -= value
+        elif direction == "E":
+            self.position[0] += value
+        elif direction == "W":
+            self.position[0] -= value
+
+    def turn(self, direction, value):
+        for _ in range(value // 90):
+            if direction == "R":
+                self.direction = TURN_RIGHT[self.direction]
+            elif direction == "L":
+                self.direction = TURN_LEFT[self.direction]
+
+    def forward(self, value):
+        self.move(self.direction, value)
+
+    def navigate(self):
+        for instruction in self.instrutions:
+            action, value = instruction[0], int(instruction[1:])
+            if action in TURN_RIGHT:
+                self.move(action, value)
+            elif action in {"L", "R"}:
+                self.turn(action, value)
+            elif action == "F":
+                self.forward(value)
+        return self.manhattan_distance()
 
     def manhattan_distance(self):
         return sum(abs(p) for p in self.position)
 
-    def move(self, direction, value):
-        if direction == "north":
-            self.position[1] += value
-        elif direction == "south":
-            self.position[1] -= value
-        elif direction == "east":
-            self.position[0] += value
-        elif direction == "west":
-            self.position[0] -= value
 
-    def turn(self, direction, value):
-        for _ in range(value):
-            if direction == "right":
-                self.direction = self.turn_right[self.direction]
-            elif direction == "left":
-                self.direction = self.turn_left[self.direction]
-
-    def navigate(self):
-        for instruction in self.instrutions:
-            action, value = instruction[0], int(instruction[1:])
-            if action == "N":
-                self.move("north", value)
-            elif action == "S":
-                self.move("south", value)
-            elif action == "E":
-                self.move("east", value)
-            elif action == "W":
-                self.move("west", value)
-            elif action == "L":
-                self.turn("left", value // 90)
-            elif action == "R":
-                self.turn("right", value // 90)
-            elif action == "F":
-                self.move(self.direction, value)
-
-
-class RealBoat(ProbableBoat):
+class ActualShip(ProbableShip):
     def __init__(self, instructions):
         super().__init__(instructions)
         self.waypoint = [10, 1]
 
-    def move(self, value):
-        self.position = [p + value * w for p, w in zip(self.position, self.waypoint)]
-
-    def move_waypoint(self, direction, value):
-        if direction == "north":
+    def move(self, direction, value):
+        """Move method now act on the waypoint."""
+        if direction == "N":
             self.waypoint[1] += value
-        elif direction == "south":
+        elif direction == "S":
             self.waypoint[1] -= value
-        elif direction == "east":
+        elif direction == "E":
             self.waypoint[0] += value
-        elif direction == "west":
+        elif direction == "W":
             self.waypoint[0] -= value
 
-    def turn_waypoint(self, direction, value):
-        for _ in range(value):
-            if direction == "right":
+    def turn(self, direction, value):
+        """Turn method now rotate the waypoint around the ship."""
+        for _ in range(value // 90):
+            if direction == "R":
                 self.waypoint = [self.waypoint[1], -self.waypoint[0]]
-            elif direction == "left":
+            elif direction == "L":
                 self.waypoint = [-self.waypoint[1], self.waypoint[0]]
 
-    def navigate(self):
-        for instruction in self.instrutions:
-            action, value = instruction[0], int(instruction[1:])
-            if action == "N":
-                self.move_waypoint("north", value)
-            elif action == "S":
-                self.move_waypoint("south", value)
-            elif action == "E":
-                self.move_waypoint("east", value)
-            elif action == "W":
-                self.move_waypoint("west", value)
-            elif action == "L":
-                self.turn_waypoint("left", value // 90)
-            elif action == "R":
-                self.turn_waypoint("right", value // 90)
-            elif action == "F":
-                self.move(value)
+    def forward(self, value):
+        """Forward method moves the ship in the direction of the waypoint."""
+        self.position = [p + value * w for p, w in zip(self.position, self.waypoint)]
 
 
 class Today(Puzzle):
     def part_one(self):
-        boat = ProbableBoat(self.input)
-        boat.navigate()
-        return boat.manhattan_distance()
+        return ProbableShip(self.input).navigate()
 
     def part_two(self):
-        boat = RealBoat(self.input)
-        boat.navigate()
-        return boat.manhattan_distance()
+        return ActualShip(self.input).navigate()
 
 
 solutions = (508, 30761)

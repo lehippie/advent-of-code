@@ -1,25 +1,24 @@
 """Day 2: Password Philosophy."""
 
-from collections import Counter
 from aoc.puzzle import Puzzle
 
 
-def is_valid(password_line, policy="sled"):
-    values, letter, password = password_line.split(" ")
-    v1, v2 = [int(v) for v in values.split("-")]
-    letter = letter[0]
-    if policy == "sled":
-        return v1 <= Counter(password)[letter] <= v2
-    if policy == "toboggan":
-        return (password[v1 - 1] == letter) != (password[v2 - 1] == letter)
-
-
 class Today(Puzzle):
+    def parser(self):
+        def parse_line(line):
+            values, letter, password = line.split(" ")
+            return password, letter[0], *map(int, values.split("-"))
+
+        self.passwords = [parse_line(l) for l in self.input]
+
     def part_one(self):
-        return sum(is_valid(pwd) for pwd in self.input)
+        return sum(v1 <= pwd.count(l) <= v2 for pwd, l, v1, v2 in self.passwords)
 
     def part_two(self):
-        return sum(is_valid(pwd, "toboggan") for pwd in self.input)
+        return sum(
+            (pwd[v1 - 1] == l) != (pwd[v2 - 1] == l)
+            for pwd, l, v1, v2 in self.passwords
+        )
 
 
 solutions = (628, 705)

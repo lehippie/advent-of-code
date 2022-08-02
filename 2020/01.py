@@ -9,11 +9,11 @@ class Today(Puzzle):
     def parser(self):
         self.expenses = list(map(int, self.input))
 
-    def part_one(self, n=2):
-        return prod(next(c for c in combinations(self.expenses, n) if sum(c) == 2020))
+    def part_one(self, total=2020, n=2):
+        return prod(next(c for c in combinations(self.expenses, n) if sum(c) == total))
 
     def part_two(self):
-        return self.part_one(3)
+        return self.part_one(n=3)
 
 
 solutions = (751776, 42275090)

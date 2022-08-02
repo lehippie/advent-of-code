@@ -6,25 +6,33 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.adapters = list(map(int, self.input))
+        self.jolts = set([0]).union(map(int, self.input))
 
     def part_one(self):
-        joltages = sorted(self.adapters + [0, max(self.adapters) + 3])
-        differences = Counter(a - b for a, b in zip(joltages[1:], joltages[:-1]))
-        return differences[1] * differences[3]
+        """Best way to use all adapters is to sort them. As our device
+        is exactly 3 jolts above the highest adapter, it can only be
+        reached by the latter so we add 1 to the count of 3-jolt
+        differences.
+        """
+        chain = sorted(self.jolts)
+        differences = Counter(a - b for a, b in zip(chain[1:], chain))
+        return differences[1] * (differences[3] + 1)
 
     def part_two(self):
-        end_jolt = max(self.adapters) + 3
-        jolts = set(self.adapters + [0, end_jolt])
-        tree = Counter({0: 1})
-        arrangements_count = 0
-        while tree:
-            new_tree = Counter()
-            for n, q in tree.items():
-                new_tree.update({j: q for j in jolts.intersection(range(n + 1, n + 4))})
-            arrangements_count += new_tree.pop(end_jolt, 0)
-            tree = new_tree
-        return arrangements_count
+        """Starting with the unique outlet, replace recursively each
+        joltage by the adapters that can be plugged in. The amount of
+        arrangements is counted by removing from the joltages queue
+        all path that reached the last adapter.
+        """
+        joltages = Counter({0: 1})
+        arrangements = 0
+        while joltages:
+            jolt = min(joltages)
+            n = joltages.pop(jolt)
+            plugs = range(jolt + 1, jolt + 4)
+            joltages.update({j: n for j in self.jolts.intersection(plugs)})
+            arrangements += joltages.pop(max(self.jolts), 0)
+        return arrangements
 
 
 solutions = (2201, 169255295254528)

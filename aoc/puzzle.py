@@ -74,6 +74,4 @@ class Puzzle:
                 return False
             elif verbose:
                 print(f"Part {k+1} solved!")
-        if verbose:
-            print("Day completed \o/")
         return True

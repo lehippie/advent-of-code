@@ -20,14 +20,15 @@ class Console:
         elif operation == "nop":
             self.position += 1
 
-    def will_loop(self):
-        count = [0] * len(self.instructions)
-        while count[self.position] == 0:
-            count[self.position] += 1
+    def is_looping(self):
+        history = set()
+        while True:
+            if self.position in history:
+                return True
+            history.add(self.position)
             self.execute_next_instruction()
             if self.position == len(self.instructions):
                 return False
-        return True
 
 
 class Today(Puzzle):
@@ -37,20 +38,20 @@ class Today(Puzzle):
 
     def part_one(self):
         console = Console(self.boot)
-        assert console.will_loop()
+        assert console.is_looping()
         return console.accumulator
 
     def part_two(self):
         for k in range(len(self.boot)):
-            modified_instructions = deepcopy(self.boot)
-            if modified_instructions[k][0] == "jmp":
-                modified_instructions[k][0] = "nop"
-            elif modified_instructions[k][0] == "nop":
-                modified_instructions[k][0] = "jmp"
+            new_boot = deepcopy(self.boot)
+            if new_boot[k][0] == "jmp":
+                new_boot[k][0] = "nop"
+            elif new_boot[k][0] == "nop":
+                new_boot[k][0] = "jmp"
             else:
                 continue
-            console = Console(modified_instructions)
-            if not console.will_loop():
+            console = Console(new_boot)
+            if not console.is_looping():
                 return console.accumulator
 
 

@@ -7,8 +7,8 @@ from aoc.puzzle import Puzzle
 
 def count_trees(trees, right, down):
     return Counter(
-        trees[row][(k * right) % len(trees[0])]
-        for k, row in enumerate(range(0, len(trees), down))
+        row[(k * right) % len(trees[0])]
+        for k, row in enumerate(trees[0 : len(trees) : down])
     )["#"]
 
 

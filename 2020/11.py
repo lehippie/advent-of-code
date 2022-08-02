@@ -1,87 +1,73 @@
 """Day 11: Seating System."""
 
-from collections import Counter
-from copy import deepcopy
 from itertools import product
 from aoc.puzzle import Puzzle
 
 
-class Seats:
-    def __init__(self, layout):
-        self.layout = deepcopy(layout)
+class SeatsLayout:
+    def __init__(self, seats, tolerance=4):
+        self.seats = seats
+        self.tolerance = tolerance
+        self.occupied = set()
 
-    def __str__(self):
-        return "\n".join("".join(l) for l in self.layout)
+    def count(self, seat):
+        """Count occupied adjacent seats."""
+        adjacents = product(*((s - 1, s, s + 1) for s in seat))
+        return len(self.occupied.intersection(adjacents).difference({seat}))
 
-    def occupied(self):
-        return Counter(str(self)).get("#", 0)
+    def stabilize(self):
+        """Perform rounds until the layout doesn't change
+        and return the count of occupied seats.
+        """
+        while True:
+            occupied = self.occupied.copy()
+            for seat in self.seats:
+                if seat not in self.occupied and self.count(seat) == 0:
+                    occupied.add(seat)
+                elif seat in self.occupied and self.count(seat) >= self.tolerance:
+                    occupied.remove(seat)
+            if occupied == self.occupied:
+                return len(occupied)
+            self.occupied = occupied
 
-    def count_around(self, row, col):
-        occupation = Counter()
-        for r in self.layout[max(row - 1, 0) : min(row + 2, len(self.layout))]:
-            occupation.update(r[max(col - 1, 0) : min(col + 2, len(r))])
-        occupation.subtract(self.layout[row][col])
-        return occupation.get("#", 0)
 
-    def count_seen(self, row, col):
-        max_distance = max(len(self.layout), len(self.layout[0]))
-        occupation = Counter()
+class VisibilityLayout(SeatsLayout):
+    def __init__(self, seats, tolerance=5):
+        super().__init__(seats, tolerance)
+        self.size = (max(r for r, _ in seats), max(c for _, c in seats))
+
+    def count(self, seat):
+        """Count occupied nearest seats in each direction."""
+        seen = 0
+        row, col = seat
         for dr, dc in product([-1, 0, 1], repeat=2):
             if (dr, dc) == (0, 0):
                 continue
-            direction_seats = (
-                (row + k * dr, col + k * dc)
-                for k in range(1, max_distance)
-                if (
-                    0 <= row + k * dr < len(self.layout)
-                    and 0 <= col + k * dc < len(self.layout[0])
-                )
-            )
-            try:
-                occupation.update(
-                    next(
-                        self.layout[r][c]
-                        for r, c in direction_seats
-                        if self.layout[r][c] != "."
-                    )
-                )
-            except StopIteration:
-                pass
-        return occupation.get("#", 0)
-
-    def stabilize(self, limit, method):
-        if method == "around":
-            count = self.count_around
-        elif method == "seen":
-            count = self.count_seen
-
-        while True:
-            new_layout = deepcopy(self.layout)
-            for r, c in product(
-                range(len(new_layout)),
-                range(len(new_layout[0])),
-            ):
-                if new_layout[r][c] == "L" and count(r, c) == 0:
-                    new_layout[r][c] = "#"
-                elif new_layout[r][c] == "#" and count(r, c) >= limit:
-                    new_layout[r][c] = "L"
-            if new_layout == self.layout:
-                break
-            else:
-                self.layout = new_layout
+            xy = (row + dr, col + dc)
+            while 0 <= xy[0] <= self.size[0] and 0 <= xy[1] <= self.size[1]:
+                if xy not in self.seats:
+                    xy = (xy[0] + dr, xy[1] + dc)
+                else:
+                    if xy in self.occupied:
+                        seen += 1
+                    break
+        return seen
 
 
 class Today(Puzzle):
     def parser(self):
-        self.grid = list(map(list, self.input))
+        self.seats = set(
+            (r, c)
+            for r, row in enumerate(self.input)
+            for c, col in enumerate(row)
+            if col == "L"
+        )
 
-    def part_one(self, limit=4, method="around"):
-        seats = Seats(self.grid)
-        seats.stabilize(limit, method)
-        return seats.occupied()
+    def part_one(self):
+        return SeatsLayout(self.seats).stabilize()
 
     def part_two(self):
-        return self.part_one(limit=5, method="seen")
+        return VisibilityLayout(self.seats).stabilize()
 
 
 solutions = (2251, 2019)

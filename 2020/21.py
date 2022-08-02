@@ -6,36 +6,41 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
+        """Foods are stored in a list as sets of ingredients.
+        Existing ingredients are stored in a set.
+        Allergens are stored as keys of a dictionnary where values
+        are the common ingredients in foods where they appear.
+        """
         self.foods = []
         self.ingredients = set()
         self.allergens = {}
         for line in self.input:
-            ingr, alrg = line.split(" (")
+            ingr, alrg = line.split(" (contains ")
             ingr = set(ingr.split())
-            alrg = set(alrg[9:-1].split(", "))
+            alrg = set(alrg[:-1].split(", "))
             self.foods.append(ingr)
             self.ingredients.update(ingr)
             for a in alrg:
                 self.allergens[a] = self.allergens.get(a, ingr).intersection(ingr)
 
     def part_one(self):
-        possibly_unsafe = set().union(*self.allergens.values())
-        safe = self.ingredients.difference(possibly_unsafe)
-        safe_count = 0
-        for food in self.foods:
-            safe_count += len(food.intersection(safe))
-        return safe_count
+        """Safe ingredients are the ones that are not risky, meaning
+        they do not appear in allergens dictionnary.
+        """
+        risky = set.union(*self.allergens.values())
+        return sum(len(food.difference(risky)) for food in self.foods)
 
     def part_two(self):
+        """Iteratively filter each allergens' possible ingredients
+        with the ones that have only one possibility.
+        """
         allergens = deepcopy(self.allergens)
         while any(len(i) > 1 for i in allergens.values()):
-            for allergen, ingredients in allergens.items():
-                if len(ingredients) > 1:
-                    continue
-                found = next(iter(ingredients))
-                for other_allergen in (a for a in allergens if a != allergen):
-                    allergens[other_allergen].discard(found)
-        return ",".join(next(iter(allergens[a])) for a in sorted(allergens))
+            for alrg, ingr in allergens.items():
+                if len(ingr) == 1:
+                    for other in (a for a in allergens if a != alrg):
+                        allergens[other].difference_update(ingr)
+        return ",".join(allergens[a].pop() for a in sorted(allergens))
 
 
 solutions = (2317, "kbdgs,sqvv,slkfgq,vgnj,brdd,tpd,csfmb,lrnz")

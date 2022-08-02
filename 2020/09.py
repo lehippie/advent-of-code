@@ -8,29 +8,24 @@ class Today(Puzzle):
     def parser(self):
         self.data = list(map(int, self.input))
 
-    def part_one(self, preamble=25):
-        for k, number in enumerate(self.data):
-            if k < preamble:
+    def part_one(self):
+        for k, n in enumerate(self.data):
+            if k < 25:
                 continue
             try:
-                next(
-                    c
-                    for c in combinations(self.data[k - preamble : k], 2)
-                    if sum(c) == number
-                )
+                next(c for c in combinations(self.data[k - 25 : k], 2) if sum(c) == n)
             except StopIteration:
-                self.invalid = number
-                return number
+                self.invalid = n
+                return n
 
     def part_two(self):
-        for k, n in enumerate(self.data):
-            add = [n]
-            l = 0
-            while sum(add) < self.invalid:
+        for k in range(len(self.data)):
+            l = 2
+            while sum(self.data[k : k + l]) < self.invalid:
                 l += 1
-                add.append(self.data[k + l])
-            if sum(add) == self.invalid:
-                return min(add) + max(add)
+            s = self.data[k : k + l]
+            if sum(s) == self.invalid:
+                return min(s) + max(s)
 
 
 solutions = (41682220, 5388976)

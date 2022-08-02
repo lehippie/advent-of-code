@@ -3,20 +3,22 @@
 from aoc.puzzle import Puzzle
 
 
-TRANSTABLE = str.maketrans("BFRL", "1010")
-
-
 class Today(Puzzle):
+    def parser(self):
+        """Seat IDs are hidden binary numbers. Converting them
+        to intergers allow direct manipulation.
+        """
+        transtable = str.maketrans("FBLR", "0101")
+        self.seats = {int(p.translate(transtable), base=2) for p in self.input}
+
     def part_one(self):
-        self.seats = [int(p.translate(TRANSTABLE), base=2) for p in self.input]
         return max(self.seats)
 
     def part_two(self):
-        return next(
-            seat
-            for seat in range(min(self.seats) + 1, max(self.seats))
-            if seat not in self.seats
-        )
+        seat = min(self.seats)
+        while seat in self.seats:
+            seat += 1
+        return seat
 
 
 solutions = (928, 610)

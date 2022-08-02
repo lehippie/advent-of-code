@@ -1,40 +1,29 @@
 """Day 22: Crab Combat."""
 
 from collections import deque
-from copy import deepcopy
 from itertools import islice
 from aoc.puzzle import Puzzle
 
 
 class Combat:
     def __init__(self, decks):
-        self.decks = deepcopy(decks)
+        self.decks = [deque(deck) for deck in decks]
         self.winner = None
 
-    def has_won(self):
-        try:
-            return next(
-                (k + 1) % 2 for k, deck in enumerate(self.decks) if len(deck) == 0
-            )
-        except StopIteration:
-            return None
+    def play(self):
+        while self.winner is None:
+            self.play_round()
 
     def play_round(self):
-        cards = tuple(deck.popleft() for deck in self.decks)
+        cards = [deck.popleft() for deck in self.decks]
         win = cards.index(max(cards))
-        self.decks[win].extend(sorted(cards, reverse=True))
+        self.decks[win].extend((cards[win], cards[(win + 1) % 2]))
+        if not all(self.decks):
+            self.winner = next(k for k, d in enumerate(self.decks) if d)
 
-    def play(self):
-        while (player := self.has_won()) is None:
-            self.play_round()
-        self.winner = player
-
-    def score(self, player):
-        score = 0
-        deck = self.decks[player]
-        for k, card in zip(range(len(deck), 0, -1), deck):
-            score += k * card
-        return score
+    def score(self):
+        deck = self.decks[self.winner]
+        return sum(k * card for k, card in zip(range(len(deck), 0, -1), deck))
 
 
 class RecursiveCombat(Combat):
@@ -42,49 +31,41 @@ class RecursiveCombat(Combat):
         super().__init__(decks)
         self.history = set()
 
-    def deck_hash(self):
-        return (self.score(0), self.score(1))
-
-    def has_won(self):
-        if (dh := self.deck_hash()) in self.history:
-            return 0
-        self.history.add(dh)
-        return super().has_won()
-
     def play_round(self):
-        cards = tuple(deck.popleft() for deck in self.decks)
-        if all(len(deck) >= card for deck, card in zip(self.decks, cards)):
-            sub_game = RecursiveCombat(
-                [deque(islice(deck, card)) for deck, card in zip(self.decks, cards)]
-            )
-            sub_game.play()
-            win = sub_game.winner
+        state = tuple(map(tuple, self.decks))
+        if state in self.history:
+            self.winner = 0
         else:
-            win = cards.index(max(cards))
-        self.decks[win].append(cards[win])
-        self.decks[win].append(cards[(win + 1) % 2])
+            self.history.add(state)
+            cards = [deck.popleft() for deck in self.decks]
+            if all(len(deck) >= card for deck, card in zip(self.decks, cards)):
+                sub_game = RecursiveCombat(
+                    [list(islice(d, card)) for d, card in zip(self.decks, cards)]
+                )
+                sub_game.play()
+                win = sub_game.winner
+            else:
+                win = cards.index(max(cards))
+            self.decks[win].extend((cards[win], cards[(win + 1) % 2]))
+            if not all(self.decks):
+                self.winner = next(k for k, d in enumerate(self.decks) if d)
 
 
 class Today(Puzzle):
     def parser(self):
-        self.decks = [deque(), deque()]
-        lines = iter(self.input)
-        line = next(lines)
-        while line := next(lines):
-            self.decks[0].append(int(line))
-        assert "Player 2" in next(lines)
-        for line in lines:
-            self.decks[1].append(int(line))
+        idx = self.input.index("")
+        self.decks = [
+            list(map(int, self.input[1:idx])),
+            list(map(int, self.input[idx + 2 :])),
+        ]
 
-    def part_one(self):
-        game = Combat(self.decks)
-        game.play()
-        return game.score(game.winner)
+    def part_one(self, game=Combat):
+        g = game(self.decks)
+        g.play()
+        return g.score()
 
     def part_two(self):
-        game = RecursiveCombat(self.decks)
-        game.play()
-        return game.score(game.winner)
+        return self.part_one(RecursiveCombat)
 
 
 solutions = (32495, 32665)

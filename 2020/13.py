@@ -1,36 +1,41 @@
 """Day 13: Shuttle Search."""
 
-from math import prod
 from aoc.puzzle import Puzzle
 
 
 class Today(Puzzle):
     def parser(self):
         self.start = int(self.input[0])
-        self.buses = [int(b) if b != "x" else None for b in self.input[1].split(",")]
+        self.buses = [
+            (int(b), k) for k, b in enumerate(self.input[1].split(",")) if b != "x"
+        ]
 
     def part_one(self):
         ts = {}
-        for bus in self.buses:
-            if bus is None:
-                continue
+        for bus, _ in self.buses:
             ts[bus] = next(
-                t for t in range(self.start, self.start + bus + 1) if t % bus == 0
+                t for t in range(self.start, self.start + bus) if t % bus == 0
             )
-        earliest = min(ts, key=ts.get)
-        return earliest * (ts[earliest] - self.start)
+        first_bus = min(ts, key=ts.get)
+        return first_bus * (ts[first_bus] - self.start)
 
     def part_two(self):
-        buses = [[b, k] for k, b in enumerate(self.buses) if b is not None]
-        buses = sorted(buses, key=lambda x: x[0], reverse=True)
+        """We start with the timestamp where one bus arrive at the
+        correct subsequent minute with a cycle time equal to its id.
+        We then sync another bus by checking each cycle until its
+        arrival minute is also correct. The cycle is then updated by
+        multiplying it by the new bus id.
+        One by one, we converge to the first timestamp where all
+        buses arrive in correct order.
+        """
+        buses = sorted(self.buses, key=lambda x: x[0], reverse=True)
+        t = buses[0][0] - buses[0][1]
         cycle = buses[0][0]
-        ts = buses[0][0] - buses[0][1]
-        for k in range(2, len(buses) + 1):
-            road = buses[:k]
-            while not all((ts + k) % b == 0 for b, k in road):
-                ts += cycle
-            cycle = prod(b[0] for b in road)
-        return ts
+        for bus, delay in buses[1:]:
+            while not (t + delay) % bus == 0:
+                t += cycle
+            cycle *= bus
+        return t
 
 
 solutions = (3789, 667437230788118)

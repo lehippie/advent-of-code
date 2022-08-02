@@ -9,52 +9,46 @@ RULES = {
     "iyr": (2010, 2020),
     "eyr": (2020, 2030),
     "hgt": {"cm": (150, 193), "in": (59, 76)},
-    "hcl": r"^#[0-9a-f]{6}$",
+    "hcl": re.compile(r"^#[0-9a-f]{6}$"),
     "ecl": ("amb", "blu", "brn", "gry", "grn", "hzl", "oth"),
-    "pid": r"^[0-9]{9}$",
+    "pid": re.compile(r"^[0-9]{9}$"),
 }
 
 
-def check_height(height):
-    unit = height[-2:]
-    if unit in RULES["hgt"]:
-        mini, maxi = RULES["hgt"][unit]
-        return mini <= int(height[:-2]) <= maxi
-    else:
-        return False
-
-
-def passport_validity(passport):
-    if (
-        set(RULES).issubset(set(passport))
-        and RULES["byr"][0] <= int(passport["byr"]) <= RULES["byr"][1]
-        and RULES["iyr"][0] <= int(passport["iyr"]) <= RULES["iyr"][1]
-        and RULES["eyr"][0] <= int(passport["eyr"]) <= RULES["eyr"][1]
-        and check_height(passport["hgt"])
-        and re.match(RULES["hcl"], passport["hcl"])
-        and passport["ecl"] in RULES["ecl"]
-        and re.match(RULES["pid"], passport["pid"])
-    ):
-        return True
-    return False
+def passport_validity(p):
+    return bool(
+        set(RULES).issubset(p)
+        and RULES["byr"][0] <= int(p["byr"]) <= RULES["byr"][1]
+        and RULES["iyr"][0] <= int(p["iyr"]) <= RULES["iyr"][1]
+        and RULES["eyr"][0] <= int(p["eyr"]) <= RULES["eyr"][1]
+        and p["hgt"][-2:] in RULES["hgt"]
+        and (
+            RULES["hgt"][p["hgt"][-2:]][0]
+            <= int(p["hgt"][:-2])
+            <= RULES["hgt"][p["hgt"][-2:]][1]
+        )
+        and RULES["hcl"].match(p["hcl"])
+        and p["ecl"] in RULES["ecl"]
+        and RULES["pid"].match(p["pid"])
+    )
 
 
 class Today(Puzzle):
     def parser(self):
-        self.passeports = [{}]
+        self.passports = [{}]
         for line in self.input:
             if not line:
-                self.passeports.append({})
+                self.passports.append({})
                 continue
             for field in line.split(" "):
                 key, value = field.split(":")
-                self.passeports[-1][key] = value
+                self.passports[-1][key] = value
 
     def part_one(self):
-        return sum(set(RULES).issubset(set(p)) for p in self.passeports)
+        return sum(set(RULES).issubset(p) for p in self.passports)
 
     def part_two(self):
-        return sum(passport_validity(p) for p in self.passeports)
+        return sum(passport_validity(p) for p in self.passports)
 
 
 solutions = (222, 140)

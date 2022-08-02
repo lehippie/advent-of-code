@@ -1,9 +1,8 @@
 """Day 20: Jurassic Jigsaw."""
 
-import re
 from collections import Counter
 from itertools import combinations, product
-from math import prod, sqrt
+from math import prod
 from aoc.puzzle import Puzzle
 
 
@@ -15,168 +14,154 @@ MONSTER = [
 
 
 class Tile:
-    def __init__(self, tile_id, tile):
+    def __init__(self, tile_id, lines):
         self.id = tile_id
-        self.tile = tile
-        self.connections = {}
+        self.lines = lines
+        self.size = len(self.lines)
+        self.links = {}
 
     @property
-    def edges(self):
+    def borders(self):
+        """Return borders of the tile. Directions are indexed
+        clockwise: up=0, right=1, down=2, left=3.
+        """
         return {
-            "0": self.tile[0],
-            "-0": self.tile[0][::-1],
-            "1": "".join(line[-1] for line in self.tile),
-            "-1": "".join(line[-1] for line in self.tile)[::-1],
-            "2": self.tile[-1],
-            "-2": self.tile[-1][::-1],
-            "3": "".join(line[0] for line in self.tile),
-            "-3": "".join(line[0] for line in self.tile)[::-1],
+            0: self.lines[0],
+            1: "".join(line[-1] for line in self.lines),
+            2: self.lines[-1],
+            3: "".join(line[0] for line in self.lines),
         }
 
-    def check_connection(self, other_tile):
-        edges = set(self.edges.values())
-        other_edges = set(other_tile.edges.values())
-        same = edges.intersection(other_edges)
-        if same:
-            same = same.pop()
-            mine = next(k for k, e in self.edges.items() if e == same)
-            hers = next(k for k, e in other_tile.edges.items() if e == same)
-            self.connections[abs(int(mine))] = other_tile.id
-            other_tile.connections[abs(int(hers))] = self.id
+    def flip(self):
+        """Flip upside-down."""
+        self.lines = self.lines[::-1]
+        self.links = {d if d % 2 else (d + 2) % 4: t for d, t in self.links.items()}
 
     def rotate(self):
-        self.tile = [
-            "".join(line[i] for line in self.tile[::-1])
-            for i in range(len(self.tile[0]))
-        ]
-        self.connections = {(e + 1) % 4: t for e, t in self.connections.items()}
+        """Rotate 90° clockwise."""
+        self.lines = ["".join(l[i] for l in self.lines[::-1]) for i in range(self.size)]
+        self.links = {(d + 1) % 4: t for d, t in self.links.items()}
 
-    def flip_lr(self):
-        self.tile = [line[::-1] for line in self.tile]
-        self.connections = {
-            (e + 2) % 4 if e % 2 else e: t for e, t in self.connections.items()
-        }
-
-    def flip_ud(self):
-        self.tile = self.tile[::-1]
-        self.connections = {
-            (e + 2) % 4 if not e % 2 else e: t for e, t in self.connections.items()
-        }
+    def align(self, other, direction):
+        """Align an other tile along a direction."""
+        border = self.borders[direction]
+        other_direction = (direction + 2) % 4
+        test_count = 0
+        while other.borders[other_direction] != border:
+            test_count += 1
+            if test_count != 4:
+                other.rotate()
+            else:
+                other.flip()
 
 
 class Image:
     def __init__(self, tiles):
-        self.tiles = {tid: Tile(tid, t) for tid, t in tiles.items()}
-        self.find_connections()
-        self.corners = [
-            tile.id for tile in self.tiles.values() if len(tile.connections) == 2
-        ]
-        self.checksum = prod(self.corners)
-        self.form_image()
+        self.tiles = tiles
+        self.find_links()
+        self.arrange_tiles()
+        self.checksum = prod(self.grid[r][c].id for r, c in product((0, -1), repeat=2))
 
-    def find_connections(self):
-        for tileA, tileB in combinations(self.tiles.values(), 2):
-            tileA.check_connection(tileB)
+    def find_links(self):
+        """For each couple of tiles, search for a common border and
+        save the links for each match.
+        """
+        for t1, t2 in combinations(self.tiles, 2):
+            borders1 = set(t1.borders.values())
+            borders2 = set(t2.borders.values())
+            borders2.update({border[::-1] for border in borders2})
+            link = borders1.intersection(borders2)
+            if link:
+                link = link.pop()
+                dir1 = next(d for d, b in t1.borders.items() if b == link)
+                t1.links[dir1] = t2
+                dir2 = next(d for d, b in t2.borders.items() if b in {link, link[::-1]})
+                t2.links[dir2] = t1
 
-    def fill_line(self, starting_tile):
-        ids = [starting_tile.id]
-        try:
-            while True:
-                next_tile = self.tiles[starting_tile.connections[1]]
-                edge = next(
-                    e for e, i in next_tile.connections.items() if i == starting_tile.id
-                )
-                for _ in range(3 - edge):
-                    next_tile.rotate()
-                if next_tile.edges["3"] != starting_tile.edges["1"]:
-                    next_tile.flip_ud()
-                ids.append(next_tile.id)
-                starting_tile = next_tile
-        except KeyError:
-            return ids
+    def arrange_tiles(self):
+        """The correct arrangement is obtained in three steps.
+        1: Rotate a corner to have its links right and down.
+        2: Fill the first column by matching tiles up to down.
+        3: For each line-starting tile, fill the line left to right.
+        """
+        current_tile = next(tile for tile in self.tiles if len(tile.links) == 2)
+        self.grid = [[current_tile]]
+        while set(current_tile.links) != {1, 2}:
+            current_tile.rotate()
 
-    def fill_column(self, starting_tile):
-        ids = [starting_tile.id]
-        try:
-            while True:
-                next_tile = self.tiles[starting_tile.connections[2]]
-                edge = next(
-                    e for e, i in next_tile.connections.items() if i == starting_tile.id
-                )
-                for _ in range((4 - edge) % 4):
-                    next_tile.rotate()
-                if next_tile.edges["0"] != starting_tile.edges["2"]:
-                    next_tile.flip_lr()
-                ids.append(next_tile.id)
-                starting_tile = next_tile
-        except KeyError:
-            return ids
+        while 2 in current_tile.links:
+            next_tile = current_tile.links[2]
+            self.grid.append([next_tile])
+            current_tile.align(next_tile, 2)
+            current_tile = next_tile
 
-    def form_image(self):
-        size = int(sqrt(len(self.tiles)))
-        self.layout = [[] for _ in range(size)]
-        # Place first corner
-        corner = self.tiles[self.corners[0]]
-        while set(corner.connections) != {1, 2}:
-            corner.rotate()
-        # Fill first line
-        self.layout[0] = self.fill_line(corner)
-        # Fill each column
-        for t in self.layout[0]:
-            column_ids = self.fill_column(self.tiles[t])
-            for k, cid in enumerate(column_ids):
-                if k != 0:
-                    self.layout[k].append(cid)
-        # Final image
-        self.image = []
-        for ids in self.layout:
-            tiles = [self.tiles[tid].tile for tid in ids]
-            for k, t in enumerate(tiles):
-                tiles[k] = t[1:-1]
-                tiles[k] = [line[1:-1] for line in tiles[k]]
-            self.image.extend(["".join(lines) for lines in zip(*tiles)])
+        for line in self.grid:
+            current_tile = line[0]
+            while 1 in current_tile.links:
+                next_tile = current_tile.links[1]
+                line.append(next_tile)
+                current_tile.align(next_tile, 1)
+                current_tile = next_tile
+
+    def get_image(self):
+        """Construct the real image by joining tiles without borders."""
+        image = []
+        for tiles_line in self.grid:
+            for k in range(1, tiles_line[0].size - 1):
+                image.append("".join(tile.lines[k][1:-1] for tile in tiles_line))
+        return image
+
+
+def find_monsters(sea, monster=MONSTER):
+    """Treat the sea image as a Tile and rotate/flip it until
+    monsters are found. Detection is based on the hashes
+    coordinates in the image.
+    """
+    sea = Tile(0, sea)
+    monster_size = (len(monster), len(monster[0]))
+    monster_hashes = set(
+        (r, c)
+        for r, c in product(range(monster_size[0]), range(monster_size[1]))
+        if monster[r][c] == "#"
+    )
+    monsters_found = False
+    test_count = 0
+    while True:
+        for row, col in product(
+            range(0, len(sea.lines) - monster_size[0] + 1),
+            range(0, len(sea.lines[0]) - monster_size[1] + 1),
+        ):
+            coords = set((row + x, col + y) for x, y in monster_hashes)
+            if all(sea.lines[r][c] == "#" for r, c in coords):
+                monsters_found = True
+                for r, c in coords:
+                    sea.lines[r] = f"{sea.lines[r][:c]}O{sea.lines[r][c+1:]}"
+        if monsters_found:
+            break
+        test_count += 1
+        if test_count != 4:
+            sea.rotate()
+        else:
+            sea.flip()
+    return sea.lines
 
 
 class Today(Puzzle):
     def parser(self):
-        data = "\n".join(self.input).split("\n\n")
-        self.tiles = {}
-        for d in data:
-            lines = d.rstrip().split("\n")
-            self.tiles[int(re.findall(r"\d+", lines[0])[0])] = lines[1:]
+        self.tiles = "\n".join(self.input).strip().split("\n\n")
+        for k, tile in enumerate(self.tiles):
+            lines = tile.split("\n")
+            self.tiles[k] = Tile(int(lines[0][5:-1]), lines[1:])
 
     def part_one(self):
         self.image = Image(self.tiles)
+        self.image.find_links()
         return self.image.checksum
 
     def part_two(self):
-        sea = Tile(0, self.image.image)
-        sizemon = (len(MONSTER), len(MONSTER[0]))
-        hashesmon = set(
-            (r, c)
-            for r, c in product(range(sizemon[0]), range(sizemon[1]))
-            if MONSTER[r][c] == "#"
-        )
-        monsters_found = False
-        rotations_tested = 0
-        while True:
-            for r, c in product(
-                range(0, len(sea.tile) - sizemon[0] + 1),
-                range(0, len(sea.tile[0]) - sizemon[1] + 1),
-            ):
-                coords = set((r + x, c + y) for x, y in hashesmon)
-                if all(sea.tile[x][y] == "#" for x, y in coords):
-                    monsters_found = True
-                    for x, y in coords:
-                        sea.tile[x] = f"{sea.tile[x][:y]}O{sea.tile[x][y+1:]}"
-            if monsters_found:
-                break
-            rotations_tested += 1
-            sea.rotate()
-            if rotations_tested == 4:
-                sea.flip_ud()
-        # print("\n".join(sea.tile))
-        return Counter("".join(sea.tile))["#"]
+        sea = find_monsters(self.image.get_image())
+        # print("\n".join(sea).replace(".", " ").replace("#", "."))
+        return Counter("".join(sea))["#"]
 
 
 solutions = (54755174472007, 1692)
