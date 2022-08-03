@@ -17,7 +17,7 @@ class Floor:
 
     def adjacents(self, location):
         r, c = location
-        for row, col in [(r, c - 1), (r, c + 1), (r - 1, c), (r + 1, c)]:
+        for row, col in (r, c - 1), (r, c + 1), (r - 1, c), (r + 1, c):
             if 0 <= row < self.nrows and 0 <= col < self.ncols:
                 yield row, col
 
@@ -40,7 +40,7 @@ class Today(Puzzle):
 
     def part_two(self):
         """BFS from each low points to locations of height 9."""
-        self.basin_sizes = []
+        basin_sizes = []
         for low in self.lows:
             basin = {low}
             frontier = deque([low])
@@ -50,8 +50,8 @@ class Today(Puzzle):
                     if adjacent not in basin and self.floor[adjacent] != 9:
                         basin.add(adjacent)
                         frontier.append(adjacent)
-            self.basin_sizes.append(len(basin))
-        return prod(sorted(self.basin_sizes)[-3:])
+            basin_sizes.append(len(basin))
+        return prod(sorted(basin_sizes)[-3:])
 
 
 solutions = (468, 1280496)
