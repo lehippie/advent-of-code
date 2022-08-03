@@ -13,11 +13,12 @@ class Display:
         """Associate sets of segments with their digit. 1, 7, 4 and 8
         have unique lengths. 7 is included in 3, 4 in 9, etc...
         """
-        self.digits[1] = self.segments.pop(0)
-        self.digits[7] = self.segments.pop(0)
-        self.digits[4] = self.segments.pop(0)
-        self.digits[8] = self.segments.pop()
-        for digit in self.segments:
+        segments = self.segments.copy()
+        self.digits[1] = segments.pop(0)
+        self.digits[7] = segments.pop(0)
+        self.digits[4] = segments.pop(0)
+        self.digits[8] = segments.pop()
+        for digit in segments:
             if len(digit) == 5:
                 if digit.issuperset(self.digits[7]):
                     self.digits[3] = digit
@@ -39,7 +40,6 @@ class Display:
 
 class Today(Puzzle):
     def parser(self):
-        """Store display's visible segments and output in sets."""
         self.displays = []
         for entry in self.input:
             segments, output = map(str.split, entry.split(" | "))
