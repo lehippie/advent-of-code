@@ -33,7 +33,7 @@ from aoc import ROOT
 TIMING_FILE = ROOT / "timings.json"
 
 
-def timing(year, day):
+def timing(year, day, verbose=True):
     day = f"{day:>02}"
     module = import_module(f"{year}.{day}")
     puzzle = module.Today(solutions=module.solutions)
@@ -43,6 +43,8 @@ def timing(year, day):
             timer = Timer(part)
             loops, seconds = timer.autorange()
             out[k] = round(1000 * seconds / loops, 3)
+            if verbose:
+                print(f"Part {k+1}: {out[k]} ms")
         return out
     else:
         raise IOError(f"Unsolved puzzle: {year}.{day}")
@@ -74,7 +76,7 @@ def time_them_all(erase="False"):
             d = day.stem
             if erase or d not in times[y]:
                 try:
-                    times[y][d] = timing(y, d)
+                    times[y][d] = timing(y, d, verbose=False)
                 except:
                     continue
             print(f"  {d}: {times[y][d][0]:>8.3f} ms |{times[y][d][1]:>8.3f} ms")
@@ -94,7 +96,6 @@ if __name__ == "__main__":
 
         puzzle_path = ROOT / args["<year>"] / f"{args['<day>']:>02}.py"
         if puzzle_path.exists():
-            for k, t in enumerate(timing(args["<year>"], args["<day>"])):
-                print(f"Part {k+1}: {t} ms")
+            timing(args["<year>"], args["<day>"])
         else:
             print(f"Puzzle not found: {puzzle_path}")

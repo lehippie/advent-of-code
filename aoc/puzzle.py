@@ -1,6 +1,7 @@
 """Advent of Code puzzle solver."""
 
 import inspect
+import time
 from pathlib import Path
 
 from aoc.inputs import load_input
@@ -63,15 +64,17 @@ class Puzzle:
         """Run puzzle parts and warn for regressions."""
         parts = (self.part_one, self.part_two)
         for k, (part, solution) in enumerate(zip(parts, self.solutions)):
+            start = time.time()
             answer = part()
+            duration = round(1000 * (time.time() - start), 3)
             if solution is None:
                 if verbose:
-                    print(f"Part {k+1} answer: {answer} ?")
+                    print(f"Part {k+1} answer after {duration} ms: {answer}")
                 return False
             elif answer != solution:
                 if verbose:
                     print(f"Regression in part {k+1}: {answer} instead of {solution}.")
                 return False
             elif verbose:
-                print(f"Part {k+1} solved!")
+                print(f"Part {k+1} solved in {duration} ms")
         return True
