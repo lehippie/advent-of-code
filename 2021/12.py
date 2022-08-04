@@ -1,6 +1,6 @@
 """Day 12: Passage Pathing."""
 
-from collections import defaultdict, deque
+from collections import defaultdict
 from aoc.puzzle import Puzzle
 
 
@@ -13,11 +13,11 @@ class Today(Puzzle):
             self.cave_system[cave2].append(cave1)
 
     def part_one(self):
-        """Explore cave system with BFS and count paths to the end."""
+        """Explore cave system and count paths to the end."""
         paths_count = 0
-        exploration = deque([["start"]])
+        exploration = [["start"]]
         while exploration:
-            path = exploration.popleft()
+            path = exploration.pop()
             for cave in self.cave_system[path[-1]]:
                 if cave == "end":
                     paths_count += 1
@@ -28,9 +28,9 @@ class Today(Puzzle):
     def part_two(self):
         """Adding a flag to paths to allow visiting a small cave twice."""
         paths_count = 0
-        exploration = deque([(["start"], True)])
+        exploration = [(["start"], True)]
         while exploration:
-            path, can_revisit_small = exploration.popleft()
+            path, can_revisit_small = exploration.pop()
             for cave in self.cave_system[path[-1]]:
                 if cave == "end":
                     paths_count += 1

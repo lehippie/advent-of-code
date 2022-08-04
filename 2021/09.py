@@ -1,6 +1,5 @@
 """Day 9: Smoke Basin."""
 
-from collections import deque
 from itertools import product
 from math import prod
 from aoc.puzzle import Puzzle
@@ -39,13 +38,13 @@ class Today(Puzzle):
         return risk
 
     def part_two(self):
-        """BFS from each low points to locations of height 9."""
+        """Search from each low points to locations of height 9."""
         basin_sizes = []
         for low in self.lows:
             basin = {low}
-            frontier = deque([low])
+            frontier = [low]
             while frontier:
-                location = frontier.popleft()
+                location = frontier.pop()
                 for adjacent in self.floor.adjacents(location):
                     if adjacent not in basin and self.floor[adjacent] != 9:
                         basin.add(adjacent)
