@@ -37,17 +37,17 @@ def timing(year, day, verbose=True):
     day = f"{day:>02}"
     module = import_module(f"{year}.{day}")
     puzzle = module.Today(solutions=module.solutions)
-    if puzzle.solve(verbose=False):
-        out = [None, None]
-        for k, part in enumerate((puzzle.part_one, puzzle.part_two)):
+    out = [None, None]
+    for k, part in enumerate((puzzle.part_one, puzzle.part_two)):
+        if puzzle.solutions[k]:
             timer = Timer(part)
             loops, seconds = timer.autorange()
             out[k] = round(1000 * seconds / loops, 3)
             if verbose:
                 print(f"Part {k+1}: {out[k]} ms")
-        return out
-    else:
-        raise IOError(f"Unsolved puzzle: {year}.{day}")
+        elif verbose:
+            print(f"Part {k+1}: unsolved")
+    return out
 
 
 def read_timing_file(filepath=TIMING_FILE):

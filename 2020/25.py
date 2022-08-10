@@ -17,7 +17,7 @@ class Today(Puzzle):
         while value not in self.keys:
             value = (value * 7) % 20201227
             loop_size += 1
-        
+
         key = next(k for k in self.keys if k != value)
         value = 1
         for _ in range(loop_size):
