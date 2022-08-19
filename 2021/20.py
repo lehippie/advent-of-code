@@ -8,24 +8,32 @@ class Image:
     def __init__(self, algo, img):
         self.algo = algo
         self.img = img
-        self.outside = 0
+        self.padding = 0
 
     def step(self):
-        self.img = np.pad(self.img, 1, constant_values=self.outside)
-        pad = np.pad(self.img, 1, constant_values=self.outside)
+        """The padding pixels could (will) switch from dark to lit, so
+        their state is stored independently of the image.
+        The latter is padded twice: once for storing the next step
+        image, and once again to get the 9 surrounding pixels of the
+        new image's border.
+        Finally, the new padding becomes the algorithm value at index
+        511 or 0, depending of the current padding.
+        """
+        self.img = np.pad(self.img, 1, constant_values=self.padding)
+        pad = np.pad(self.img, 1, constant_values=self.padding)
         for (r, c), _ in np.ndenumerate(self.img):
             binary = "".join(
-                "1" if i else "0" for i in pad[r : r + 3, c : c + 3].flat
+                "1" if p else "0" for p in pad[r : r + 3, c : c + 3].flat
             )
             self.img[r, c] = self.algo[int(binary, base=2)]
-        self.outside = self.algo[int(str(self.outside) * 9, base=2)]
+        self.padding = self.algo[511 if self.padding else 0]
 
 
 class Today(Puzzle):
     def parser(self):
-        self.input = [[int(l == "#") for l in line] for line in self.input]
-        self.algo = self.input[0]
-        self.img = np.array(self.input[2:])
+        binary = [[int(l == "#") for l in line] for line in self.input]
+        self.algo = binary[0]
+        self.img = np.array(binary[2:])
 
     def part_one(self, steps=2):
         trench = Image(self.algo, self.img)

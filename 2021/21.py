@@ -5,55 +5,51 @@ from itertools import cycle, product
 from aoc.puzzle import Puzzle
 
 
-class DiracDice:
-    def __init__(self, starting_positions):
-        self.positions = list(starting_positions)
-        self.n_players = len(self.positions)
-        self.scores = [0] * self.n_players
-        self.turn = 0
-        self.dice = cycle(range(1, 101))
-
-    def has_ended(self):
-        return max(self.scores) >= 1000
-
-    def next_turn(self):
-        roll = sum(next(self.dice) for _ in range(3))
-        player = self.turn % self.n_players
-        self.positions[player] = (self.positions[player] + roll) % 10 or 10
-        self.scores[player] += self.positions[player]
-        self.turn += 1
-
-
 class Today(Puzzle):
     def parser(self):
-        return tuple(int(line.split()[-1]) for line in self.input)
+        self.start = tuple(int(line.split()[-1]) for line in self.input)
 
     def part_one(self):
-        game = DiracDice(self.input)
-        while not game.has_ended():
-            game.next_turn()
-        return min(game.scores) * 3 * game.turn
+        positions = list(self.start)
+        scores = [0, 0]
+        dice = cycle(range(1, 101))
+        rolls = 0
+        player = 0
+        while all(score < 1000 for score in scores):
+            result = sum(next(dice) for _ in range(3))
+            rolls += 3
+            positions[player] = (positions[player] + result) % 10 or 10
+            scores[player] += positions[player]
+            player = (player + 1) % 2
+        return min(scores) * rolls
 
     def part_two(self):
-        n_players = len(self.input)
+        """Each triple rolls splits in the same amount of universes,
+        with a resulting sum of rolls that are identical. Thus, these
+        outcomes are precalculated before starting the game.
+
+        A game state reduces to player's positions, scores and the
+        next player to roll. Games in progress are stored in a dict
+        where values are the amount of universes in this state.
+        """
         quantum_rolls = Counter(sum(rolls) for rolls in product(range(1, 4), repeat=3))
-        wins = [0] * n_players
-        games = {self.input + (0,) * n_players + (0,): 1}
+        wins = [0, 0]
+        games = {self.start + (0, 0, 0): 1}
         while games:
-            _games = defaultdict(int)
+            new_games = defaultdict(int)
             for state, n_games in games.items():
                 player = state[-1]
                 for roll, n_roll in quantum_rolls.items():
-                    positions = list(state[0:n_players])
-                    scores = list(state[n_players:-1])
+                    positions = list(state[0:2])
+                    scores = list(state[2:-1])
                     positions[player] = (positions[player] + roll) % 10 or 10
                     scores[player] += positions[player]
                     if scores[player] >= 21:
                         wins[player] += n_games * n_roll
                     else:
-                        _state = tuple(positions + scores + [(player + 1) % n_players])
-                        _games[_state] += n_games * n_roll
-            games = _games
+                        new_state = tuple(positions + scores + [(player + 1) % 2])
+                        new_games[new_state] += n_games * n_roll
+            games = new_games
         return max(wins)
 
 

@@ -4,21 +4,6 @@ from collections import Counter
 from aoc.puzzle import Puzzle
 
 
-def gas_filtering(numbers, method):
-    """Filter numbers according to given <method>. If the amounts of
-    0s and 1s are equal, adding a '1' in the count ensure that 'max'
-    will keep 1s and 'min' will keep 0s.
-    """
-    k = 0
-    while len(numbers) > 1:
-        count = Counter(n[k] for n in numbers)
-        if count["0"] == count["1"]:
-            count.update("1")
-        numbers = [n for n in numbers if n[k] == method(count, key=count.get)]
-        k += 1
-    return numbers[0]
-
-
 class Today(Puzzle):
     def part_one(self):
         """Keeping numbers as strings, we count the amounts of 1s and
@@ -37,6 +22,21 @@ class Today(Puzzle):
         """Oxygen and CO2 ratings are found by filtering input numbers
         with max or min methods, respectively.
         """
+
+        def gas_filtering(numbers, method):
+            """Filter numbers according to given <method>. If the
+            amounts of 0s and 1s are equal, adding a '1' in the count
+            ensure that 'max' will keep 1s and 'min' will keep 0s.
+            """
+            k = 0
+            while len(numbers) > 1:
+                count = Counter(n[k] for n in numbers)
+                if count["0"] == count["1"]:
+                    count.update("1")
+                numbers = [n for n in numbers if n[k] == method(count, key=count.get)]
+                k += 1
+            return numbers[0]
+
         oxy = gas_filtering(self.input, method=max)
         co2 = gas_filtering(self.input, method=min)
         return int(oxy, base=2) * int(co2, base=2)
