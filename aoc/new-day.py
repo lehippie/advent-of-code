@@ -23,8 +23,6 @@ from docopt import docopt
 from aoc import ROOT, CONFIG
 
 
-YEARS = (2015, 2021)
-DAYS = (1, 25)
 TEMPLATE = '''"""{title}."""
 
 from aoc.puzzle import Puzzle
@@ -72,16 +70,17 @@ def create_file(year, day):
 
 if __name__ == "__main__":
     args = docopt(__doc__.format(name=Path(__file__).name))
+    now = datetime.now()
 
     if args["<year>"] is None:
-        now = datetime.now()
+        if now.month != 12:
+            print("We're not in December yet. Please enter year and day manually.")
+            exit()
         args["<year>"] = now.year
         args["<day>"] = now.day
 
-    if (
-        YEARS[0] <= int(args["<year>"]) <= YEARS[1]
-        and DAYS[0] <= int(args["<day>"]) <= DAYS[1]
-    ):
-        create_file(args["<year>"], args["<day>"])
+    date = datetime(int(args["<year>"]), 12, int(args["<day>"]))
+    if 1 <= date.day <= 25 and datetime(2015, 12, 1) <= date <= now:
+        create_file(date.year, date.day)
     else:
-        print("Error: invalid date")
+        print(f"No existing puzzle on day {date.day} of year {date.year}.")
