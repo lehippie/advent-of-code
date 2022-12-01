@@ -20,7 +20,7 @@ from urllib.request import Request, urlopen
 
 from docopt import docopt
 
-from aoc import ROOT, CONFIG
+from aoc import ROOT, REQUEST_HEADER
 
 
 TEMPLATE = '''"""{title}."""
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 def day_title(year, day):
     request = Request(
         url=f"https://adventofcode.com/{year}/day/{int(day)}",
-        headers={"cookie": f"session={CONFIG['www']['session']}"},
+        headers=REQUEST_HEADER,
     )
     with urlopen(request) as response:
         response = response.read().decode("utf-8")

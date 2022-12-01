@@ -2,7 +2,7 @@
 
 from urllib.request import Request, urlopen
 
-from aoc import ROOT, CONFIG
+from aoc import ROOT, REQUEST_HEADER
 
 
 INPUTS_DIR = ROOT / "inputs"
@@ -40,7 +40,7 @@ def download_input(year, day):
     """
     request = Request(
         url=f"https://adventofcode.com/{year}/day/{int(day)}/input",
-        headers={"cookie": f"session={CONFIG['www']['session']}"},
+        headers=REQUEST_HEADER,
     )
     with urlopen(request) as response:
         return response.read().decode("utf-8")
