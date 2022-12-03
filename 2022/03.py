@@ -4,9 +4,6 @@ from aoc.puzzle import Puzzle
 
 
 class Today(Puzzle):
-    def parser(self):
-        pass
-
     def part_one(self):
         priority = 0
         for sack in self.input:
@@ -24,7 +21,7 @@ class Today(Puzzle):
         return priority
 
 
-solutions = (7795, None)
+solutions = (7795, 2703)
 
 if __name__ == "__main__":
     Today(solutions=solutions).solve()
