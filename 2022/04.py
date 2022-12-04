@@ -18,7 +18,7 @@ class Today(Puzzle):
     def part_two(self):
         count = 0
         for s1, e1, s2, e2 in self.pairs:
-            if set(range(s1, e1 + 1)).intersection(set(range(s2, e2 + 1))):
+            if set(range(s1, e1 + 1)).intersection(range(s2, e2 + 1)):
                 count += 1
         return count
 
