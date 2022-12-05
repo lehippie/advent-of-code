@@ -20,7 +20,7 @@ def read_file(filepath):
         String if the file contains only one line.
     """
     with open(filepath) as f:
-        content = [line.rstrip() for line in f]
+        content = [line.rstrip("\n\r") for line in f]
     if len(content) == 1:
         return content[0]
     return content
