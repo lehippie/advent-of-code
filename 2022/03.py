@@ -1,5 +1,6 @@
 """Day 3: Rucksack Reorganization."""
 
+from string import ascii_letters
 from aoc.puzzle import Puzzle
 
 
@@ -9,7 +10,7 @@ class Today(Puzzle):
         for sack in self.input:
             l = len(sack) // 2
             item = set(sack[:l]).intersection(sack[l:]).pop()
-            priority += ord(item) - (96 if item.islower() else 38)
+            priority += ascii_letters.index(item) + 1
         return priority
 
     def part_two(self):
@@ -17,7 +18,7 @@ class Today(Puzzle):
         for k in range(0, len(self.input), 3):
             e1, e2, e3 = self.input[k : k + 3]
             badge = set(e1).intersection(e2).intersection(e3).pop()
-            priority += ord(badge) - (96 if badge.islower() else 38)
+            priority += ascii_letters.index(badge) + 1
         return priority
 
 
