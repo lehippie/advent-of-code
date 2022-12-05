@@ -11,14 +11,14 @@ class Today(Puzzle):
     def part_one(self):
         count = 0
         for s1, e1, s2, e2 in self.pairs:
-            if (s1 <= s2 and e1 >= e2) or (s2 <= s1 and e2 >= e1):
+            if (s1 <= s2 and e2 <= e1) or (s2 <= s1 and e1 <= e2):
                 count += 1
         return count
 
     def part_two(self):
         count = 0
         for s1, e1, s2, e2 in self.pairs:
-            if set(range(s1, e1 + 1)).intersection(range(s2, e2 + 1)):
+            if s1 <= e2 and s2 <= e1:
                 count += 1
         return count
 
