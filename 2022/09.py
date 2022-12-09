@@ -4,6 +4,7 @@ from aoc.puzzle import Puzzle
 
 
 MOVE = {"U": 1j, "D": -1j, "L": -1, "R": 1}
+SIGN = lambda n: (n > 0) - (n < 0)
 
 
 class Today(Puzzle):
@@ -17,8 +18,7 @@ class Today(Puzzle):
             for _ in range(n):
                 h += MOVE[m]
                 if abs(l := h - t) >= 2:
-                    t += l.real // 2 if abs(l.real) == 2 else l.real
-                    t += 1j * (l.imag // 2 if abs(l.imag) == 2 else l.imag)
+                    t += SIGN(l.real) + 1j * SIGN(l.imag)
                 visited.add(t)
         return len(visited)
 
@@ -30,8 +30,7 @@ class Today(Puzzle):
                 rope[0] += MOVE[m]
                 for k in range(1, len(rope)):
                     if abs(l := rope[k - 1] - rope[k]) >= 2:
-                        rope[k] += l.real // 2 if abs(l.real) == 2 else l.real
-                        rope[k] += 1j * (l.imag // 2 if abs(l.imag) == 2 else l.imag)
+                        rope[k] += SIGN(l.real) + 1j * SIGN(l.imag)
                 visited.add(rope[-1])
         return len(visited)
 
