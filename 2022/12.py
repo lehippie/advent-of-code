@@ -38,16 +38,15 @@ class Today(Puzzle):
     def part_one(self, start=None):
         if start is None:
             start = self.start
-        frontier = deque()
-        frontier.append((start, 0))
-        reached = {start: 0}
+        frontier = deque([(start, 0)])
+        reached = {start}
         while frontier:
             position, steps = frontier.popleft()
             for destination in self.hill.climbable_paths(position):
                 if destination == self.goal:
                     return steps + 1
                 if destination not in reached:
-                    reached[destination] = steps + 1
+                    reached.add(destination)
                     frontier.append((destination, steps + 1))
 
     def part_two(self):
