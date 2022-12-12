@@ -37,9 +37,9 @@ class Today(Puzzle):
 
     def part_one(self, start=None):
         if start is None:
-            start = self.start
-        frontier = deque([(start, 0)])
-        reached = {start}
+            start = [self.start]
+        frontier = deque((s, 0) for s in start)
+        reached = set(start)
         while frontier:
             position, steps = frontier.popleft()
             for destination in self.hill.climbable_paths(position):
@@ -50,13 +50,9 @@ class Today(Puzzle):
                     frontier.append((destination, steps + 1))
 
     def part_two(self):
-        trail_starts = [
-            position
-            for position, height in self.hill.heights.items()
-            if height == ascii_letters.index("a")
-        ]
-        trails = [self.part_one(s) for s in trail_starts]
-        return min(t for t in trails if t is not None)
+        return self.part_one(
+            [p for p, h in self.hill.heights.items() if h == ascii_letters.index("a")]
+        )
 
 
 solutions = (468, 459)
