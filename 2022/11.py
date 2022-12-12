@@ -40,7 +40,7 @@ class Today(Puzzle):
 
     def part_two(self):
         """The product of monkeys' divisors will be divisible by any
-        monkey so the modulo of this number contains all information
+        monkey so the modulo by this number contains all information
         we need.
         """
         mod = prod(m.div for m in self.monkeys)
