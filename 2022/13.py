@@ -1,6 +1,7 @@
 """Day 13: Distress Signal."""
 
 from functools import cmp_to_key
+from json import loads
 from aoc.puzzle import Puzzle
 
 
@@ -28,7 +29,7 @@ def compare(left, right):
 class Today(Puzzle):
     def parser(self):
         self.pairs = "|".join(self.input).split("||")
-        self.pairs = [list(map(eval, pair.split("|"))) for pair in self.pairs]
+        self.pairs = [list(map(loads, pair.split("|"))) for pair in self.pairs]
 
     def part_one(self):
         correct = []
