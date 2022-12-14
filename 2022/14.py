@@ -21,39 +21,39 @@ class Today(Puzzle):
                 self.rocks = self.rocks.union(rock_line(pt1, pt2))
 
     def part_one(self):
-        self.resting = set()
+        resting = set()
         floor = max(r.imag for r in self.rocks)
         sand = 500 + 0j
         while sand.imag < floor:
             obstacles = {
-                p: p in self.rocks or p in self.resting
+                p: p in self.rocks or p in resting
                 for p in (sand + 1j, sand - 1 + 1j, sand + 1 + 1j)
             }
             if all(obstacles.values()):
-                self.resting.add(sand)
+                resting.add(sand)
                 sand = 500 + 0j
             else:
                 sand = next(p for p, blocked in obstacles.items() if not blocked)
-        return len(self.resting)
+        return len(resting)
 
     def part_two(self):
         """Limit redondant calculations by keeping track of the
         complete sand path and by going back one step when a resting
         position is found.
         """
+        resting = set()
         floor = 2 + max(r.imag for r in self.rocks)
         sand = [500 + 0j]
-        while True:
+        while sand:
             obstacles = {
-                p: p in self.rocks or p in self.resting or p.imag == floor
+                p: p in self.rocks or p in resting or p.imag == floor
                 for p in (sand[-1] + 1j, sand[-1] - 1 + 1j, sand[-1] + 1 + 1j)
             }
             if all(obstacles.values()):
-                self.resting.add(sand.pop())
-                if not sand:
-                    return len(self.resting)
+                resting.add(sand.pop())
             else:
                 sand.append(next(p for p, blocked in obstacles.items() if not blocked))
+        return len(resting)
 
 
 solutions = (1199, 23925)
