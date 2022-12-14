@@ -19,12 +19,11 @@ class Today(Puzzle):
             path = [list(map(int, p.split(","))) for p in path]
             for pt1, pt2 in zip(path, path[1:]):
                 self.rocks = self.rocks.union(rock_line(pt1, pt2))
-        self.source = 500 + 0j
 
     def part_one(self):
         self.resting = set()
         floor = max(r.imag for r in self.rocks)
-        sand = self.source
+        sand = 500 + 0j
         while sand.imag < floor:
             obstacles = {
                 p: p in self.rocks or p in self.resting
@@ -32,26 +31,29 @@ class Today(Puzzle):
             }
             if all(obstacles.values()):
                 self.resting.add(sand)
-                sand = self.source
+                sand = 500 + 0j
             else:
                 sand = next(p for p, blocked in obstacles.items() if not blocked)
         return len(self.resting)
 
     def part_two(self):
+        """Limit redondant calculations by keeping track of the
+        complete sand path and by going back one step when a resting
+        position is found.
+        """
         floor = 2 + max(r.imag for r in self.rocks)
-        sand = self.source
+        sand = [500 + 0j]
         while True:
             obstacles = {
                 p: p in self.rocks or p in self.resting or p.imag == floor
-                for p in (sand + 1j, sand - 1 + 1j, sand + 1 + 1j)
+                for p in (sand[-1] + 1j, sand[-1] - 1 + 1j, sand[-1] + 1 + 1j)
             }
             if all(obstacles.values()):
-                self.resting.add(sand)
-                if sand == self.source:
+                self.resting.add(sand.pop())
+                if not sand:
                     return len(self.resting)
-                sand = self.source
             else:
-                sand = next(pos for pos, blocked in obstacles.items() if not blocked)
+                sand.append(next(p for p, blocked in obstacles.items() if not blocked))
 
 
 solutions = (1199, 23925)
