@@ -22,11 +22,9 @@ class Today(Puzzle):
                 xmin, xmax = sx - radius + dy, sx + radius - dy
                 ranges.append([xmin, xmax])
         # Remove intersections
-        unions = []
-        for start, stop in sorted(ranges):
-            if not unions:
-                unions.append([start, stop])
-                continue
+        ranges.sort()
+        unions = [ranges.pop(0)]
+        for start, stop in ranges:
             ustart, ustop = unions[-1]
             if start <= ustop and ustart <= stop:
                 unions[-1] = [min(start, ustart), max(stop, ustop)]
