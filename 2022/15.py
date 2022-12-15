@@ -25,9 +25,8 @@ class Today(Puzzle):
         ranges.sort()
         unions = [ranges.pop(0)]
         for start, stop in ranges:
-            ustart, ustop = unions[-1]
-            if start <= ustop and ustart <= stop:
-                unions[-1] = [min(start, ustart), max(stop, ustop)]
+            if start <= unions[-1][1]:
+                unions[-1][1] = max(stop, unions[-1][1])
             else:
                 unions.append([start, stop])
         return unions
