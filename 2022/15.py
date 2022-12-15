@@ -21,7 +21,7 @@ class Today(Puzzle):
             if (dy := abs(y - sy)) <= radius:
                 xmin, xmax = sx - radius + dy, sx + radius - dy
                 ranges.append([xmin, xmax])
-        # Remove ranges' intersections
+        # Remove intersections
         unions = []
         for start, stop in sorted(ranges):
             if not unions:
@@ -40,7 +40,7 @@ class Today(Puzzle):
         return sum(M - m + 1 for m, M in scanned) - n_beacons
 
     def part_two(self, ymax=4000000):
-        for y in range(ymax + 1):
+        for y in range(ymax, -1, -1):
             if len(s := self.scanned_ranges(y)) == 2:
                 return 4000000 * (s[0][1] + 1) + y
 
