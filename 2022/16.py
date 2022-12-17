@@ -5,18 +5,18 @@ from itertools import combinations
 from aoc.puzzle import Puzzle
 
 
-def bfs(graph, start, goal):
-    """Time to go open valve <goal> from <start>."""
-    frontier = deque([(start, 0)])
-    reached = set(start)
+def bfs(graph, current, goal):
+    """Return time from <current> valve to open <goal> valve."""
+    frontier = deque([(current, 0)])
+    reached = set(current)
     while frontier:
-        position, minutes = frontier.popleft()
+        position, time = frontier.popleft()
         for destination in graph[position]:
             if destination == goal:
-                return minutes + 2
+                return time + 2
             if destination not in reached:
                 reached.add(destination)
-                frontier.append((destination, minutes + 1))
+                frontier.append((destination, time + 1))
 
 
 class Today(Puzzle):
@@ -29,54 +29,62 @@ class Today(Puzzle):
             self.flow[v] = int(valve.split("=")[-1])
             self.tunnels[v] = [t.replace(",", "") for t in tunnel.split()[4:]]
 
-    def part_one(self):
-        """Valves with flow rate 0 are just tunnels. We only care
-        about the shortest paths between each pair of closed valves
-        with positive flow rates.
-        The new graph is then explored fully to find the best path.
-        """
-        valves = {v for v, f in self.flow.items() if f}
-        self.graph = defaultdict(dict)
-        self.graph["AA"] = {v: bfs(self.tunnels, "AA", v) for v in valves}
-        for v1, v2 in combinations(valves, 2):
-            minutes = bfs(self.tunnels, v1, v2)
-            self.graph[v1][v2] = minutes
-            self.graph[v2][v1] = minutes
-
-        max_pressure = 0
+    def max_pressure(self, valves, minutes=30):
+        """Return maximum pressure released using <valves>."""
+        max_released = 0
         paths = [("AA", set(), 0, 0)]
         while paths:
             position, opened, time, pressure = paths.pop()
-            for valve, move in self.graph[position].items():
-                if valve in opened:
+            if pressure > max_released:
+                max_released = pressure
+            for valve, move_time in self.graph[position].items():
+                if valve in opened or valve not in valves:
                     continue
-                T = time + move
-                if T < 30:
-                    P = pressure + (30 - T) * self.flow[valve]
+                if (T := time + move_time) < minutes:
+                    P = pressure + (minutes - T) * self.flow[valve]
                     paths.append((valve, opened.union({valve}), T, P))
-                max_pressure = max(max_pressure, P)
-        return max_pressure
+        return max_released
+
+    def part_one(self):
+        """Valves with flow rate 0 are just tunnels so we only care
+        about the paths between each pair of valves with flow > 0.
+        """
+        self.valves = {v for v, f in self.flow.items() if f}
+        self.graph = defaultdict(dict)
+        for v1, v2 in combinations(self.valves, 2):
+            self.graph[v1][v2] = bfs(self.tunnels, v1, v2)
+            self.graph[v2][v1] = self.graph[v1][v2]
+        self.graph["AA"] = {v: bfs(self.tunnels, "AA", v) for v in self.valves}
+        return self.max_pressure(self.valves)
 
     def part_two(self):
-        return NotImplemented
+        """We need to find the better pair of disjoint sets of valves.
+        For that, all paths that can be explored in 26 minutes are
+        considered.
+        Only the sets of valves for these paths arekapt as key of the
+        max pressure dict to ensure we keep the best permutations.
+        """
+        paths = {}
+        frontier = [(["AA"], [0])]
+        while frontier:
+            path, times = frontier.pop()
+            for valve, move_time in self.graph[path[-1]].items():
+                if valve not in path and (T := times[-1] + move_time) < 26:
+                    new_path = path + [valve]
+                    new_times = times + [T]
+                    frontier.append((new_path, new_times))
+                    valves = frozenset(new_path[1:])
+                    P = self.max_pressure(valves, 26)
+                    if valves not in paths or P > paths[valves]:
+                        paths[valves] = P
+        return max(
+            p1 + p2
+            for (s1, p1), (s2, p2) in combinations(paths.items(), 2)
+            if not s1.intersection(s2)
+        )
 
 
-solutions = (1580, None)
+solutions = (1580, 2213)
 
 if __name__ == "__main__":
-    test = Today(
-        solutions=(1651, 1707),
-        input_data=[
-            "Valve AA has flow rate=0; tunnels lead to valves DD, II, BB",
-            "Valve BB has flow rate=13; tunnels lead to valves CC, AA",
-            "Valve CC has flow rate=2; tunnels lead to valves DD, BB",
-            "Valve DD has flow rate=20; tunnels lead to valves CC, AA, EE",
-            "Valve EE has flow rate=3; tunnels lead to valves FF, DD",
-            "Valve FF has flow rate=0; tunnels lead to valves EE, GG",
-            "Valve GG has flow rate=0; tunnels lead to valves FF, HH",
-            "Valve HH has flow rate=22; tunnel leads to valve GG",
-            "Valve II has flow rate=0; tunnels lead to valves AA, JJ",
-            "Valve JJ has flow rate=21; tunnel leads to valve II",
-        ],
-    ).solve()
     Today(solutions=solutions).solve()
