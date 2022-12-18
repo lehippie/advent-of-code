@@ -30,8 +30,8 @@ class Today(Puzzle):
         risk = 0
         for location in product(range(self.floor.nrows), range(self.floor.ncols)):
             if all(
-                self.floor[location] < self.floor[adjascent]
-                for adjascent in self.floor.adjacents(location)
+                self.floor[location] < self.floor[adjacent]
+                for adjacent in self.floor.adjacents(location)
             ):
                 self.lows.add(location)
                 risk += 1 + self.floor[location]
