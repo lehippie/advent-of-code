@@ -4,7 +4,7 @@ from itertools import product
 from aoc.puzzle import Puzzle
 
 
-def around(cube: tuple):
+def adjacent(cube: tuple):
     x, y, z = cube
     yield (x - 1, y, z)
     yield (x + 1, y, z)
@@ -15,7 +15,7 @@ def around(cube: tuple):
 
 
 def area(cubes: set):
-    return sum(6 - len(cubes.intersection(around(c))) for c in cubes)
+    return sum(6 - len(cubes.intersection(adjacent(c))) for c in cubes)
 
 
 class Today(Puzzle):
@@ -26,23 +26,21 @@ class Today(Puzzle):
         return area(self.droplet)
 
     def part_two(self):
-        """Holes inside the droplet are cubes that are nor outside,
-        nor part of it. The exterior is found using pathfinding from
-        the corner of a megacube surrounding the whole droplet.
+        """Holes are cubes that are nor outside nor part of the
+        droplet. Outside cubes are found using pathfinding from the
+        corner of a volume surrounding the droplet.
         """
-        span = [list(map(min, zip(*self.droplet))), list(map(max, zip(*self.droplet)))]
-        span[0] = [mini - 1 for mini in span[0]]
-        span[1] = [maxi + 2 for maxi in span[1]]
-        megacube = set(c for c in product(*(range(m, M) for m, M in zip(*span))))
-        frontier = [tuple(span[0])]
-        exterior = {tuple(span[0])}
+        span = [(min(d) - 1, max(d) + 2) for d in zip(*self.droplet)]
+        volume = set(c for c in product(*(range(m, M) for m, M in span)))
+        corner = tuple(m for m, _ in span)
+        outside = {corner}
+        frontier = [corner]
         while frontier:
-            cube = frontier.pop()
-            for c in around(cube):
-                if c in megacube and c not in self.droplet and c not in exterior:
-                    exterior.add(c)
-                    frontier.append(c)
-        holes = megacube.difference(exterior).difference(self.droplet)
+            for cube in adjacent(frontier.pop()):
+                if cube in volume and cube not in self.droplet and cube not in outside:
+                    outside.add(cube)
+                    frontier.append(cube)
+        holes = volume.difference(outside).difference(self.droplet)
         return self.solutions[0] - area(holes)
 
 
