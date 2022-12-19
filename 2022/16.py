@@ -8,7 +8,7 @@ from aoc.puzzle import Puzzle
 def bfs(graph, current, goal):
     """Return time from <current> valve to open <goal> valve."""
     frontier = deque([(current, 0)])
-    reached = set(current)
+    reached = {current}
     while frontier:
         position, time = frontier.popleft()
         for destination in graph[position]:
@@ -64,7 +64,7 @@ class Today(Puzzle):
         considered.
         For paths with same valves but not in the same order, we keep
         the permutation leading to the max released pressure (stored
-        as frozensets to be usable as dict keys).
+        as a frozenset to use as dict key).
         """
         paths = {}
         frontier = [(["AA"], [0])]
