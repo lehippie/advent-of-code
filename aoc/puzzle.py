@@ -4,7 +4,7 @@ import inspect
 import time
 from pathlib import Path
 
-from aoc.inputs import load_input
+from aoc.inputs import read_file, load_input
 
 
 class Puzzle:
@@ -31,23 +31,24 @@ class Puzzle:
 
     def __init__(
         self,
-        input_data=None,
+        infile=None,
         solutions=(None, None),
     ):
         """Puzzle class constructor.
 
         Arguments:
-            input_data      List of strings OR string. If set to None,
-                            it is fetched from "inputs" folder based
-                            on the path to where the instance is
-                            created (format: /.../2020/01.py).
-            solutions       Already found solutions used by <solve>
-                            classmethod to prevent regressions.
+            infile      Name of the file containing input data. If set
+                        to None, it is fetched from repo_root/inputs/
+                        based on the path to where the instance is
+                        created (ex: .../2020/01.py).
+            solutions   Already found solutions used by <solve> method
+                        to prevent regressions.
         """
-        if input_data is None:
-            f = Path(inspect.getmodule(self).__file__)
-            input_data = load_input(f.parts[-2], f.stem)
-        self.input = input_data
+        f = Path(inspect.getmodule(self).__file__)
+        if infile is None:
+            self.input = load_input(f.parts[-2], f.stem)
+        else:
+            self.input = read_file(f.parent / infile)
         self.parser()
         self.solutions = solutions
 
