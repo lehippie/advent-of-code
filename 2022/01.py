@@ -5,8 +5,8 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.elves = ",".join(self.input).split(",,")
-        self.elves = [list(map(int, e.split(","))) for e in self.elves]
+        self.elves = "|".join(self.input).split("||")
+        self.elves = [list(map(int, e.split("|"))) for e in self.elves]
 
     def part_one(self):
         return max(sum(e) for e in self.elves)

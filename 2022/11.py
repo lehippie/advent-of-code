@@ -18,8 +18,8 @@ class Monkey:
 class Today(Puzzle):
     def parser(self):
         self.monkeys = []
-        for monkey in "\n".join(self.input).split("\n\n"):
-            m = monkey.split("\n")
+        for monkey in "|".join(self.input).split("||"):
+            m = monkey.split("|")
             items = list(map(int, re.findall(r"\d+", m[1])))
             op = eval(f"lambda old: {m[2].split('=')[1]}")
             div = int(m[3].split()[-1])

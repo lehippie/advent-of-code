@@ -8,8 +8,8 @@ class Today(Puzzle):
     def part_one(self):
         priority = 0
         for sack in self.input:
-            l = len(sack) // 2
-            item = set(sack[:l]).intersection(sack[l:]).pop()
+            n = len(sack) // 2
+            item = set(sack[:n]).intersection(sack[n:]).pop()
             priority += ascii_letters.index(item) + 1
         return priority
 
