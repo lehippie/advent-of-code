@@ -1,6 +1,5 @@
 """Day 14: Regolith Reservoir."""
 
-from itertools import product
 from aoc.puzzle import Puzzle
 
 
