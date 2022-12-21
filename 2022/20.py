@@ -1,42 +1,52 @@
 """Day 20: Grove Positioning System."""
 
-from collections import deque
 from aoc.puzzle import Puzzle
 
-SIGN = lambda n: (n > 0) - (n < 0)
+
+def mix(steps, links):
+    for k, s in enumerate(steps):
+        if s == 0:
+            continue
+        links[links.index(k)] = links[k]
+        destination = k
+        for _ in range(s):
+            destination = links[destination]
+        links[k] = links[destination]
+        links[destination] = k
+    return links
 
 
-def mix(numbers, order):
-    for i, n in order:
-        while numbers[-1] != (i, n):
-            numbers.rotate()
-        numbers.pop()
-        numbers.rotate(-SIGN(n) * (abs(n) % len(numbers)))
-        numbers.append((i, n))
-    return numbers
-
-
-def decrypt(numbers):
-    while numbers[0][1] != 0:
-        numbers.rotate()
-    return sum(numbers[i % len(numbers)][1] for i in (1000, 2000, 3000))
+def decrypt(numbers, links):
+    indexes = [numbers.index(0)]
+    for _ in range(len(numbers) - 1):
+        indexes.append(links[indexes[-1]])
+    return sum(numbers[indexes[i % len(numbers)]] for i in (1000, 2000, 3000))
 
 
 class Today(Puzzle):
     def parser(self):
-        self.order = list(enumerate(map(int, self.input)))
+        self.file = list(map(int, self.input))
 
     def part_one(self):
-        numbers = deque(self.order)
-        numbers = mix(numbers, self.order)
-        return decrypt(numbers)
+        """Positions of numbers are stored as the indexes of a list
+        where the value is the position of the following number.
+        Steps are computed beforehand, converting negative ones into
+        their positive equivalents.
+        """
+        L = len(self.file) - 1
+        steps = [abs(n) % L if n > 0 else L - (abs(n) % L) for n in self.file]
+        links = [k + 1 for k in range(L)] + [0]
+        links = mix(steps, links)
+        return decrypt(self.file, links)
 
     def part_two(self):
-        new_order = [(i, 811589153 * n) for i, n in self.order]
-        numbers = deque(new_order)
+        new_file = [811589153 * n for n in self.file]
+        L = len(new_file) - 1
+        steps = [abs(n) % L if n > 0 else L - (abs(n) % L) for n in new_file]
+        links = [k + 1 for k in range(L)] + [0]
         for _ in range(10):
-            numbers = mix(numbers, new_order)
-        return decrypt(numbers)
+            links = mix(steps, links)
+        return decrypt(new_file, links)
 
 
 solutions = (5498, 3390007892081)
