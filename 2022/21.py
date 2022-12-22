@@ -1,7 +1,7 @@
 """Day 21: Monkey Math."""
 
 from copy import deepcopy
-from operator import add, sub, mul, floordiv
+from operator import add, sub, mul, floordiv, truediv
 from aoc.puzzle import Puzzle
 
 OP = {"+": add, "-": sub, "*": mul, "/": floordiv}
@@ -79,6 +79,28 @@ class Today(Puzzle):
                 number = calculate(m1)
                 result = solve(result, number, op, "left")
         return result
+
+    def part_two_alt(self):
+        """Replace number yelled by 'humn' by 1j and solve the final
+        equation. Works only if the equation stay linear.
+        """
+        monkeys = deepcopy(self.monkeys)
+        monkeys["humn"] = 1j
+        root1, _, root2 = monkeys.pop("root")
+        operation = deepcopy(OP)
+        operation["/"] = truediv
+
+        def calculate(monkey):
+            yell = monkeys[monkey]
+            if isinstance(yell, list):
+                m1, op, m2 = yell
+                return operation[op](calculate(m1), calculate(m2))
+            return yell
+
+        root = [calculate(r) for r in (root1, root2)]
+        eq = next(r for r in root if isinstance(r, complex))
+        num = next(r for r in root if isinstance(r, float))
+        return (num - eq.real) / eq.imag
 
 
 solutions = (145167969204648, 3330805295850)
