@@ -47,7 +47,5 @@ class Today(Puzzle):
 solutions = (3202, None)
 
 if __name__ == "__main__":
-    Today(
-        solutions=(3068, None), input_data=">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>"
-    ).solve()
+    Today(solutions=(3068, None), infile="17.txt").solve()
     Today(solutions=solutions).solve()
