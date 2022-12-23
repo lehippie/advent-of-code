@@ -24,21 +24,23 @@ class ElvesProcess:
             if adj != elf:
                 yield adj[0] + adj[1] * 1j
 
-    def do_steps(self, n):
+    def do_rounds(self, n):
         for _ in range(n):
             elves = set()
-            movers = defaultdict(list)
+            propositions = defaultdict(list)
+            # First half
             for elf in self.elves:
                 if not self.elves.intersection(self.adjacents(elf)):
                     elves.add(elf)
                     continue
                 for direction in self.checks:
                     if not self.elves.intersection((elf + d for d in direction)):
-                        movers[elf + direction[0]].append(elf)
+                        propositions[elf + direction[0]].append(elf)
                         break
                 else:
                     elves.add(elf)
-            for destination, proposers in movers.items():
+            # Second half
+            for destination, proposers in propositions.items():
                 if len(proposers) > 1:
                     elves.update(proposers)
                 else:
@@ -54,13 +56,6 @@ class ElvesProcess:
         spans = [(min(e), max(e) + 1) for e in zip(*elves)]
         return prod(s[1] - s[0] for s in spans) - len(elves)
 
-    def solve(self):
-        steps = 0
-        while not self.stable:
-            self.do_steps(1)
-            steps += 1
-        return steps
-
 
 class Today(Puzzle):
     def parser(self):
@@ -72,12 +67,16 @@ class Today(Puzzle):
 
     def part_one(self):
         process = ElvesProcess(self.elves)
-        process.do_steps(10)
+        process.do_rounds(10)
         return process.empty_count()
 
     def part_two(self):
         process = ElvesProcess(self.elves)
-        return process.solve()
+        rounds = 0
+        while not process.stable:
+            process.do_rounds(1)
+            rounds += 1
+        return rounds
 
 
 solutions = (4049, 1021)
