@@ -46,7 +46,7 @@ class Puzzle:
         """
         f = Path(inspect.getmodule(self).__file__)
         if infile is None:
-            self.input = load_input(f.parts[-2], f.stem)
+            self.input = load_input(int(f.parts[-2]), int(f.stem))
         else:
             self.input = read_file(f.parent / infile)
         self.parser()

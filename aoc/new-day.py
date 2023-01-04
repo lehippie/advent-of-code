@@ -16,11 +16,10 @@ Options:
 import re
 from datetime import datetime
 from pathlib import Path
-from urllib.request import Request, urlopen
 
 from docopt import docopt
 
-from aoc import ROOT, REQUEST_HEADER
+from aoc import ROOT, download_day
 
 
 TEMPLATE = '''"""{title}."""
@@ -46,25 +45,16 @@ if __name__ == "__main__":
 '''
 
 
-def day_title(year, day):
-    request = Request(
-        url=f"https://adventofcode.com/{year}/day/{int(day)}",
-        headers=REQUEST_HEADER,
-    )
-    with urlopen(request) as response:
-        response = response.read().decode("utf-8")
-        return re.findall(r"--- (Day.*) ---", response)[0]
-
-
-def create_file(year, day):
+def create_file(year: int, day: int):
     puzzle_path = ROOT / str(year) / f"{day:>02}.py"
     if puzzle_path.exists():
         answer = input("Puzzle file already exists. Overwrite? [y/N] ")
         if not answer.lower().startswith("y"):
             print("Aborted.")
             return
+    title = re.findall(r"--- (Day.*) ---", download_day(year, day))[0]
     puzzle_path.parent.mkdir(parents=True, exist_ok=True)
-    puzzle_path.write_text(TEMPLATE.format(title=day_title(year, day)))
+    puzzle_path.write_text(TEMPLATE.format(title=title))
     print(f"New puzzle created at {puzzle_path}")
 
 

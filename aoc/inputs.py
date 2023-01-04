@@ -1,8 +1,6 @@
 """Puzzle inputs management."""
 
-from urllib.request import Request, urlopen
-
-from aoc import ROOT, REQUEST_HEADER
+from aoc import ROOT, download_input
 
 
 INPUTS_DIR = ROOT / "inputs"
@@ -26,27 +24,7 @@ def read_file(filepath):
     return content
 
 
-def download_input(year, day):
-    """Get puzzle input from Advent of Code website.
-
-    Authentification is done with the session cookie parsed from
-    configuration file (see "config.txt.example").
-
-    Arguments:
-        year, day       Date of the puzzle to download.
-
-    Returns:
-        String containing the response from the website.
-    """
-    request = Request(
-        url=f"https://adventofcode.com/{year}/day/{int(day)}/input",
-        headers=REQUEST_HEADER,
-    )
-    with urlopen(request) as response:
-        return response.read().decode("utf-8")
-
-
-def load_input(year, day):
+def load_input(year: int, day: int):
     """Get puzzle input from inputs folder (download it if absent).
 
     Arguments:
@@ -57,7 +35,7 @@ def load_input(year, day):
             OR
         String if the puzzle input is only one line.
     """
-    input_path = INPUTS_DIR / f"{year}" / f"{day.zfill(2)}.txt"
+    input_path = INPUTS_DIR / f"{year}-{day:>02}.txt"
     if not input_path.exists():
         puzzle_input = download_input(year, day)
         input_path.parent.mkdir(parents=True, exist_ok=True)
