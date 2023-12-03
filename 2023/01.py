@@ -19,35 +19,33 @@ DIGITS = {
 
 class Today(Puzzle):
     def part_one(self):
-        calibration_values = []
+        """Create a list of all digits and use the first and last to
+        get the calibration value.
+        """
+        calibration = 0
         for line in self.input:
             digits = re.findall(r"\d", line)
-            calibration_values.append(int(digits[0] + digits[-1]))
-        return sum(calibration_values)
+            calibration += int(digits[0] + digits[-1])
+        return calibration
 
     def part_two(self):
-        calibration_values = []
+        """Each line is checked character by character from both ends
+        until we find both first and last digits.
+        """
+        calibration = 0
         possible_digits = set(DIGITS).union(DIGITS.values())
         for line in self.input:
             first, last = None, None
-            # First digit
             for idx in range(len(line)):
                 for d in possible_digits:
-                    if line[idx:].startswith(d):
+                    if not first and line[idx:].startswith(d):
                         first = DIGITS.get(d, d)
-                        break
-                if first is not None:
-                    break
-            # Last digit
-            for idx in range(len(line), 0, -1):
-                for d in possible_digits:
-                    if line[:idx].endswith(d):
+                    if not last and line[: len(line) - idx].endswith(d):
                         last = DIGITS.get(d, d)
-                        break
-                if last is not None:
+                if first and last:
                     break
-            calibration_values.append(int(first + last))
-        return sum(calibration_values)
+            calibration += int(first + last)
+        return calibration
 
 
 solutions = (54390, 54277)

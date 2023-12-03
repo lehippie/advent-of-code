@@ -5,6 +5,9 @@ from aoc.puzzle import Puzzle
 
 
 def is_possible(game, max_cubes):
+    """A game is possible if the maximum amount of cubes seen is not
+    higher than the input limit.
+    """
     for color, maxi in max_cubes.items():
         max_seen = max(map(int, re.findall(rf"(\d+) {color}", game)))
         if max_seen > maxi:
@@ -13,6 +16,9 @@ def is_possible(game, max_cubes):
 
 
 def power(game):
+    """The power of a game is the product of the maximum amount of
+    cubes seen.
+    """
     p = 1
     for color in ("red", "green", "blue"):
         max_seen = max(map(int, re.findall(rf"(\d+) {color}", game)))
