@@ -18,10 +18,10 @@ class Today(Puzzle):
         where t is the duration of the press. It is a parabol centered
         at time/2. The first winning t is sufficient to calculate how
         many ways there are to win.
-        
+
         To calculate it, we solve `t² - time * t + distance = 0` and
-        add one to the result because we want a solution greater than
-        the distance.
+        take the nearest higher integer because the solution must be
+        greater than the distance.
         """
         time, distance = [int(s.replace(" ", "").split(":")[1]) for s in self.input]
         first = (time - (time**2 - 4 * distance) ** 0.5) // 2 + 1
