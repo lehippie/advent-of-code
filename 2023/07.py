@@ -46,8 +46,7 @@ class JokerHand:
         self.bid = int(bid)
         count = Counter(hand)
         if "J" in hand and len(count) > 1:
-            j = count["J"]
-            del count["J"]
+            j = count.pop("J")
             count[max(count, key=count.get)] += j
         self.type = hand_type(count)
 
@@ -63,8 +62,7 @@ class JokerHand:
 
 class Today(Puzzle):
     def part_one(self, hand_type=Hand):
-        hands = [hand_type(*line.split()) for line in self.input]
-        hands = sorted(hands)
+        hands = sorted(hand_type(*line.split()) for line in self.input)
         return sum((i + 1) * h.bid for i, h in enumerate(hands))
 
     def part_two(self):
