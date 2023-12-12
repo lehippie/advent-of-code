@@ -4,17 +4,23 @@ from aoc.puzzle import Puzzle
 
 
 def apply(maps, ranges):
+    """Maps are sorted so we compare each range to them one by
+    one until we treat each value. During the process range's start
+    is updated to keep track if there are values remaining inside.
+    """
     ranges.sort(key=lambda r: r[0])
     next_ranges = []
     for rstart, rstop in ranges:
         for mstart, mstop, offset in maps:
-            if rstop < mstart:
+            if rstop < mstart:  # range is before all maps
                 break
-            if rstart > mstop:
+            if rstart > mstop:  # range is after current map
                 continue
+            # Manage values before the map...
             if rstart < mstart:
                 next_ranges.append((rstart, mstart - 1))
                 rstart = mstart
+            # ...and values inside the map
             if rstop <= mstop:
                 next_ranges.append((rstart + offset, rstop + offset))
                 rstart = None
@@ -22,6 +28,7 @@ def apply(maps, ranges):
             else:
                 next_ranges.append((rstart + offset, mstop + offset))
                 rstart = mstop + 1
+        # Add remaining values after checking all maps
         if rstart is not None:
             next_ranges.append((rstart, rstop))
     return next_ranges
@@ -42,17 +49,13 @@ class Today(Puzzle):
 
     def part_one(self):
         locations = []
-        for number in self.seeds:
+        for n in self.seeds:
             for maps in self.almanac:
                 try:
-                    number += next(
-                        offset
-                        for start, stop, offset in maps
-                        if start <= number <= stop
-                    )
+                    n += next(add for start, stop, add in maps if start <= n <= stop)
                 except StopIteration:
                     pass
-            locations.append(number)
+            locations.append(n)
         return min(locations)
 
     def part_two(self):
