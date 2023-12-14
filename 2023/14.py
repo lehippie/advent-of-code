@@ -55,10 +55,25 @@ class Today(Puzzle):
         return int(sum(r.imag for r in platform.rocks))
 
     def part_two(self):
-        return NotImplemented
+        platform = Platform(self.input)
+        cycle = ("N", "W", "S", "E")
+        ncycle = 1000000000
+        cache = []
+        for n in range(ncycle):
+            for direction in cycle:
+                platform.move(direction)
+            if platform.rocks not in cache:
+                cache.append(platform.rocks)
+            else:
+                seen = cache.index(platform.rocks)
+                remaining = (ncycle - seen - 1) % (n - seen)
+                for _ in range(remaining):
+                    for direction in cycle:
+                        platform.move(direction)
+                return int(sum(r.imag for r in platform.rocks))
 
-solutions = (102497, None)
+
+solutions = (102497, 105008)
 
 if __name__ == "__main__":
-    Today(infile="test.txt", solutions=(136, 64)).solve()
-    # Today(solutions=solutions).solve()
+    Today(solutions=solutions).solve()
