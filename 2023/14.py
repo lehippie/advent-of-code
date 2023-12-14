@@ -67,10 +67,7 @@ class Today(Puzzle):
             else:
                 seen = cache.index(platform.rocks)
                 remaining = (ncycle - seen - 1) % (n - seen)
-                for _ in range(remaining):
-                    for direction in cycle:
-                        platform.move(direction)
-                return int(sum(r.imag for r in platform.rocks))
+                return int(sum(r.imag for r in cache[seen + remaining]))
 
 
 solutions = (102497, 105008)
