@@ -8,14 +8,19 @@ from aoc.puzzle import Puzzle
 
 @lru_cache
 def pattern(n):
-    """Create a regex pattern to detect groups of <n> ? and # that
-    are not preceded nor followed by additionnal #s.
+    """Create a regex pattern to detect overlapping groups of <n>
+    consecutive ? and # that are neither preceded nor followed by
+    other #s.
     """
     return re.compile(rf"(?<!#)(?=[\?#]{{{n}}})(?![\?#]{{{n}}}#)")
 
 
 @lru_cache
 def arrangements(row, groups):
+    """Recursive function that place first group and call itself on
+    the remaining row and groups. Search is stopped if we skip a # or
+    if the rest of ? and # is less than total of springs to place.
+    """
     if not groups:
         return 0 if "#" in row else 1
     out = 0
@@ -40,17 +45,21 @@ class Today(Puzzle):
             self.groups.append(tuple(int(g) for g in groups.split(",")))
 
     def part_one(self):
+        """Consecutive dots are fused and leading/trailing ones are
+        removed to help converge similar rows in the lru_cache.
+        """
         rows = [re.sub(r"\.+", ".", s.strip(".")) for s in self.rows]
         return sum(arrangements(row, groups) for row, groups in zip(rows, self.groups))
 
     def part_two(self):
-        a = 0
+        counts = 0
         for row, groups in zip(self.rows, self.groups):
             r = re.sub(r"\.+", ".", "?".join(row for _ in range(5)).strip("."))
             g = []
-            [g.extend(groups) for _ in range(5)]
-            a += arrangements(r, tuple(g))
-        return a
+            for _ in range(5):
+                g.extend(groups)
+            counts += arrangements(r, tuple(g))
+        return counts
 
 
 solutions = (7286, 25470469710341)
