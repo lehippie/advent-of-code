@@ -7,8 +7,9 @@ from aoc.puzzle import Puzzle
 DIRECTIONS = {1, -1, 1j, -1j}
 
 
-def distance(a, b):
-    return abs(a.real - b.real) + abs(a.imag - b.imag)
+class Cplx(complex):
+    def __lt__(self, other):
+        return self.real < other.real
 
 
 class Today(Puzzle):
@@ -29,11 +30,9 @@ class Today(Puzzle):
         to shorter one globally (see example: row 1, column 6).
         """
         reached = {(0, 0, 0)}
-        frontier = [(0, (0, 0), (0, 0), 0)]
+        frontier = [(0, Cplx(0), Cplx(0), 0)]
         while frontier:
-            heat, (pr, pc), (dr, dc), count = heappop(frontier)
-            position = pr + pc * 1j
-            direction = dr + dc * 1j
+            heat, position, direction, count = heappop(frontier)
             for d in DIRECTIONS:
                 if d == -direction or (d == direction and count == 3):
                     continue
@@ -44,30 +43,28 @@ class Today(Puzzle):
                     if p == self.factory:
                         return h
                     reached.add((p, d, c))
-                    heappush(frontier, (h, (p.real, p.imag), (d.real, d.imag), c))
+                    heappush(frontier, (h, Cplx(p), Cplx(d), c))
 
     def part_two(self):
         """Same logic as part one with the new limitations."""
         reached = {(0, 0, 0)}
-        frontier = [(0, (0, 0), (0, 0), 0)]
+        frontier = [(0, Cplx(0), Cplx(0), 0)]
         while frontier:
-            heat, (pr, pc), (dr, dc), count = heappop(frontier)
-            position = pr + pc * 1j
-            direction = dr + dc * 1j
+            heat, position, direction, count = heappop(frontier)
             for d in DIRECTIONS:
                 if d == -direction or (d == direction and count == 10):
                     continue
                 c = count + 1 if d == direction else 4
                 p = position + d if c > 4 else position + 4 * d
                 if p in self.city and (p, d, c) not in reached:
-                    h = heat + sum(
-                        self.city[position + (i + 1) * d]
-                        for i in range(int(abs(position - p)))
-                    )
+                    if c == 4:
+                        h = heat + sum(self.city[position + i * d] for i in range(1, 5))
+                    else:
+                        h = heat + self.city[p]
                     if p == self.factory:
                         return h
                     reached.add((p, d, c))
-                    heappush(frontier, (h, (p.real, p.imag), (d.real, d.imag), c))
+                    heappush(frontier, (h, Cplx(p), Cplx(d), c))
 
 
 solutions = (755, 881)
