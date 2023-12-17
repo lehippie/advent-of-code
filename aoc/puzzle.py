@@ -64,18 +64,21 @@ class Puzzle:
     def solve(self, verbose=True):
         """Run puzzle parts and warn for regressions."""
         parts = (self.part_one, self.part_two)
-        for k, (part, solution) in enumerate(zip(parts, self.solutions)):
+        for k, (part, solution) in enumerate(zip(parts, self.solutions), 1):
             start = time.time()
             answer = part()
             duration = round(1000 * (time.time() - start), 3)
             if solution is None:
                 if verbose:
-                    print(f"Part {k+1} answer after {duration} ms: {answer}")
+                    print(f"Part {k} answer: {answer} ({duration} ms)")
                 return False
             elif answer != solution:
                 if verbose:
-                    print(f"Regression in part {k+1}: {answer} instead of {solution}.")
+                    print(
+                        f"Regression in part {k}:",
+                        f"{answer} instead of {solution} ({duration} ms)",
+                    )
                 return False
             elif verbose:
-                print(f"Part {k+1} solved in {duration} ms")
+                print(f"Part {k} solved ({duration} ms)")
         return True
