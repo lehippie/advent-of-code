@@ -1,7 +1,7 @@
 """--- Day 12: Hot Springs ---"""
 
 import re
-from collections import Counter
+
 from functools import lru_cache
 from aoc.puzzle import Puzzle
 
@@ -28,8 +28,7 @@ def arrangements(row, groups):
         if "#" in row[: match.start()]:
             break
         remaining = row[match.start() + groups[0] + 1 :].strip(".")
-        count = Counter(remaining)
-        if count["#"] + count["?"] < sum(groups[1:]):
+        if remaining.count("#") + remaining.count("?") < sum(groups[1:]):
             break
         out += arrangements(remaining, groups[1:])
     return out
