@@ -69,7 +69,7 @@ class Today(Puzzle):
             p1 = p0 + n * MOVE[direction]
             area += p0.real * p1.imag - p0.imag * p1.real
             p0 = p1
-        return int(area / 2 + length / 2 + 1)
+        return int(abs(area) / 2 + length / 2 + 1)
 
 
 solutions = (26857, 129373230496292)
