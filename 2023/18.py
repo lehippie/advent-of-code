@@ -1,6 +1,5 @@
 """--- Day 18: Lavaduct Lagoon ---"""
 
-from math import ceil
 from aoc.puzzle import Puzzle
 
 MOVE = {"U": -1j, "D": 1j, "L": -1, "R": 1}
@@ -49,29 +48,31 @@ class Today(Puzzle):
         return int((rM - rm) * (iM - im) - len(exterior))
 
     def part_two(self):
-        """Green's theorem for polygons (aka shoelace formula).
-        Adjustments must be taken into account because this theorem
-        works on points, not on a path made of m²: the perimeter
-        needs an added 1/2 per m², outer corners are balanced by inner
-        ones except for 4 of them. Thus the area is initialized to 1.
+        """Green's theorem for polygons (aka shoelace formula). It
+        calculates the area of any polygon by the sum of the oriented
+        areas of each triangle made by the origin and each couple of
+        vertices.
+
+        Adjustments must be made because this calculate the area while
+        passing through points and not a grid: edges miss 1/2, inner
+        corners 1/4 and outer corners 3/4. They are almost the same
+        amount of inner and outer corners so counting 1/2 for each
+        balances them. The exception is for 4 of outer corners (like
+        in a simple square), for which we need to add 1.
         """
         digit2direction = {"0": "R", "1": "D", "2": "L", "3": "U"}
-        trench = [0]
-        area = 1
-        length = 0
+        length, area, p0 = 0, 0, 0
         for _, _, color in self.plan:
             direction = digit2direction[color[-1]]
             n = int(f"0x{color[:5]}", base=16)
-            trench.append(trench[-1] + n * MOVE[direction])
-            p1, p2 = trench[-2], trench[-1]
-            area += (p1.real * p2.imag - p1.imag * p2.real) / 2
             length += n
-        area = area + length // 2
-        return int(area)
+            p1 = p0 + n * MOVE[direction]
+            area += p0.real * p1.imag - p0.imag * p1.real
+            p0 = p1
+        return int(area / 2 + length / 2 + 1)
 
 
 solutions = (26857, 129373230496292)
 
 if __name__ == "__main__":
-    Today(infile="test.txt", solutions=(62, 952408144115)).solve()
     Today(solutions=solutions).solve()
