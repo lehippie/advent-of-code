@@ -51,6 +51,7 @@ class Today(Puzzle):
                 continue
             if name == "R":
                 continue
+
             for rating, check, limit, next_step in self.workflows[name]:
                 m, M = parts[rating]
                 if m < limit < M:
@@ -59,7 +60,7 @@ class Today(Puzzle):
                     else:
                         ranges = [(m, limit), (limit + 1, M)]
                 else:
-                    ranges = [[m, M]]
+                    ranges = [(m, M)]
 
                 for rm, rM in ranges:
                     if (check == "<" and rM < limit) or (check == ">" and rm > limit):
