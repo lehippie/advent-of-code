@@ -18,22 +18,18 @@ class Today(Puzzle):
                     self.garden.add(position)
 
     def part_one(self, steps=64):
-        history = [set(), set([self.start])]
-        for _ in range(steps):
-            frontier = list(history[-1])
-            reached = set()
-            while frontier:
-                position = frontier.pop()
+        plots = [1, 0]
+        lasts = [set(), set([self.start])]
+        for s in range(1, steps + 1):
+            new = set()
+            for position in lasts[s % 2]:
                 for direction in DIRECTIONS:
                     p = position + direction
-                    if (
-                        p in self.garden
-                        and p not in history[-1]
-                        and p not in history[-2]
-                    ):
-                        reached.add(p)
-            history.append(reached)
-        return sum(len(h) for h in history[-1::-2])
+                    if p in self.garden and p not in lasts[0] and p not in lasts[1]:
+                        new.add(p)
+            plots[s % 2] += len(new)
+            lasts[(s + 1) % 2] = new
+        return plots[steps % 2]
 
     def part_two(self):
         return super().part_two()
@@ -42,5 +38,4 @@ class Today(Puzzle):
 solutions = (3639, None)
 
 if __name__ == "__main__":
-    Today(infile="test.txt", solutions=(16, None)).solve()
-    # Today(solutions=solutions).solve()
+    Today(solutions=solutions).solve()
