@@ -2,7 +2,7 @@
 
 from aoc.puzzle import Puzzle
 
-DIRECTIONS = (1, -1, 1j, -1j)
+MOVES = (1, -1, 1j, -1j)
 
 
 class Today(Puzzle):
@@ -13,8 +13,7 @@ class Today(Puzzle):
                 position = r + c * 1j
                 if tile == "S":
                     self.start = position
-                    self.garden.add(position)
-                elif tile == ".":
+                if tile != "#":
                     self.garden.add(position)
 
     def part_one(self, steps=64):
@@ -23,7 +22,7 @@ class Today(Puzzle):
         for s in range(1, steps + 1):
             new = set()
             for position in lasts[s % 2]:
-                for direction in DIRECTIONS:
+                for direction in MOVES:
                     p = position + direction
                     if p in self.garden and p not in lasts[0] and p not in lasts[1]:
                         new.add(p)
