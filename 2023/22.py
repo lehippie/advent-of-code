@@ -15,12 +15,6 @@ class Brick:
         self.up = []
         self.down = []
 
-    def __str__(self):
-        return str(self.i)
-
-    def __hash__(self):
-        return self.i
-
 
 def stabilize(falling: list[Brick]) -> list:
     """Make bricks falls and save their contacts."""
@@ -60,4 +54,5 @@ class Today(Puzzle):
 solutions = (477, None)
 
 if __name__ == "__main__":
+    # Today(infile="test.txt", solutions=(5, None)).solve()
     Today(solutions=solutions).solve()
