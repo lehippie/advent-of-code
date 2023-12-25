@@ -16,7 +16,7 @@ class Today(Puzzle):
         return code
 
 
-solutions = (19980801, NotImplemented)
+solutions = 19980801
 
 if __name__ == "__main__":
     Today(solutions=solutions).solve()

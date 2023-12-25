@@ -16,7 +16,7 @@ class Puzzle:
     Attributes defined at init:
         input           Store the puzzle input as a list of strings
                         or as a string if it contains only one line.
-        solutions       Solutions for both part.
+        solutions       Solutions for both parts.
 
     Methods:
         parser          Method called at instance init to manipulate
@@ -31,13 +31,13 @@ class Puzzle:
 
     def __init__(
         self,
-        infile=None,
+        test_input=None,
         solutions=(None, None),
     ):
         """Puzzle class constructor.
 
         Arguments:
-            infile      Name of the file containing input data. If set
+            test_input  Name of the file containing input data. If set
                         to None, it is fetched from repo_root/inputs/
                         based on the path to where the instance is
                         created (ex: .../2020/01.py).
@@ -45,10 +45,11 @@ class Puzzle:
                         to prevent regressions.
         """
         f = Path(inspect.getmodule(self).__file__)
-        if infile is None:
-            self.input = load_input(int(f.parts[-2]), int(f.stem))
+        self.year, self.day = int(f.parts[-2]), int(f.stem)
+        if test_input is None:
+            self.input = load_input(self.year, self.day)
         else:
-            self.input = read_file(f.parent / infile)
+            self.input = read_file(f.parent / test_input)
         self.parser()
         self.solutions = solutions
 
@@ -63,7 +64,12 @@ class Puzzle:
 
     def solve(self, verbose=True):
         """Run puzzle parts and warn for regressions."""
-        parts = (self.part_one, self.part_two)
+        if self.day != 25:
+            parts = (self.part_one, self.part_two)
+        else:
+            parts = [self.part_one]
+            self.solutions = [self.solutions]
+
         for k, (part, solution) in enumerate(zip(parts, self.solutions), 1):
             start = time.time()
             answer = part()
