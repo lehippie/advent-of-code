@@ -3,24 +3,27 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parents[1]
 CONFIG = ConfigParser()
 CONFIG.read(ROOT / "config.txt")
 REQUEST_HEADER = {
-    "User-Agent": "github.com/lehippie/advent-of-code by dahip@gmx.fr",
     "cookie": f"session={CONFIG['www']['session']}",
+    "User-Agent": CONFIG["www"]["user-agent"],
 }
 
 
-def download(url):
+def download(url: str) -> str:
+    """Download an url source code."""
     request = Request(url=url, headers=REQUEST_HEADER)
     with urlopen(request) as response:
         return response.read().decode("utf-8")
 
 
-def download_day(year: int, day: int):
+def download_day(year: int, day: int) -> str:
+    """Download the instructions of given day."""
     return download(f"https://adventofcode.com/{year}/day/{day}")
 
 
-def download_input(year: int, day: int):
+def download_input(year: int, day: int) -> str:
+    """Download your personnal input of given day."""
     return download(f"https://adventofcode.com/{year}/day/{day}/input")

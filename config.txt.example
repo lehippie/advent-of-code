@@ -1,8 +1,10 @@
 # HOW TO USE:
 # 1. Copy this file and remove the ".example" extension
-# 2. Replace the session field by AoC cookie from your web browser
+# 2. Paste your AoC session cookie and enter your User-agent as the chief elf demanded:
+#    https://www.reddit.com/r/adventofcode/comments/z9dhtd/please_include_your_contact_info_in_the_useragent/
 # 3. ???
 # 4. Profit
 
 [www]
 session = PASTE_YOUR_SESSION_COOKIE_HERE
+user-agent = SEE_URL_ABOVE
