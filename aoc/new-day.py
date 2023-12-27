@@ -62,12 +62,14 @@ def create_file(year: int, day: int) -> None:
 
 if __name__ == "__main__":
     args = docopt(__doc__.format(name=Path(__file__).name))
+    today = date.today()
     if args["<year>"]:
         puzzle = date(int(args["<year>"]), 12, int(args["<day>"]))
     else:
-        puzzle = date.today()
+        puzzle = today
 
-    if 2015 <= puzzle.year <= 2023 and 1 <= puzzle.day <= 25:
+    last = date(2023, 12, 25)
+    if date(2015, 12, 1) <= puzzle <= min(today, last) and puzzle.day <= 25:
         create_file(puzzle.year, puzzle.day)
     else:
-        print(f"No puzzle for day {puzzle.day} of year {puzzle.year}")
+        print(f"No puzzle for day {puzzle.day} of {puzzle.year}")
