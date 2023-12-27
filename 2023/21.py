@@ -34,7 +34,5 @@ class Today(Puzzle):
         return super().part_two()
 
 
-solutions = (3639, None)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

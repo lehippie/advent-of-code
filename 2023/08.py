@@ -37,7 +37,5 @@ class Today(Puzzle):
                 return lcm(*reached)
 
 
-solutions = (20659, 15690466351717)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

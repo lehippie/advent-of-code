@@ -28,7 +28,5 @@ class Today(Puzzle):
         return time - 2 * first + 1
 
 
-solutions = (503424, 32607562)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

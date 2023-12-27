@@ -1,10 +1,14 @@
 """Advent of Code puzzle solver."""
 
 import inspect
+import json
 import time
 from pathlib import Path
 
-from aoc.inputs import read_file, load_input
+from aoc import ROOT
+from aoc.inputs import load_input, read_file
+
+SOLUTIONS_FILE = ROOT / "solutions.json"
 
 
 class Puzzle:
@@ -16,7 +20,6 @@ class Puzzle:
     Attributes defined at init:
         input           Store the puzzle input as a list of strings
                         or as a string if it contains only one line.
-        solutions       Solutions for both parts.
 
     Methods:
         parser          Method called at instance init to manipulate
@@ -29,29 +32,20 @@ class Puzzle:
                         regressions.
     """
 
-    def __init__(
-        self,
-        test_input=None,
-        solutions=(None, None),
-    ):
+    def __init__(self, test_input: str = ""):
         """Puzzle class constructor.
 
         Arguments:
-            test_input  Name of the file containing input data. If set
-                        to None, it is fetched from repo_root/inputs/
-                        based on the path to where the instance is
-                        created (ex: .../2020/01.py).
-            solutions   Already found solutions used by <solve> method
-                        to prevent regressions.
+            test_input  File containing the test input to be used in
+                        place of the one in `inputs` folder.
         """
-        f = Path(inspect.getmodule(self).__file__)
-        self.year, self.day = int(f.parts[-2]), int(f.stem)
-        if test_input is None:
-            self.input = load_input(self.year, self.day)
+        puzzle = Path(inspect.getmodule(self).__file__)
+        self.year, self.day = int(puzzle.parts[-2]), int(puzzle.stem)
+        if test_input:
+            self.input = read_file(puzzle.parent / test_input)
         else:
-            self.input = read_file(f.parent / test_input)
+            self.input = load_input(self.year, self.day)
         self.parser()
-        self.solutions = solutions
 
     def parser(self):
         pass
@@ -62,29 +56,25 @@ class Puzzle:
     def part_two(self):
         return NotImplemented
 
-    def solve(self, verbose=True):
-        """Run puzzle parts and warn for regressions."""
-        if self.day != 25:
-            parts = (self.part_one, self.part_two)
-        else:
-            parts = [self.part_one]
-            self.solutions = [self.solutions]
+    def solve(self, solutions: list = []) -> None:
+        """Run puzzle parts and give answer or warn for regressions."""
+        parts = (self.part_one, self.part_two)
+        if not solutions:
+            with open(SOLUTIONS_FILE) as f:
+                solutions = json.load(f)[f"{self.year}"][f"{self.day}"]
 
-        for k, (part, solution) in enumerate(zip(parts, self.solutions), 1):
+        for k, (part, solution) in enumerate(zip(parts, solutions), 1):
             start = time.time()
             answer = part()
             duration = round(1000 * (time.time() - start), 3)
             if solution is None:
-                if verbose:
-                    print(f"Part {k} answer: {answer} ({duration} ms)")
-                return False
-            elif answer != solution:
-                if verbose:
-                    print(
-                        f"Regression in part {k}:",
-                        f"{answer} instead of {solution} ({duration} ms)",
-                    )
-                return False
-            elif verbose:
-                print(f"Part {k} solved ({duration} ms)")
-        return True
+                print(f"Part {k}: {answer} ({duration} ms)")
+                return
+            if answer != solution:
+                print(
+                    f"Regression in part {k}:",
+                    f"{answer} instead of {solution} ({duration} ms)",
+                )
+                return
+            print(f"Part {k} solved ({duration} ms)")
+        print("Day solved \o/")

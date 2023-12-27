@@ -41,8 +41,7 @@ class Today(Puzzle):
     def part_two(self):
         return super().part_two()
 
-solutions = (2278, None)
 
 if __name__ == "__main__":
-    # Today(infile="test.txt", solutions=(94, 154)).solve()
-    Today(solutions=solutions).solve()
+    # Today(test_input="test.txt").solve((94, 154))
+    Today().solve()

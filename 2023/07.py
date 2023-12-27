@@ -69,7 +69,5 @@ class Today(Puzzle):
         return self.part_one(hand_type=JokerHand)
 
 
-solutions = (247961593, 248750699)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

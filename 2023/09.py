@@ -32,7 +32,5 @@ class Today(Puzzle):
         return sum(backward_prediction(history) for history in self.histories)
 
 
-solutions = (1955513104, 1131)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

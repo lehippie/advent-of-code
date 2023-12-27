@@ -29,7 +29,5 @@ class Today(Puzzle):
         return sum(scratchcards)
 
 
-solutions = (24733, 5422730)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

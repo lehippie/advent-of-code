@@ -2,20 +2,18 @@
 
 from aoc import ROOT, download_input
 
-
 INPUTS_DIR = ROOT / "inputs"
 
 
-def read_file(filepath):
+def read_file(filepath: str) -> list | str:
     """Read file content.
 
     Arguments:
-        filepath        String OR Path object.
+        filepath: Path to the file to read.
 
     Returns:
-        List of string, one for each line in the file.
-            OR
-        String if the file contains only one line.
+        List containing the lines of the file.
+        If there is only one line, returns it as a string.
     """
     with open(filepath) as f:
         content = [line.rstrip("\n\r") for line in f]
@@ -24,16 +22,15 @@ def read_file(filepath):
     return content
 
 
-def load_input(year: int, day: int):
-    """Get puzzle input from inputs folder (download it if absent).
+def load_input(year: int, day: int) -> list | str:
+    """Load input from `inputs` folder (download it if not saved yet).
 
     Arguments:
-        year, day       Date of the puzzle to load.
+        year, day: Date of the puzzle to load.
 
     Returns:
-        List of string, one for each line in the puzzle input.
-            OR
-        String if the puzzle input is only one line.
+        List containing the lines of the puzzle input.
+        If there is only one line, returns it as a string.
     """
     input_path = INPUTS_DIR / f"{year}-{day:>02}.txt"
     if not input_path.exists():

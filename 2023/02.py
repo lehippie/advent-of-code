@@ -35,7 +35,5 @@ class Today(Puzzle):
         return sum(power(game) for game in self.input)
 
 
-solutions = (2237, 66681)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

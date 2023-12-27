@@ -14,7 +14,7 @@ Options:
 """
 
 import re
-from datetime import datetime
+from datetime import date
 from pathlib import Path
 
 from docopt import docopt
@@ -41,19 +41,20 @@ class Today(Puzzle):
 solutions = (None, None)
 
 if __name__ == "__main__":
-    Today(test_input="test.txt", solutions=(None, None)).solve()
-    # Today(solutions=solutions).solve()
+    Today(test_input="test.txt").solve([None, None])
+    # Today().solve()
 '''
 
 
-def create_file(year: int, day: int):
-    puzzle_path = ROOT / str(year) / f"{day:>02}.py"
+def create_file(year: int, day: int) -> None:
+    """Create a file to solve the puzzle of given day."""
+    puzzle_path = ROOT / f"{year}" / f"{day:>02}.py"
     if puzzle_path.exists():
         answer = input("Puzzle file already exists. Overwrite? [y/N] ")
         if not answer.lower().startswith("y"):
             print("Aborted.")
             return
-    title = re.findall(r"(--- Day.* ---)", download_day(year, day))[0]
+    title = re.findall(r"--- Day.* ---", download_day(year, day))[0]
     puzzle_path.parent.mkdir(parents=True, exist_ok=True)
     puzzle_path.write_text(TEMPLATE.format(title=title))
     print(f"New puzzle created at {puzzle_path}")
@@ -61,17 +62,12 @@ def create_file(year: int, day: int):
 
 if __name__ == "__main__":
     args = docopt(__doc__.format(name=Path(__file__).name))
-    now = datetime.now()
-
-    if args["<year>"] is None:
-        if now.month != 12:
-            print("We're not in December yet. Please enter year and day manually.")
-            exit()
-        args["<year>"] = now.year
-        args["<day>"] = now.day
-
-    date = datetime(int(args["<year>"]), 12, int(args["<day>"]))
-    if 1 <= date.day <= 25 and datetime(2015, 12, 1) <= date <= now:
-        create_file(date.year, date.day)
+    if args["<year>"]:
+        puzzle = date(int(args["<year>"]), 12, int(args["<day>"]))
     else:
-        print(f"No existing puzzle on day {date.day} of year {date.year}.")
+        puzzle = date.today()
+
+    if 2015 <= puzzle.year <= 2023 and 1 <= puzzle.day <= 25:
+        create_file(puzzle.year, puzzle.day)
+    else:
+        print(f"No puzzle for day {puzzle.day} of year {puzzle.year}")

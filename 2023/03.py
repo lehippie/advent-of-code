@@ -62,7 +62,5 @@ class Today(Puzzle):
         return sum(parts[0] * parts[1] for parts in gears.values() if len(parts) == 2)
 
 
-solutions = (535078, 75312571)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

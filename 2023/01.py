@@ -48,7 +48,5 @@ class Today(Puzzle):
         return calibration
 
 
-solutions = (54390, 54277)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

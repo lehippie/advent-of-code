@@ -70,7 +70,5 @@ class Today(Puzzle):
                 return int(sum(r.imag for r in cache[seen + remaining]))
 
 
-solutions = (102497, 105008)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -47,7 +47,5 @@ class Today(Puzzle):
         return max(self.contraption.energize(s) for s in starts)
 
 
-solutions = (6883, 7228)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

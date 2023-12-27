@@ -68,7 +68,5 @@ class Today(Puzzle):
         return min(r[0] for r in ranges)
 
 
-solutions = (309796150, 50716416)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -14,8 +14,6 @@ class Today(Puzzle):
         for line in self.input:
             a, bs = line.split(": ")
             for b in bs.split():
-                if set([a, b]) in EDGES:
-                    continue  # TODO: replace with proper algorithm that detect these
                 self.graph[a].append(b)
                 self.graph[b].append(a)
 
@@ -25,13 +23,13 @@ class Today(Puzzle):
         while frontier:
             component = frontier.pop()
             for connected in self.graph[component]:
+                if set([component, connected]) in EDGES:
+                    continue  # TODO: replace with proper algorithm that detect these
                 if connected not in reached:
                     reached.add(connected)
                     frontier.append(connected)
         return len(reached) * (len(self.graph) - len(reached))
 
 
-solutions = 518391
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -3,13 +3,13 @@
 from aoc.puzzle import Puzzle
 
 
-def mirrored_line(pattern):
+def mirror(pattern):
     for i in range(1, len(pattern)):
         if all(l1 == l2 for l1, l2 in zip(pattern[i:], pattern[i - 1 :: -1])):
             return i
 
 
-def smudged_mirror_line(pattern):
+def smudged_mirror(pattern):
     for i in range(1, len(pattern)):
         repaired = False
         difference = False
@@ -30,7 +30,7 @@ class Today(Puzzle):
         self.patterns = "\n".join(self.input).split("\n\n")
         self.patterns = [p.split("\n") for p in self.patterns]
 
-    def part_one(self, detector=mirrored_line):
+    def part_one(self, detector=mirror):
         total = 0
         for p in self.patterns:
             if l := detector(p):
@@ -41,10 +41,8 @@ class Today(Puzzle):
         return total
 
     def part_two(self):
-        return self.part_one(detector=smudged_mirror_line)
+        return self.part_one(detector=smudged_mirror)
 
-
-solutions = (34202, 34230)
 
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

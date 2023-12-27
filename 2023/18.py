@@ -50,8 +50,7 @@ class Today(Puzzle):
     def part_two(self):
         """Green's theorem for polygons (aka shoelace formula). It
         calculates the area of any polygon by the sum of the oriented
-        areas of each triangle made by the origin and each couple of
-        vertices.
+        areas of each triangle made by the origin and the edges.
 
         Adjustments must be made because this calculate the area while
         passing through points and not a grid: edges miss 1/2, inner
@@ -72,7 +71,5 @@ class Today(Puzzle):
         return int(abs(area) / 2 + length / 2 + 1)
 
 
-solutions = (26857, 129373230496292)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

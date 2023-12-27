@@ -67,7 +67,5 @@ class Today(Puzzle):
                     heappush(frontier, (h, Cplx(p), Cplx(d), c))
 
 
-solutions = (755, 881)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

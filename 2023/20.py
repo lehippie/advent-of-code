@@ -7,7 +7,7 @@ from aoc.puzzle import Puzzle
 
 
 def push_button(modules, counts):
-    """Update modules states and pulse counts during a button press."""
+    """Update `modules` states and pulse `counts` during a button press."""
     instructions = deque([("broad", False, m) for m in modules["broad"]])
     counts[False] += len(modules["broad"]) + 1
     while instructions:
@@ -77,11 +77,11 @@ class Today(Puzzle):
 
     def part_two(self):
         """Looking at the graph of the input, we see that the <rx>
-        module has a single input module, having 4 conjunctors itself
-        as inputs. Each depends on series of flip-flops, thus acting
-        as counters.
-        By detecting when each of these 4 sends an high pulse to the
-        single input of <rx>, we can calculate the lcm of them to
+        module has a single input module, itself having 4 conjunctors
+        as inputs. Each depends on series of flip-flops acting as
+        counters.
+        By detecting when each of the 4 conjuctors sends an high pulse
+        to <rx>'s input module, we can calculate the lcm of them to
         answer the puzzle.
         """
         modules = deepcopy(self.modules)
@@ -96,7 +96,5 @@ class Today(Puzzle):
                 return lcm(*to_sync.values())
 
 
-solutions = (817896682, 250924073918341)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

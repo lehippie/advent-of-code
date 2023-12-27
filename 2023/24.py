@@ -11,7 +11,7 @@ class Today(Puzzle):
         for line in self.input:
             self.hails.append([int(i) for i in line.replace("@", ",").split(",")])
 
-    def part_one(self, area=(200000000000000, 400000000000000)):
+    def part_one(self):
         """Each line passing through point (x0,y0,z0) with vector
         (a,b,c) has an equation (x-x0)/a = (y-y0)/b = (z-z0)/c.
         Ignoring z, its cartesian equation is y = y0 + (b/a)*(x-x0).
@@ -20,6 +20,7 @@ class Today(Puzzle):
         equations to get (xi, yi) of the intersection and check that
         it is not in the past and in the test area.
         """
+        area = 200000000000000, 400000000000000
         intersections = 0
         for path1, path2 in combinations(self.hails, 2):
             x01, y01, _, a1, b1, _ = path1
@@ -44,8 +45,6 @@ class Today(Puzzle):
         return super().part_two()
 
 
-solutions = (27732, None)
-
 if __name__ == "__main__":
-    # Today(infile="test.txt", solutions=(None, None)).solve()
-    Today(solutions=solutions).solve()
+    # Today(test_input="test.txt").solve()
+    Today().solve()
