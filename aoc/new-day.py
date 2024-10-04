@@ -7,7 +7,8 @@ Usage:
     {name} --help
 
 Arguments:
-    <year>, <day>       Date of the new day (default: today).
+    <year>, <day>       Date of the day to create
+                        Default: today
 
 Options:
     -h, --help          Show this help.
@@ -38,15 +39,16 @@ class Today(Puzzle):
         return super().part_two()
 
 
-solutions = (None, None)
-
 if __name__ == "__main__":
-    Today(test_input="test.txt").solve([None, None])
-    # Today().solve()
+    test = Today(test_input="""lines""")
+    print(test.part_one(), None)
+    print(test.part_two(), None)
+
+    Today().solve()
 '''
 
 
-def create_file(year: int, day: int) -> None:
+def create_puzzle_file(year: int, day: int) -> None:
     """Create a file to solve the puzzle of given day."""
     puzzle_path = ROOT / f"{year}" / f"{day:>02}.py"
     if puzzle_path.exists():
@@ -62,14 +64,25 @@ def create_file(year: int, day: int) -> None:
 
 if __name__ == "__main__":
     args = docopt(__doc__.format(name=Path(__file__).name))
+
     today = date.today()
+    if date(today.year, 12, 1) <= today <= date(today.year, 12, 25):
+        last_puzzle = today
+    elif date(today.year, 12, 26) <= today <= date(today.year, 12, 31):
+        last_puzzle = date(today.year, 12, 25)
+    else:
+        last_puzzle = date(today.year - 1, 12, 25)
+
     if args["<year>"]:
         puzzle = date(int(args["<year>"]), 12, int(args["<day>"]))
     else:
-        puzzle = today
+        if today.month == 12 and today.day < 26:
+            puzzle = today
+        else:
+            print("Today is not a puzzle day.")
+            exit(-1)
 
-    last = date(2023, 12, 25)
-    if date(2015, 12, 1) <= puzzle <= min(today, last) and puzzle.day <= 25:
-        create_file(puzzle.year, puzzle.day)
+    if date(2015, 12, 1) <= puzzle <= last_puzzle:
+        create_puzzle_file(puzzle.year, puzzle.day)
     else:
         print(f"No puzzle for day {puzzle.day} of {puzzle.year}")

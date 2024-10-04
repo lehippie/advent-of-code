@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 
 from aoc import SOLUTIONS
-from aoc.inputs import load_input, read_file
+from aoc.inputs import load_input
 
 
 class Puzzle:
@@ -29,14 +29,16 @@ class Puzzle:
         """Puzzle class constructor.
 
         Arguments:
-            test_input: Path to the test input to use in place of the real one.
+            test_input: String to use in place of the real input.
         """
         if test_input is None:
             puzzle = Path(inspect.getmodule(self).__file__)
             self.year, self.day = int(puzzle.parts[-2]), int(puzzle.stem)
             self.input = load_input(self.year, self.day)
         else:
-            self.input = read_file(puzzle.parent / test_input)
+            self.input = test_input.splitlines()
+            if len(self.input) == 1:
+                self.input = self.input[0]
         self.parser()
 
     def parser(self):
