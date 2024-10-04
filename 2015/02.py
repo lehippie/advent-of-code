@@ -20,7 +20,5 @@ class Today(Puzzle):
         return ribbons
 
 
-solutions = (1586300, 3737498)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

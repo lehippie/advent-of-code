@@ -36,7 +36,7 @@ class Grid:
 
 class DefectiveGrid(Grid):
     """A defective grid has its corners stucked on, added
-    to the set of on lights after each step.
+    to the set of on-lights after each step.
     """
 
     def __init__(self, *args, **kwargs):
@@ -68,7 +68,5 @@ class Today(Puzzle):
         return self.part_one(steps, DefectiveGrid)
 
 
-solutions = (768, 781)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

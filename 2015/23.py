@@ -66,7 +66,5 @@ class Today(Puzzle):
         return computer.reg["b"]
 
 
-solutions = (307, 160)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -36,7 +36,5 @@ class Today(Puzzle):
         return sum(is_better(s) for s in self.input)
 
 
-solutions = (255, 55)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

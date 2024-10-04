@@ -24,7 +24,5 @@ class Today(Puzzle):
         return almost_sum(json.loads(self.input))
 
 
-solutions = (111754, 65402)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -30,7 +30,5 @@ class Today(Puzzle):
         return max(self.routes.values())
 
 
-solutions = (251, 898)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -41,7 +41,5 @@ class Today(Puzzle):
         return lights.sum()
 
 
-solutions = (377891, 14110788)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

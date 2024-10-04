@@ -39,7 +39,5 @@ class Today(Puzzle):
         return self.part_one(target_calories=500)
 
 
-solutions = (13882464, 11171160)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -46,7 +46,5 @@ class Today(Puzzle):
                 return sue["number"]
 
 
-solutions = (373, 260)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

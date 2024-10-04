@@ -56,7 +56,5 @@ class Today(Puzzle):
         return circuit["a"]
 
 
-solutions = (3176, 14710)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

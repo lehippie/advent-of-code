@@ -99,7 +99,5 @@ class Today(Puzzle):
         return max(costs)
 
 
-solutions = (121, 201)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

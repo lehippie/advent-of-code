@@ -23,7 +23,5 @@ class Today(Puzzle):
         return containers_counts[min(containers_counts)]
 
 
-solutions = (654, 57)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

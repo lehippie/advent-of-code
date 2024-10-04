@@ -26,7 +26,5 @@ class Today(Puzzle):
         return np.where(presents > self.target)[0][0]
 
 
-solutions = (831600, 884520)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

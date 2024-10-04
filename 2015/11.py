@@ -47,19 +47,17 @@ def is_valid(password):
 
 class Today(Puzzle):
     def part_one(self):
-        pwd = increment(self.input)
-        while not is_valid(pwd):
-            pwd = increment(pwd)
-        return pwd
+        self.pwd = increment(self.input)
+        while not is_valid(self.pwd):
+            self.pwd = increment(self.pwd)
+        return self.pwd
 
     def part_two(self):
-        pwd = increment(self.solutions[0])
+        pwd = increment(self.pwd)
         while not is_valid(pwd):
             pwd = increment(pwd)
         return pwd
 
 
-solutions = ("hepxxyzz", "heqaabcc")
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

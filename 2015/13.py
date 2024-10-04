@@ -50,7 +50,5 @@ class Today(Puzzle):
         return max_happiness(me_included)
 
 
-solutions = (664, 640)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

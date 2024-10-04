@@ -28,7 +28,5 @@ class Today(Puzzle):
         return sum(encoded_len(s) - len(s) for s in self.input)
 
 
-solutions = (1371, 2117)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()
