@@ -21,7 +21,5 @@ class Today(Puzzle):
         return sum(len(set.intersection(*map(set, g))) for g in self.groups)
 
 
-solutions = (6763, 3512)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

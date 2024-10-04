@@ -49,7 +49,5 @@ class Today(Puzzle):
         return cups[1] * cups[cups[1]]
 
 
-solutions = (24987653, 442938711161)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

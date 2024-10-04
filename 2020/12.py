@@ -85,7 +85,5 @@ class Today(Puzzle):
         return ActualShip(self.input).navigate()
 
 
-solutions = (508, 30761)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

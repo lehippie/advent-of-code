@@ -68,7 +68,5 @@ class Today(Puzzle):
         return self.part_one(RecursiveCombat)
 
 
-solutions = (32495, 32665)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

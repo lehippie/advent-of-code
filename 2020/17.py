@@ -53,7 +53,5 @@ class Today(Puzzle):
         return PocketDimension(init_4D).boot()
 
 
-solutions = (386, 2276)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

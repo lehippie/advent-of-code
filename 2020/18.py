@@ -43,7 +43,5 @@ class Today(Puzzle):
         return sum(evaluate(exp, add_before_mult) for exp in self.input)
 
 
-solutions = (6923486965641, 70722650566361)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

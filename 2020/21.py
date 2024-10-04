@@ -43,7 +43,5 @@ class Today(Puzzle):
         return ",".join(allergens[a].pop() for a in sorted(allergens))
 
 
-solutions = (2317, "kbdgs,sqvv,slkfgq,vgnj,brdd,tpd,csfmb,lrnz")
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

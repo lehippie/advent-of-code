@@ -44,7 +44,5 @@ class Today(Puzzle):
         return sum(1 for m in self.messages if rule.match(m))
 
 
-solutions = (239, 405)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

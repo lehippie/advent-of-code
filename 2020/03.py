@@ -21,7 +21,5 @@ class Today(Puzzle):
         return prod(count_trees(self.input, *s) for s in slopes)
 
 
-solutions = (276, 7812180000)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

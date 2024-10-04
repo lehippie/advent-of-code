@@ -55,7 +55,5 @@ class Today(Puzzle):
                 return console.accumulator
 
 
-solutions = (1179, 1089)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

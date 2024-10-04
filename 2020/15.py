@@ -29,7 +29,5 @@ class Today(Puzzle):
         return self.part_one(limit=30000000)
 
 
-solutions = (468, 1801753)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -53,7 +53,5 @@ class Today(Puzzle):
         return self.part_one(DockingSystemV2)
 
 
-solutions = (10885823581193, 3816594901962)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

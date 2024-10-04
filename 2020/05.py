@@ -21,7 +21,5 @@ class Today(Puzzle):
         return seat
 
 
-solutions = (928, 610)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -28,7 +28,5 @@ class Today(Puzzle):
                 return min(s) + max(s)
 
 
-solutions = (41682220, 5388976)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

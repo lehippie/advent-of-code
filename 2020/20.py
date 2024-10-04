@@ -164,7 +164,5 @@ class Today(Puzzle):
         return Counter("".join(sea))["#"]
 
 
-solutions = (54755174472007, 1692)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

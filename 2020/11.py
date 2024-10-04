@@ -70,7 +70,5 @@ class Today(Puzzle):
         return VisibilityLayout(self.seats).stabilize()
 
 
-solutions = (2251, 2019)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

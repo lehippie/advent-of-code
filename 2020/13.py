@@ -38,7 +38,5 @@ class Today(Puzzle):
         return t
 
 
-solutions = (3789, 667437230788118)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

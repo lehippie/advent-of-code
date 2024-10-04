@@ -52,7 +52,5 @@ class Today(Puzzle):
         return prod(v for f, v in ticket.items() if f.startswith("departure"))
 
 
-solutions = (18227, 2355350878831)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

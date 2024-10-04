@@ -51,7 +51,5 @@ class Today(Puzzle):
         return sum(passport_validity(p) for p in self.passports)
 
 
-solutions = (222, 140)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()
