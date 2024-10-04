@@ -11,6 +11,10 @@ REQUEST_HEADER = {
     "User-Agent": CONFIG["www"]["user-agent"],
 }
 
+SOLUTIONS = ROOT / "solutions.json"
+if not SOLUTIONS.exists():
+    SOLUTIONS.write_text("{}")
+
 
 def download(url: str) -> str:
     """Download an url source code."""
