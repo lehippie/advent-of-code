@@ -1,2 +1,1 @@
-black>=21.8b0
 jupyter>=1.0.0
