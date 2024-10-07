@@ -22,7 +22,5 @@ class Today(Puzzle):
         return md5(screen.encode()).hexdigest()
 
 
-solutions = (13520, "10f996f2a7086790b6b2e7b9dc7e2e60")
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

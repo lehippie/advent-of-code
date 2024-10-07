@@ -80,7 +80,5 @@ class Today(Puzzle):
         return max(manhattan(a, b) for a, b in combinations(self.trench["scanners"], 2))
 
 
-solutions = (353, 10832)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -1,98 +1,64 @@
 """Day 24: Arithmetic Logic Unit."""
 
+from collections import defaultdict
 from aoc.puzzle import Puzzle
 
 
 class ALU:
-    def __init__(self, inputs, program, z=None):
-        self.inputs = inputs[::-1] if isinstance(inputs, list) else [inputs]
+    def __init__(self, program):
         self.program = program
-        self.mem = {"w": 0, "x": 0, "y": 0, "z": 0}
-        if z is not None:
-            self.mem["z"] = z
-
-    @property
-    def instructions(self):
-        return {
-            "inp": self.inp,
-            "add": self.add,
-            "mul": self.mul,
-            "div": self.div,
-            "mod": self.mod,
-            "eql": self.eql,
-        }
-
-    def inp(self, var):
-        self.mem[var] = self.inputs.pop()
-
-    def add(self, var, value):
-        self.mem[var] += value
-
-    def mul(self, var, value):
-        self.mem[var] *= value
-
-    def div(self, var, value):
-        self.mem[var] //= value
-
-    def mod(self, var, value):
-        self.mem[var] %= value
-
-    def eql(self, var, value):
-        self.mem[var] = 1 if self.mem[var] == value else 0
+        self.var = {"w": 0, "x": 0, "y": 0, "z": 0}
 
     def run(self):
         for instruction in self.program:
-            cmd, *v = instruction.split()
-            if len(v) > 1:
-                v[1] = int(self.mem.get(v[1], v[1]))
-            self.instructions[cmd](*v)
+            cmd, a, b = instruction.split()
+            b = int(self.var.get(b, b))
+            if cmd == "add":
+                self.var[a] += b
+            elif cmd == "mul":
+                self.var[a] *= b
+            elif cmd == "div":
+                self.var[a] //= b
+            elif cmd == "mod":
+                self.var[a] %= b
+            elif cmd == "eql":
+                self.var[a] = int(self.var[a] == b)
 
 
 class Today(Puzzle):
     def parser(self):
-        """MONAD code is separated in blocks each starting with an
-        input instruction.
-        """
+        """MONAD code is separated in blocks starting with "inp w"."""
         self.blocks = []
         for line in self.input:
             if "inp" in line:
-                self.blocks.append([])
-            self.blocks[-1].append(line)
-        print(*self.blocks, sep="\n")
+                self.blocks.append(ALU([]))
+            else:
+                self.blocks[-1].program.append(line)
+        # print(*(block.program for block in self.blocks), sep="\n")
 
-    def part_one(self):
-        """From one block to another, w is used for input and x and y
-        are set to 0. Thus, only the value of z needs to be stored
-        for next block.
+    def part_one(self, method=max):
+        """Looking at the blocks content, some pattern can be deduced:
+        - w is only used to store the input digit
+        - x and y are always set to 0 before being used
+            => only z is kept from one block to the next
         """
-        old = {0: 0}
-        for block in self.blocks:
-            new = {}
-            for i in range(9, 0, -1):
-                for z, n in old.items():
-                    model = int(f"{n}{i}")
-                    alu = ALU(i, block, z)
-                    alu.run()
-                    if alu.mem["z"] not in new or model > new[alu.mem["z"]]:
-                        new[alu.mem["z"]] = model
-            old = new
-        return new[0]
+        states = {0: 0}
+        for b, block in enumerate(self.blocks):
+            print(b, len(states))
+            outputs = defaultdict(int)
+            for w in range(1, 10):
+                for z, previous_model in states.items():
+                    model = int(f"{previous_model}{w}")
+                    block.var["w"] = w
+                    block.var["z"] = z
+                    block.run()
+                    outputs[block.var["z"]] = method(model, block.var["z"])
+            states = outputs
+        return outputs[0]
 
     def part_two(self):
-        old = {0: 0}
-        for block in self.blocks:
-            new = {}
-            for i in range(1, 10):
-                for z, n in old.items():
-                    model = int(f"{n}{i}")
-                    alu = ALU(i, block, z)
-                    alu.run()
-                    if alu.mem["z"] not in new or model < new[alu.mem["z"]]:
-                        new[alu.mem["z"]] = model
-            old = new
-        return new[0]
+        return self.part_one(method=min)
 
-solutions = (29989297949519, 19518121316118)
 
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

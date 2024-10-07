@@ -16,7 +16,5 @@ class Today(Puzzle):
         return sum(calories[-3:])
 
 
-solutions = (71924, 210406)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

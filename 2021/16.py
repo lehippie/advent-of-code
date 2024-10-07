@@ -90,7 +90,5 @@ class Today(Puzzle):
         return self.transmission.value
 
 
-solutions = (977, 101501020883)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

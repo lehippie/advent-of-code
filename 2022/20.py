@@ -43,7 +43,5 @@ class Today(Puzzle):
         return decrypt(new_file, mix(new_file, 10))
 
 
-solutions = (5498, 3390007892081)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

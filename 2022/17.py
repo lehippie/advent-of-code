@@ -44,8 +44,5 @@ class Today(Puzzle):
         return super().part_two()
 
 
-solutions = (3202, None)
-
 if __name__ == "__main__":
-    assert Today(solutions=(3068, 1514285714288), infile="17.txt").solve()
-    Today(solutions=solutions).solve()
+    Today().solve()

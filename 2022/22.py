@@ -123,7 +123,5 @@ class Today(Puzzle):
         return cube.move()
 
 
-solutions = (26558, 110400)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

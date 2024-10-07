@@ -50,7 +50,5 @@ class Today(Puzzle):
         return (packets.index(d1) + 1) * (packets.index(d2) + 1)
 
 
-solutions = (5843, 26289)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -11,9 +11,8 @@ HALLWAY_SPACES = (0, 1, 3, 5, 7, 9, 10)
 
 
 def possible_moves(burrow, s=2):
-    """Generate possible moves from a given <burrow>  with rooms of
-    size <s>and generate each new state with its corresponding energy
-    spending.
+    """Generate possible moves from a given <burrow> with rooms of size <s> and
+    generate each new state with its corresponding energy spending.
     """
     hallway = burrow[:11]
     rooms = [burrow[k : k + s] for k in range(11, len(burrow), s)]
@@ -112,7 +111,5 @@ class Today(Puzzle):
                     heappush(burrows, (new_energy, next_burrow))
 
 
-solutions = (16489, 43413)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

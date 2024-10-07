@@ -23,7 +23,5 @@ class Today(Puzzle):
         return count
 
 
-solutions = (475, 825)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

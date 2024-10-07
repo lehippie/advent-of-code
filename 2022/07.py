@@ -52,7 +52,5 @@ class Today(Puzzle):
         return next(s for s in sorted(self.sizes) if freespace + s >= 30000000)
 
 
-solutions = (1086293, 366028)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

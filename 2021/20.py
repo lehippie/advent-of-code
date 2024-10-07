@@ -22,9 +22,7 @@ class Image:
         self.img = np.pad(self.img, 1, constant_values=self.padding)
         pad = np.pad(self.img, 1, constant_values=self.padding)
         for (r, c), _ in np.ndenumerate(self.img):
-            binary = "".join(
-                "1" if p else "0" for p in pad[r : r + 3, c : c + 3].flat
-            )
+            binary = "".join("1" if p else "0" for p in pad[r : r + 3, c : c + 3].flat)
             self.img[r, c] = self.algo[int(binary, base=2)]
         self.padding = self.algo[511 if self.padding else 0]
 
@@ -45,7 +43,5 @@ class Today(Puzzle):
         return self.part_one(steps=50)
 
 
-solutions = (5347, 17172)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

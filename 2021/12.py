@@ -41,7 +41,5 @@ class Today(Puzzle):
         return paths_count
 
 
-solutions = (5254, 149385)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

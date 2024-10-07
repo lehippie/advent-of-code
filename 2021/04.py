@@ -49,7 +49,5 @@ class Today(Puzzle):
             boards = [board for board in boards if not board.wins()]
 
 
-solutions = (87456, 15561)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

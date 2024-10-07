@@ -72,7 +72,5 @@ class Today(Puzzle):
         return sum(flag * volume(c) for c, flag in cuboids.items())
 
 
-solutions = (601104, 1262883317822267)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -57,7 +57,5 @@ class Today(Puzzle):
         return self.part_one(extension_factor=5)
 
 
-solutions = (390, 2814)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

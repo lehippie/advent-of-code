@@ -35,7 +35,5 @@ class Today(Puzzle):
         return len(visited)
 
 
-solutions = (6354, 2651)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

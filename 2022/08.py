@@ -39,7 +39,5 @@ class Today(Puzzle):
         return best_score
 
 
-solutions = (1803, 268912)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -75,7 +75,5 @@ class Today(Puzzle):
         return max((x + y).magnitude() for x, y in permutations(self.numbers, 2))
 
 
-solutions = (3486, 4747)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -23,7 +23,8 @@ class Today(Puzzle):
         self.droplet = set(tuple(map(int, line.split(","))) for line in self.input)
 
     def part_one(self):
-        return area(self.droplet)
+        self.area = area(self.droplet)
+        return self.area
 
     def part_two(self):
         """Holes are cubes that are nor outside nor part of the
@@ -41,10 +42,8 @@ class Today(Puzzle):
                     outside.add(cube)
                     frontier.append(cube)
         holes = volume.difference(outside).difference(self.droplet)
-        return self.solutions[0] - area(holes)
+        return self.area - area(holes)
 
-
-solutions = (4320, 2456)
 
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

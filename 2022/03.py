@@ -22,7 +22,5 @@ class Today(Puzzle):
         return priority
 
 
-solutions = (7795, 2703)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

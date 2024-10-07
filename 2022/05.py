@@ -33,7 +33,5 @@ class Today(Puzzle):
         return "".join(s[-1] for s in stacks)
 
 
-solutions = ("NTWZZWHFV", "BRZGFVBTJ")
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

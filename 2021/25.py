@@ -55,7 +55,5 @@ class Today(Puzzle):
         return steps
 
 
-solutions = 435
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

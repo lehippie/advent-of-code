@@ -86,7 +86,5 @@ class Today(Puzzle):
         )
 
 
-solutions = (1580, 2213)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

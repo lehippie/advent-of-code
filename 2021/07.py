@@ -45,7 +45,5 @@ class Today(Puzzle):
         return min(fuels)
 
 
-solutions = (335271, 95851339)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

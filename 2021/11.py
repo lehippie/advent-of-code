@@ -55,7 +55,5 @@ class Today(Puzzle):
         return sync_step
 
 
-solutions = (1665, 235)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

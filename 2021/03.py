@@ -42,7 +42,5 @@ class Today(Puzzle):
         return int(oxy, base=2) * int(co2, base=2)
 
 
-solutions = (1082324, 1353024)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

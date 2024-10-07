@@ -103,7 +103,5 @@ class Today(Puzzle):
         return (num - eq.real) / eq.imag
 
 
-solutions = (145167969204648, 3330805295850)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

@@ -35,7 +35,5 @@ class Today(Puzzle):
         return dec2snafu(sum(snafu2dec(s) for s in self.input))
 
 
-solutions = "2-10==12-122-=1-1-22"
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

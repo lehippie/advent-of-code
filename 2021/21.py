@@ -53,7 +53,5 @@ class Today(Puzzle):
         return max(wins)
 
 
-solutions = (503478, 716241959649754)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

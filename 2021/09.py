@@ -53,7 +53,5 @@ class Today(Puzzle):
         return prod(sorted(basin_sizes)[-3:])
 
 
-solutions = (468, 1280496)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()
