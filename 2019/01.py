@@ -8,19 +8,17 @@ class Today(Puzzle):
         self.modules = list(map(int, self.input))
 
     def part_one(self):
-        return sum(m // 3 - 2 for m in self.modules)
+        return sum(mass // 3 - 2 for mass in self.modules)
 
     def part_two(self):
         total_fuel = 0
-        for m in self.modules:
-            fuel = [m // 3 - 2]
-            while fuel[-1] != 0:
-                fuel.append(max(fuel[-1] // 3 - 2, 0))
-            total_fuel += sum(fuel)
+        for mass in self.modules:
+            fuel = mass // 3 - 2
+            while fuel > 0:
+                total_fuel += fuel
+                fuel = fuel // 3 - 2
         return total_fuel
 
 
-solutions = (3426455, 5136807)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

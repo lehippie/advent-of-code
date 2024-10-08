@@ -7,9 +7,9 @@ from aoc.puzzle import Puzzle
 class Intcode:
     def __init__(self, program, noun, verb):
         self.memory = program.copy()
+        self.pointer = 0
         self.memory[1] = noun
         self.memory[2] = verb
-        self.pointer = 0
 
     def run(self):
         while self.memory[self.pointer] != 99:
@@ -35,7 +35,5 @@ class Today(Puzzle):
                 return 100 * noun + verb
 
 
-solutions = (4484226, 5696)
-
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()

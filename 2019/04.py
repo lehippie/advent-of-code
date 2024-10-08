@@ -14,9 +14,9 @@ def valid(password: str):
     return False
 
 
-def completely_valid(password: str):
+def really_valid(password: str):
     if len(password) == 6 and "".join(sorted(password)) == password:
-        if any(len(g[0]) == 2 for g in GROUPS.findall(password)):
+        if any(len(g[0]) == 2 for g in GROUPS.finditer(password)):
             return True
     return False
 
@@ -25,14 +25,12 @@ class Today(Puzzle):
     def parser(self):
         self.m, self.M = map(int, self.input.split("-"))
 
-    def part_one(self):
-        return sum(valid(str(pw)) for pw in range(self.m, self.M + 1))
+    def part_one(self, method=valid):
+        return sum(method(str(pw)) for pw in range(self.m, self.M + 1))
 
     def part_two(self):
-        return sum(completely_valid(str(pw)) for pw in range(self.m, self.M + 1))
+        return self.part_one(method=really_valid)
 
-
-solutions = (1729, 1172)
 
 if __name__ == "__main__":
-    Today(solutions=solutions).solve()
+    Today().solve()
