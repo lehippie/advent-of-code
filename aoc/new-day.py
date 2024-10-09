@@ -41,8 +41,8 @@ class Today(Puzzle):
 
 if __name__ == "__main__":
     test = Today(test_input="""lines""")
-    print(test.part_one(), None)
-    print(test.part_two(), None)
+    a = test.part_one()
+    assert a == None, a
 
     Today().solve()
 '''

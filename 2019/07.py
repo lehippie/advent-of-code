@@ -1,21 +1,25 @@
-"""--- Day 5: Sunny with a Chance of Asteroids ---"""
+"""--- Day 7: Amplification Circuit ---"""
 
+from itertools import permutations
 from aoc.puzzle import Puzzle
 
 
 class Intcode:
-    def __init__(self, program):
+    def __init__(self, program, phase):
         self.memory = program.copy()
         self.pointer = 0
-        self.outputs = []
+        self.inputs = [phase]
+        self.output = []
 
-    def run(self, input_id):
-        self.input = input_id
+    def run(self, *inputs):
+        self.inputs.extend(inputs)
         while self.memory[self.pointer] != 99:
             opcode = self.memory[self.pointer]
             instruction, n_params = self.opcodes[opcode % 100]
             addresses = self.process_modes(n_params, opcode // 100)
             instruction(self, *addresses)
+            if self.output:
+                return self.output.pop()
 
     def process_modes(self, n, modes):
         a = []
@@ -37,11 +41,11 @@ class Intcode:
         self.pointer += 4
 
     def _input(self, addr):
-        self.memory[addr] = self.input
+        self.memory[addr] = self.inputs.pop(0)
         self.pointer += 2
 
     def _output(self, addr):
-        self.outputs.append(self.memory[addr])
+        self.output.append(self.memory[addr])
         self.pointer += 2
 
     def _jump_if_true(self, test, addr):
@@ -80,13 +84,26 @@ class Today(Puzzle):
     def parser(self):
         self.program = list(map(int, self.input.split(",")))
 
-    def part_one(self, input_id=1):
-        intcode = Intcode(self.program)
-        intcode.run(input_id)
-        return intcode.outputs[-1]
+    def part_one(self):
+        max_signal = 0
+        for phases in permutations(range(5)):
+            output = 0
+            for phase in phases:
+                amp = Intcode(self.program, phase)
+                output = amp.run(output)
+            max_signal = max(max_signal, output)
+        return max_signal
 
     def part_two(self):
-        return self.part_one(5)
+        max_signal = 0
+        for phases in permutations(range(5, 10)):
+            amps = [Intcode(self.program, phase) for phase in phases]
+            output = 0
+            while amps[-1].memory[amps[-1].pointer] != 99:
+                for amp in amps:
+                    output = amp.run(output)
+            max_signal = max(max_signal, output)
+        return max_signal
 
 
 if __name__ == "__main__":
