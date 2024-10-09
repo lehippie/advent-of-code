@@ -28,6 +28,10 @@ class Intcode:
             modes //= 10
         return a
 
+    @property
+    def is_running(self):
+        return self.memory[self.pointer] != 99
+
     ####################
     #   Instructions   #
     ####################
@@ -98,11 +102,13 @@ class Today(Puzzle):
         max_signal = 0
         for phases in permutations(range(5, 10)):
             amps = [Intcode(self.program, phase) for phase in phases]
-            output = 0
-            while amps[-1].memory[amps[-1].pointer] != 99:
+            output, thrusters_signal = 0, 0
+            while amps[-1].is_running:
                 for amp in amps:
                     output = amp.run(output)
-            max_signal = max(max_signal, output)
+                if output is not None:
+                    thrusters_signal = output
+            max_signal = max(max_signal, thrusters_signal)
         return max_signal
 
 
