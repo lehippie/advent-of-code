@@ -7,16 +7,24 @@ class Intcode:
         self.base = 0
         self.inputs = []
         self.outputs = []
+        self.waiting_for_input = False
 
     def __getitem__(self, k):
         return self.memory.get(k, 0)
 
     def run(self, *inputs, pause_on_output=True):
         self.inputs.extend(inputs)
+        if self.inputs:
+            self.waiting_for_input = False
+
         while self[self.pointer] != 99:
             opcode = self[self.pointer]
-            instruction, n_params = self.opcodes[opcode % 100]
-            addresses = self.process_modes(n_params, opcode // 100)
+            opcode, modes = opcode % 100, opcode // 100
+            if opcode == 3 and not self.inputs:
+                self.waiting_for_input = True
+                return None
+            instruction, n_params = self.opcodes[opcode]
+            addresses = self.process_modes(n_params, modes)
             instruction(self, *addresses)
             if pause_on_output and self.outputs:
                 return self.outputs.pop()
