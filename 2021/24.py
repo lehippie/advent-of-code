@@ -32,7 +32,7 @@ class Today(Puzzle):
         z is the only value to keep from one block to the next.
 
     It's still a slow brute-force answer with minimum analysis but at least
-    each part runs in less around 15 minutes.
+    each part runs in around 15 minutes.
     """
 
     def parser(self):
