@@ -18,8 +18,7 @@ class Intcode:
             self.waiting_for_input = False
 
         while self[self.pointer] != 99:
-            opcode = self[self.pointer]
-            opcode, modes = opcode % 100, opcode // 100
+            modes, opcode = divmod(self[self.pointer], 100)
             if opcode == 3 and not self.inputs:
                 self.waiting_for_input = True
                 return None
@@ -32,14 +31,13 @@ class Intcode:
     def process_modes(self, n, modes):
         a = []
         for k in range(1, n + 1):
-            mode = modes % 10
+            modes, mode = divmod(modes, 10)
             if mode == 0:
                 a.append(self[self.pointer + k])
             elif mode == 1:
                 a.append(self.pointer + k)
             elif mode == 2:
                 a.append(self[self.pointer + k] + self.base)
-            modes //= 10
         return a
 
     @property
