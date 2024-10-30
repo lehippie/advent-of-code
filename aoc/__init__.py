@@ -15,6 +15,10 @@ SOLUTIONS = ROOT / "solutions.json"
 if not SOLUTIONS.exists():
     SOLUTIONS.write_text("{}")
 
+TIMINGS = ROOT / "timings.json"
+if not TIMINGS.exists():
+    TIMINGS.write_text("{}")
+
 
 def download(url: str) -> str:
     """Download an url source code."""
