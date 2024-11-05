@@ -34,7 +34,9 @@ def write_timing_file(timings: dict):
     Arguments:
         timings: Timings dict with format {<year>: {<day>: [t1, t2]}}.
     """
+    timings = {y: {f"{k:>02}": v for k, v in d.items()} for y, d in timings.items()}
     s = json.dumps(timings, indent=2, sort_keys=True)
+    s = re.sub(r'"0', '"', s)
     s = re.sub(r"\[\n\s{6}", "[", s)
     s = re.sub(r",\n\s{6}", ", ", s)
     s = re.sub(r"\n\s{4}\]", "]", s)
