@@ -2,8 +2,8 @@
 
 import inspect
 import json
-import time
 from pathlib import Path
+from time import process_time
 
 from aoc import SOLUTIONS
 from aoc.inputs import load_input
@@ -74,17 +74,26 @@ class Puzzle:
         for k, (part, solution) in enumerate(
             zip((self.part_one, self.part_two), solutions)
         ):
-            start = time.time()
+            start = process_time()
             answer = part()
-            duration = round(1000 * (time.time() - start), 3)
+            duration = process_time() - start
+
+            if duration < 1:
+                duration = f"{round(1000 * duration, 3)} ms"
+            elif 1 < duration < 60:
+                duration = f"{round(duration, 3)} s"
+            else:
+                m, s = divmod(int(duration), 60)
+                duration = f"{m} min {s} s"
+
             if solution is None:
-                print(f"Part {k+1}: {answer} ({duration} ms)")
+                print(f"Part {k + 1}: {answer} ({duration})")
                 return
             if answer != solution:
                 print(
-                    f"Regression in part {k+1}:",
-                    f"{answer} instead of {solution} ({duration} ms)",
+                    f"Regression in part {k + 1}:",
+                    f"{answer} instead of {solution} ({duration})",
                 )
                 return
-            print(f"Part {k+1} solved ({duration} ms)")
+            print(f"Part {k + 1} solved ({duration})")
         print("Day solved \o/")
