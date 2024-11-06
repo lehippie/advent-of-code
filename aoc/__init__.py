@@ -21,17 +21,38 @@ if not TIMINGS.exists():
 
 
 def download(url: str) -> str:
-    """Download an url source code."""
+    """Download url's source code.
+    
+    Arguments:
+        url: Web page to download.
+    
+    Returns:
+        Source of the web page.
+    """
     request = Request(url=url, headers=REQUEST_HEADER)
     with urlopen(request) as response:
         return response.read().decode("utf-8")
 
 
 def download_day(year: int, day: int) -> str:
-    """Download the instructions of given day."""
+    """Download puzzle instructions.
+    
+    Arguments:
+        year, day: Date of the puzzle.
+    
+    Returns:
+        Source of the puzzle instructions web page.
+    """
     return download(f"https://adventofcode.com/{year}/day/{day}")
 
 
 def download_input(year: int, day: int) -> str:
-    """Download your personnal input of given day."""
+    """Download personnal puzzle input.
+    
+    Arguments:
+        year, day: Date of the puzzle.
+    
+    Returns:
+        Source of the input web page.
+    """
     return download(f"https://adventofcode.com/{year}/day/{day}/input")

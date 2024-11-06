@@ -2,7 +2,7 @@
 
 """Compute the time to solve puzzles.
 
-This script analyze the solutions.json and timings.json files and
+This script analyze `solutions.json` and `timings.json` files and
 add to the latter the solved puzzles not yet timed.
 README.md's table is also updated with latest timings.
 
@@ -11,8 +11,8 @@ Usage:
     {name} --help
 
 Options:
-    -e, --erase             Recalculate previous timings
-    -h, --help              Show this help
+    -e, --erase         Recalculate previous timings
+    -h, --help          Show this help
 """
 
 import json
@@ -44,8 +44,17 @@ def write_timing_file(timings: dict):
         f.write(s)
 
 
-def puzzle_timing(year, day, solutions):
-    """Calculate the timing of a puzzle."""
+def puzzle_timing(year: int | str, day: int | str, solutions: list) -> list[float]:
+    """Calculate the timing of a puzzle.
+
+    Arguments:
+        year, day: Date of the puzzle.
+        solutions: Solutions for that day.
+
+    Returns:
+        Timing of parts of the puzzle with a solution. Timing of parts
+        without solution is set to None.
+    """
     puzzle = import_module(f"{year}.{day:>02}").Today()
     timing = []
     for part, solution in zip((puzzle.part_one, puzzle.part_two), solutions):
@@ -56,8 +65,15 @@ def puzzle_timing(year, day, solutions):
     return timing
 
 
-def get_timings(erase):
-    """Calculate the timings of all fully solved puzzle."""
+def get_timings(erase: bool = False) -> dict:
+    """Calculate the timings of all solved puzzle.
+
+    Arguments:
+        erase: If True, previous known timings are recalculated.
+
+    Returns:
+        Dict of timings with same structure as `solutions.json`.
+    """
     with open(SOLUTIONS) as f:
         solutions = json.load(f)
     with open(TIMINGS) as f:
@@ -81,7 +97,15 @@ def get_timings(erase):
     return timings
 
 
-def get_emoji(timing):
+def get_emoji(timing: float) -> str:
+    """Define emojis for timings representation in `README.md`.
+
+    Arguments:
+        timing: time to solve a puzzle part.
+
+    Returns:
+        Emoji corresponding to given solving time interval.
+    """
     if timing is None:
         return ":x:"
     if timing < 1:
@@ -97,7 +121,12 @@ def get_emoji(timing):
     return ":skull:"
 
 
-def update_readme(timings):
+def update_readme(timings: dict) -> None:
+    """Integrate the timings table in `README.md`.
+
+    Arguments:
+        timings: Dict of timings.
+    """
     header = (
         "# advent-of-code\n\nAdvent of Code solutions in python 3.10\n\n"
         ":zap: < 1 ms&emsp;:green_square: < 1 s&emsp;:blue_square: < 5 s&emsp;"

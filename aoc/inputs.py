@@ -26,7 +26,7 @@ def load_input(year: int, day: int) -> list | str:
     """Load input from `inputs` folder (download it if not saved yet).
 
     Arguments:
-        year, day: Date of the puzzle to load.
+        year, day: Date of the puzzle.
 
     Returns:
         List containing the lines of the puzzle input.

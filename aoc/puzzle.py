@@ -15,8 +15,8 @@ class Puzzle:
     This class is made to be inherited from to solve Advent of Code puzzles.
 
     Attributes defined:
-        input: Store the puzzle input as a list of strings or as a string if it
-            contains only one line.
+        input: Store the puzzle input as a list of strings (one per line) or
+            as a string (one line inputs).
 
     Methods:
         parser: Called at init to manipulate the puzzle input.

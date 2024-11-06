@@ -7,8 +7,8 @@ Usage:
     {name} --help
 
 Arguments:
-    <year>, <day>       Date of the day to create
-                        Default: today
+    <year>, <day>       Date of the puzzle to create.
+                        Default: today.
 
 Options:
     -h, --help          Show this help.
@@ -40,16 +40,20 @@ class Today(Puzzle):
 
 
 if __name__ == "__main__":
-    test = Today(test_input="""lines""")
-    a = test.part_one()
-    assert a == None, a
+    # test = Today(test_input="""parse_lines_here""")
+    # a = test.part_one()
+    # assert a == expected_result, a
 
     Today().solve()
 '''
 
 
 def create_puzzle_file(year: int, day: int) -> None:
-    """Create a file to solve the puzzle of given day."""
+    """Create a template file to solve a puzzle.
+
+    Arguments:
+        year, day: Date of the puzzle.
+    """
     puzzle_path = ROOT / f"{year}" / f"{day:>02}.py"
     if puzzle_path.exists():
         answer = input("Puzzle file already exists. Overwrite? [y/N] ")
@@ -75,12 +79,11 @@ if __name__ == "__main__":
 
     if args["<year>"]:
         puzzle = date(int(args["<year>"]), 12, int(args["<day>"]))
+    elif today.month == 12 and today.day < 26:
+        puzzle = today
     else:
-        if today.month == 12 and today.day < 26:
-            puzzle = today
-        else:
-            print("Today is not a puzzle day.")
-            exit(-1)
+        print("Today is not a puzzle day.")
+        exit(-1)
 
     if date(2015, 12, 1) <= puzzle <= last_puzzle:
         create_puzzle_file(puzzle.year, puzzle.day)

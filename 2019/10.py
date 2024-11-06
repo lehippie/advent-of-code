@@ -28,7 +28,7 @@ class Today(Puzzle):
 
     def part_two(self):
         """From the station, detected asteroids are sorted by their phase.
-        As it is counterclockwise, we need a reverse sorting.
+        As it goes clockwise, we need a reverse sorting.
         Also, the laser starts its job at an angle of pi/2 so we substract
         2*pi to phases that are over it.
         """
