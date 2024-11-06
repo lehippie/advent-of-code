@@ -23,6 +23,7 @@ from docopt import docopt
 from aoc import ROOT, download_day
 
 
+TODAY = date.today()
 TEMPLATE = '''"""{title}"""
 
 from aoc.puzzle import Puzzle
@@ -48,8 +49,30 @@ if __name__ == "__main__":
 '''
 
 
+def check_date(puzzle_date: date) -> bool:
+    """Verify if a puzzle exists on given date.
+
+    Arguments:
+        puzzle: `datetime.date` of the puzzle.
+
+    Returns:
+        True if a puzzle is available on given date, False otherwise.
+    """
+    if puzzle_date.day > 25:
+        return False
+
+    if date(TODAY.year, 12, 1) <= TODAY <= date(TODAY.year, 12, 25):
+        last_puzzle = TODAY
+    elif TODAY.month == 12:
+        last_puzzle = date(TODAY.year, 12, 25)
+    else:
+        last_puzzle = date(TODAY.year - 1, 12, 25)
+
+    return date(2015, 12, 1) <= puzzle_date <= last_puzzle
+
+
 def create_puzzle_file(year: int, day: int) -> None:
-    """Create a template file to solve a puzzle.
+    """Create a basic file to solve <puzzle> day.
 
     Arguments:
         year, day: Date of the puzzle.
@@ -69,23 +92,14 @@ def create_puzzle_file(year: int, day: int) -> None:
 if __name__ == "__main__":
     args = docopt(__doc__.format(name=Path(__file__).name))
 
-    today = date.today()
-    if date(today.year, 12, 1) <= today <= date(today.year, 12, 25):
-        last_puzzle = today
-    elif date(today.year, 12, 26) <= today <= date(today.year, 12, 31):
-        last_puzzle = date(today.year, 12, 25)
-    else:
-        last_puzzle = date(today.year - 1, 12, 25)
-
     if args["<year>"]:
         puzzle = date(int(args["<year>"]), 12, int(args["<day>"]))
-    elif today.month == 12 and today.day < 26:
-        puzzle = today
+    elif TODAY.month == 12 and TODAY.day < 26:
+        puzzle = TODAY
     else:
-        print("Today is not a puzzle day.")
-        exit(-1)
+        raise IOError("Today is not a puzzle day.")
 
-    if date(2015, 12, 1) <= puzzle <= last_puzzle:
+    if check_date(puzzle):
         create_puzzle_file(puzzle.year, puzzle.day)
     else:
-        print(f"No puzzle for day {puzzle.day} of {puzzle.year}")
+        print(f"There is no puzzle on day {puzzle.day} of {puzzle.year}")
