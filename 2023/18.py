@@ -49,12 +49,12 @@ class Today(Puzzle):
 
     def part_two(self):
         """Green's theorem for polygons (aka shoelace formula). It
-        calculates the area of any polygon by the sum of the oriented
-        areas of each triangle made by the origin and the edges.
+        calculates the area of any polygon by summing the oriented
+        areas of each triangle defined by the edges with the origin.
 
         Adjustments must be made because this calculate the area while
         passing through points and not a grid: edges miss 1/2, inner
-        corners 1/4 and outer corners 3/4. They are almost the same
+        corners 1/4 and outer corners 3/4. There are almost the same
         amount of inner and outer corners so counting 1/2 for each
         balances them. The exception is for 4 of outer corners (like
         in a simple square), for which we need to add 1.
