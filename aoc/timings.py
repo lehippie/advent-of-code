@@ -2,9 +2,10 @@
 
 """Compute the time to solve puzzles.
 
-This script analyze `solutions.json` and `timings.json` files and
-add to the latter the solved puzzles not yet timed.
-README.md's table is also updated with latest timings.
+Analysis of `solutions.json` and `timings.json` files to time newly
+solved puzzle parts and add them to `README.md`'s table.
+
+TODO : Add ability to recalculate and update a single day.
 
 Usage:
     {name} [--erase]
@@ -26,22 +27,6 @@ from time import process_time
 from docopt import docopt
 
 from aoc import ROOT, SOLUTIONS, TIMINGS
-
-
-def write_timing_file(timings: dict):
-    """Write the timings in a json file.
-
-    Arguments:
-        timings: Timings dict with format {<year>: {<day>: [t1, t2]}}.
-    """
-    timings = {y: {f"{k:>02}": v for k, v in d.items()} for y, d in timings.items()}
-    s = json.dumps(timings, indent=2, sort_keys=True)
-    s = re.sub(r'"0', '"', s)
-    s = re.sub(r"\[\n\s{6}", "[", s)
-    s = re.sub(r",\n\s{6}", ", ", s)
-    s = re.sub(r"\n\s{4}\]", "]", s)
-    with open(TIMINGS, "w") as f:
-        f.write(s)
 
 
 def puzzle_timing(year: int | str, day: int | str, solutions: list) -> list[float]:
@@ -95,6 +80,22 @@ def get_timings(erase: bool = False) -> dict:
                 print(f"{year}-{day}: {timings[year][day]} ms")
 
     return timings
+
+
+def write_timing_file(timings: dict):
+    """Write the timings in a json file.
+
+    Arguments:
+        timings: Timings dict with format {<year>: {<day>: [t1, t2]}}.
+    """
+    timings = {y: {f"{k:>02}": v for k, v in d.items()} for y, d in timings.items()}
+    s = json.dumps(timings, indent=2, sort_keys=True)
+    s = re.sub(r'"0', '"', s)
+    s = re.sub(r"\[\n\s{6}", "[", s)
+    s = re.sub(r",\n\s{6}", ", ", s)
+    s = re.sub(r"\n\s{4}\]", "]", s)
+    with open(TIMINGS, "w") as f:
+        f.write(s)
 
 
 def get_emoji(timing: float) -> str:
