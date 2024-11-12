@@ -27,8 +27,8 @@ class Today(Puzzle):
         )
 
     def part_two(self):
-        """Reto-engineering the scaffolding to manually find the routine and
-        functions.
+        """Retro-engineering of the scaffolding to manually find the
+        routine and functions.
         """
         ascii_program = Intcode(self.program)
         ascii_program.memory[0] = 2
