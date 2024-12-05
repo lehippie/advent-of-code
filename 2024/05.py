@@ -32,7 +32,7 @@ class Today(Puzzle):
         """The intersection of the update's pages with possible pages
         coming after is decreasing along the update, so we can use the
         size of this intersection as the key for `sorted`.
-        Ne nood to activate the `reverse` flag because we only take
+        No need to activate the `reverse` flag because we only take
         the middle page into account.
         """
         result = 0
