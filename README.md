@@ -10,7 +10,7 @@ Advent of Code solutions in python 3.10
 |2|:zap: :zap:|:x:|:x:|:x:|:zap: :green_square:|:zap: :zap:|:zap: :zap:|:zap: :zap:|:green_square: :green_square:|:green_square: :green_square:|
 |3|:green_square: :green_square:|:x:|:x:|:x:|:green_square: :green_square:|:zap: :zap:|:green_square: :green_square:|:zap: :zap:|:green_square: :green_square:|:zap: :zap:|
 |4|:green_square: :green_square:|:x:|:x:|:x:|:green_square: :green_square:|:zap: :zap:|:green_square: :green_square:|:zap: :zap:|:zap: :zap:|:green_square: :green_square:|
-|5|:zap: :green_square:|:x:|:x:|:x:|:zap: :zap:|:zap: :zap:|:green_square: :green_square:|:zap: :zap:|:zap: :zap:|:x:|
+|5|:zap: :green_square:|:x:|:x:|:x:|:zap: :zap:|:zap: :zap:|:green_square: :green_square:|:zap: :zap:|:zap: :zap:|:zap: :zap:|
 |6|:green_square: :green_square:|:x:|:x:|:x:|:green_square: :zap:|:zap: :green_square:|:zap: :zap:|:zap: :green_square:|:zap: :zap:|:x:|
 |7|:zap: :zap:|:x:|:x:|:x:|:green_square: :green_square:|:green_square: :zap:|:zap: :zap:|:zap: :zap:|:green_square: :green_square:|:x:|
 |8|:zap: :zap:|:x:|:x:|:x:|:zap: :zap:|:zap: :green_square:|:zap: :zap:|:green_square: :green_square:|:green_square: :green_square:|:x:|
@@ -32,4 +32,4 @@ Advent of Code solutions in python 3.10
 |24|:green_square: :green_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:skull: :skull:|:x:|:green_square: :x:|:x:|
 |25|:blue_square:|:x:|:x:|:x:|:x:|:blue_square:|:blue_square:|:zap:|:zap:|:x:|
 
-_(last update: 2024-12-04)_
+_(last update: 2024-12-05)_
