@@ -5,8 +5,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.area = set()
-        self.obstacles = set()
+        self.area, self.obstacles = set(), set()
         for r, row in enumerate(self.input):
             for c, cell in enumerate(row):
                 position = r + c * 1j
@@ -15,28 +14,33 @@ class Today(Puzzle):
                 if cell == "#":
                     self.obstacles.add(position)
                 elif cell == "^":
-                    self.area.add(position)
                     self.start = position
+                    self.area.add(position)
 
     def part_one(self):
-        guard = self.start
-        direction = -1
+        """The guard is followed by keeping track of the visited
+        cells in a set.
+        """
+        guard, direction = self.start, -1
         visited = set()
         while guard in self.area:
             visited.add(guard)
             step = guard + direction
             if step in self.obstacles:
                 direction *= -1j
-                continue
-            guard += direction
+            else:
+                guard = step
         return len(visited)
 
     def part_two(self):
-        guard = self.start
-        direction = -1
-        visited = set()
-        path = set()
-        obstructions = set()
+        """While the guard is followed again, for each step forward
+        in a position that have not been visited yet, we simulate the
+        path of a virtual guard turning to the right.
+        Loops are found if the virtual guard eventually gets in its
+        own path.
+        """
+        guard, direction = self.start, -1
+        visited, path, obstructions = set(), set(), set()
         while guard in self.area:
             visited.add(guard)
             path.add((guard, direction))
@@ -44,21 +48,22 @@ class Today(Puzzle):
             if step in self.obstacles:
                 direction *= -1j
                 continue
+
+            # Simulation
             if step in self.area and step not in visited:
-                test_guard = guard
-                test_direction = direction * -1j
-                test_path = path.copy()
-                while test_guard in self.area:
-                    test_path.add((test_guard, test_direction))
-                    test_step = test_guard + test_direction
-                    if test_step in self.obstacles or test_step == step:
-                        test_direction *= -1j
-                        continue
-                    test_guard += test_direction
-                    if (test_guard, test_direction) in test_path:
-                        obstructions.add(step)
-                        break
-            guard += direction
+                g, d, p = guard, direction * -1j, path.copy()
+                while g in self.area:
+                    p.add((g, d))
+                    s = g + d
+                    if s in self.obstacles or s == step:
+                        d *= -1j
+                    else:
+                        if (s, d) in p:
+                            obstructions.add(step)
+                            break
+                        g = s
+
+            guard = step
         return len(obstructions)
 
 
