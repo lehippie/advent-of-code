@@ -42,8 +42,10 @@ class Today(Puzzle):
 
 if __name__ == "__main__":
     # test = Today(test_input="""parse_lines_here""")
-    # a = test.part_one()
-    # assert a == expected_result, a
+    # r1 = test.part_one()
+    # assert r1 == expected_result, r1
+    # r2 = test.part_two()
+    # assert r2 == expected_result, r2
 
     Today().solve()
 '''
