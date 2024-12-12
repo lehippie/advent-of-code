@@ -32,4 +32,4 @@ Advent of Code solutions in python 3.10
 |24|:green_square: :green_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:skull: :skull:|:x:|:green_square: :x:|:x:|
 |25|:blue_square:|:x:|:x:|:x:|:x:|:blue_square:|:blue_square:|:zap:|:zap:|:x:|
 
-_(last update: 2024-12-12)_
+_(last update: 2024-12-13)_
