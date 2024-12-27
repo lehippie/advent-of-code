@@ -46,17 +46,17 @@ class Today(Puzzle):
         follows the boxes in contact with the one pushed in case of
         vertical move.
         """
-        # Parse the wide warehouse
+        # Wide warehouse parser
         robot = self.robot + self.robot.imag * 1j
         walls = set()
         for wall in self.walls:
             walls.add(wall + wall.imag * 1j)
             walls.add(wall + (wall.imag + 1) * 1j)
         boxes = []
-        for box_id in self.boxes:
-            boxes.append({box_id + box_id.imag * 1j, box_id + (box_id.imag + 1) * 1j})
+        for box in self.boxes:
+            boxes.append({box + box.imag * 1j, box + (box.imag + 1) * 1j})
 
-        # Handle robot moves
+        # Robot movements
         for move in self.moves:
             all_boxes = set(chain(*boxes))
             step = robot + move
