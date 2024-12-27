@@ -1,6 +1,6 @@
 """--- Day 15: Warehouse Woes ---"""
 
-from itertools import chain, count, takewhile
+from itertools import chain, count
 from aoc.puzzle import Puzzle
 
 
@@ -59,29 +59,10 @@ class Today(Puzzle):
         # Handle robot moves
         for move in self.moves:
             all_boxes = set(chain(*boxes))
-            is_box = lambda x: x in all_boxes
-
             step = robot + move
-            if step in walls:
-                continue
-            if step not in all_boxes:
+            if step not in all_boxes and step not in walls:
                 robot = step
-                continue
-
-            # Horizontal push
-            if move == 1j or move == -1j:
-                afters = [*takewhile(is_box, (step + k * move for k in count(1)))]
-                if afters[-1] + move not in walls:
-                    robot = step
-                    for box_id in {
-                        k
-                        for k, box in enumerate(boxes)
-                        if any(p in box for p in afters)
-                    }:
-                        boxes[box_id] = {p + move for p in boxes[box_id]}
-
-            # Vertical push
-            else:
+            elif step in all_boxes:
                 box_id = next(k for k, b in enumerate(boxes) if step in b)
                 pushed = {box_id}
                 frontier = set(boxes[box_id])
@@ -91,8 +72,9 @@ class Today(Puzzle):
                         break
                     elif check in all_boxes:
                         box_id = next(k for k, b in enumerate(boxes) if check in b)
-                        pushed.add(box_id)
-                        frontier.update(boxes[box_id])
+                        if box_id not in pushed:
+                            pushed.add(box_id)
+                            frontier.update(boxes[box_id])
                 else:
                     robot = step
                     for box_id in pushed:
