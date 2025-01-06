@@ -57,7 +57,7 @@ class Today(Puzzle):
         ends with `A = A // 8`, meaning the calculations are made on
         the octal decomposition of A.
         As A is part of the calculation, we can only work backward to
-        find the decomposition's coefficients from hig to low orders.
+        find the decomposition's coefficients from high to low orders.
         """
         values = [0]
         for output in reversed(self.program):
