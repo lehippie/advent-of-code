@@ -134,7 +134,7 @@ def update_readme(timings: dict) -> None:
         ":orange_square: < 1 min&emsp;:red_square: < 5 min&emsp;:skull: > 5 min&emsp;"
         ":x: unsolved\n\n"
     )
-    footer = f"\n\n_(last update: {date.today().isoformat()})_\n"
+    footer = f"\n\n_(AMD Ryzen 7 PRO 4750U - last update: {date.today().isoformat()})_\n"
     years = sorted(timings)
     table = ["||" + "|".join(years) + "|"]
     table.append("|:---:|" + "".join(":---:|" for _ in years))
@@ -153,6 +153,7 @@ def update_readme(timings: dict) -> None:
 
 if __name__ == "__main__":
     args = docopt(__doc__.format(name=Path(__file__).name))
+    sys.path.append(".")  # Allow puzzle imports
     sys.path.append("./2019")  # Allow local import of intcode computer
     timings = get_timings(args["--erase"])
     write_timing_file(timings)
