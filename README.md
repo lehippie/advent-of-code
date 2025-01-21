@@ -24,7 +24,7 @@ Advent of Code solutions in python 3.10
 |16|:zap: :zap:|:x:|:x:|:x:|:green_square: :orange_square:|:zap: :green_square:|:zap: :zap:|:green_square: :orange_square:|:green_square: :blue_square:|:green_square: :green_square:|
 |17|:green_square: :zap:|:x:|:x:|:x:|:green_square: :green_square:|:green_square: :green_square:|:zap: :green_square:|:green_square: :x:|:green_square: :blue_square:|:zap: :green_square:|
 |18|:blue_square: :blue_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:green_square: :blue_square:|:green_square: :green_square:|:green_square: :zap:|:green_square: :blue_square:|
-|19|:zap: :zap:|:x:|:x:|:x:|:x:|:green_square: :orange_square:|:blue_square: :zap:|:x:|:zap: :green_square:|:x:|
+|19|:zap: :zap:|:x:|:x:|:x:|:x:|:green_square: :orange_square:|:blue_square: :zap:|:x:|:zap: :green_square:|:green_square: :green_square:|
 |20|:orange_square: :orange_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:green_square: :blue_square:|:green_square: :blue_square:|:green_square: :green_square:|:x:|
 |21|:green_square: :green_square:|:x:|:x:|:x:|:x:|:zap: :zap:|:zap: :green_square:|:green_square: :green_square:|:green_square: :x:|:x:|
 |22|:green_square: :green_square:|:x:|:x:|:x:|:x:|:zap: :blue_square:|:green_square: :blue_square:|:green_square: :green_square:|:green_square: :x:|:x:|
@@ -32,4 +32,4 @@ Advent of Code solutions in python 3.10
 |24|:green_square: :green_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:skull: :skull:|:x:|:green_square: :x:|:x:|
 |25|:blue_square:|:x:|:x:|:x:|:x:|:blue_square:|:blue_square:|:zap:|:zap:|:x:|
 
-_(AMD Ryzen 7 PRO 4750U - last update: 2025-01-07)_
+_(AMD Ryzen 7 PRO 4750U - last update: 2025-01-21)_
