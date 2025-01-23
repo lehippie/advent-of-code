@@ -129,12 +129,15 @@ def update_readme(timings: dict) -> None:
         timings: Dict of timings.
     """
     header = (
-        "# advent-of-code\n\nAdvent of Code solutions in python 3.10\n\n"
+        "# advent-of-code\n\nAdvent of Code solutions in python 3\n\n"
         ":zap: < 1 ms&emsp;:green_square: < 1 s&emsp;:blue_square: < 5 s&emsp;"
         ":orange_square: < 1 min&emsp;:red_square: < 5 min&emsp;:skull: > 5 min&emsp;"
         ":x: unsolved\n\n"
     )
-    footer = f"\n\n_(AMD Ryzen 7 PRO 4750U - last update: {date.today().isoformat()})_\n"
+    footer = (
+        f"\n\n_(last update: {date.today().isoformat()} - "
+        "computed on an AMD Ryzen 7 PRO 4750U)_\n"
+    )
     years = sorted(timings)
     table = ["||" + "|".join(years) + "|"]
     table.append("|:---:|" + "".join(":---:|" for _ in years))

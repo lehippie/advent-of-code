@@ -1,6 +1,6 @@
 # advent-of-code
 
-Advent of Code solutions in python 3.10
+Advent of Code solutions in python 3
 
 :zap: < 1 ms&emsp;:green_square: < 1 s&emsp;:blue_square: < 5 s&emsp;:orange_square: < 1 min&emsp;:red_square: < 5 min&emsp;:skull: > 5 min&emsp;:x: unsolved
 
@@ -25,11 +25,11 @@ Advent of Code solutions in python 3.10
 |17|:green_square: :zap:|:x:|:x:|:x:|:green_square: :green_square:|:green_square: :green_square:|:zap: :green_square:|:green_square: :x:|:green_square: :blue_square:|:zap: :green_square:|
 |18|:blue_square: :blue_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:green_square: :blue_square:|:green_square: :green_square:|:green_square: :zap:|:green_square: :blue_square:|
 |19|:zap: :zap:|:x:|:x:|:x:|:x:|:green_square: :orange_square:|:blue_square: :zap:|:x:|:zap: :green_square:|:green_square: :green_square:|
-|20|:orange_square: :orange_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:green_square: :blue_square:|:green_square: :blue_square:|:green_square: :green_square:|:x:|
+|20|:orange_square: :orange_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:green_square: :blue_square:|:green_square: :blue_square:|:green_square: :green_square:|:green_square: :blue_square:|
 |21|:green_square: :green_square:|:x:|:x:|:x:|:x:|:zap: :zap:|:zap: :green_square:|:green_square: :green_square:|:green_square: :x:|:x:|
 |22|:green_square: :green_square:|:x:|:x:|:x:|:x:|:zap: :blue_square:|:green_square: :blue_square:|:green_square: :green_square:|:green_square: :x:|:x:|
 |23|:green_square: :zap:|:x:|:x:|:x:|:x:|:zap: :orange_square:|:green_square: :green_square:|:green_square: :orange_square:|:orange_square: :x:|:x:|
 |24|:green_square: :green_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:skull: :skull:|:x:|:green_square: :x:|:x:|
 |25|:blue_square:|:x:|:x:|:x:|:x:|:blue_square:|:blue_square:|:zap:|:zap:|:x:|
 
-_(AMD Ryzen 7 PRO 4750U - last update: 2025-01-21)_
+_(last update: 2025-01-23 - computed on an AMD Ryzen 7 PRO 4750U)_
