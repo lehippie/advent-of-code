@@ -15,10 +15,10 @@ class Today(Puzzle):
 
     def part_one(self):
         count = 0
-        self.triplets = set()
+        self.triplets = []
         for a, b, c in combinations(self.connect, r=3):
             if a in self.connect[b] and a in self.connect[c] and b in self.connect[c]:
-                self.triplets.add(frozenset((a, b, c)))
+                self.triplets.append({a, b, c})
                 if "t" in {a[0], b[0], c[0]}:
                     count += 1
         return count
@@ -31,7 +31,7 @@ class Today(Puzzle):
         while len(lans) > 1:
             bigger_lans = set()
             for lan, computer in product(lans, self.connect):
-                if self.connect[computer].intersection(lan) == lan:
+                if self.connect[computer].issuperset(lan):
                     bigger_lans.add(frozenset(lan.union((computer,))))
             lans = bigger_lans
         return ",".join(sorted(lans.pop()))
