@@ -29,7 +29,7 @@ Advent of Code solutions in python 3
 |21|:green_square: :green_square:|:x:|:x:|:x:|:x:|:zap: :zap:|:zap: :green_square:|:green_square: :green_square:|:green_square: :x:|:zap: :zap:|
 |22|:green_square: :green_square:|:x:|:x:|:x:|:x:|:zap: :blue_square:|:green_square: :blue_square:|:green_square: :green_square:|:green_square: :x:|:blue_square: :orange_square:|
 |23|:green_square: :zap:|:x:|:x:|:x:|:x:|:zap: :orange_square:|:green_square: :green_square:|:green_square: :orange_square:|:orange_square: :x:|:green_square: :orange_square:|
-|24|:green_square: :green_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:skull: :skull:|:x:|:green_square: :x:|:skull: :x:|
+|24|:green_square: :green_square:|:x:|:x:|:x:|:x:|:green_square: :green_square:|:skull: :skull:|:x:|:green_square: :x:|:zap: :x:|
 |25|:blue_square:|:x:|:x:|:x:|:x:|:blue_square:|:blue_square:|:zap:|:zap:|:x:|
 
 _(last update: 2025-02-12 - computed on an AMD Ryzen 7 PRO 4750U)_
