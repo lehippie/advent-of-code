@@ -1,6 +1,7 @@
 """--- Day 25: Snowverload ---"""
 
 from collections import defaultdict
+from pathlib import Path
 from aoc.puzzle import Puzzle
 
 
@@ -11,11 +12,13 @@ EDGES = [set(["jxd", "bbz"]), set(["glz", "mxd"]), set(["clb", "brd"])]
 class Today(Puzzle):
     def parser(self):
         self.graph = defaultdict(list)
-        for line in self.input:
-            a, bs = line.split(": ")
-            for b in bs.split():
-                self.graph[a].append(b)
-                self.graph[b].append(a)
+        with open(Path(__file__).parent / "graph.txt", "w") as f:
+            for line in self.input:
+                a, bs = line.split(": ")
+                for b in bs.split():
+                    # f.write(f"    {a} -- {b};\n")  # Uncomment to create graphviz data
+                    self.graph[a].append(b)
+                    self.graph[b].append(a)
 
     def part_one(self):
         frontier = [next(key for key in self.graph)]
@@ -24,7 +27,7 @@ class Today(Puzzle):
             component = frontier.pop()
             for connected in self.graph[component]:
                 if set([component, connected]) in EDGES:
-                    continue  # TODO: replace with proper algorithm that detect these
+                    continue  # TODO: code an algorithm that detect these
                 if connected not in reached:
                     reached.add(connected)
                     frontier.append(connected)
