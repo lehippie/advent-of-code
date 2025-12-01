@@ -71,7 +71,7 @@ def get_timings(erase: bool = False) -> dict:
         for day, day_solutions in year_solutions.items():
             if day not in timings[year]:
                 timings[year][day] = [None for _ in day_solutions]
-            if not any(day_solutions):
+            if not any(d is not None for d in day_solutions):
                 continue
             if erase or any(
                 s and not t for s, t in zip(day_solutions, timings[year][day])
@@ -136,7 +136,7 @@ def update_readme(timings: dict) -> None:
     )
     footer = (
         f"\n\n_(last update: {date.today().isoformat()} - "
-        "computed on an AMD Ryzen 7 PRO 4750U)_\n"
+        "computed on an Intel i5 13600K)_\n"
     )
     years = sorted(timings)
     table = ["||" + "|".join(years) + "|"]
@@ -144,11 +144,14 @@ def update_readme(timings: dict) -> None:
     for day in range(1, 26):
         table.append(f"|{day}|")
         for year in years:
-            times = timings[year][f"{day}"]
-            if any(times):
-                table[-1] += " ".join(get_emoji(t) for t in times) + "|"
-            else:
-                table[-1] += ":x:|"
+            try:
+                times = timings[year][f"{day}"]
+                if any(t is not None for t in times):
+                    table[-1] += " ".join(get_emoji(t) for t in times) + "|"
+                else:
+                    table[-1] += ":x:|"
+            except KeyError:
+                pass
 
     readme = ROOT / "README.md"
     readme.write_text(header + "\n".join(table) + footer)
