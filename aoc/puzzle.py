@@ -96,4 +96,4 @@ class Puzzle:
                 )
                 return
             print(f"Part {k + 1} solved ({duration})")
-        print("Day solved \o/")
+        print(r"Day solved \o/")

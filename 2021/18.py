@@ -15,7 +15,7 @@ LAST_NUMBER = re.compile(r"(\d+)[^\d]*$")
 def explode(pair: re.Match):
     before = pair.string[: pair.start()]
     after = pair.string[pair.end() :]
-    x, y = [int(d) for d in re.findall("\d+", pair[0])]
+    x, y = [int(d) for d in re.findall(r"\d+", pair[0])]
     if (n := LAST_NUMBER.search(before)) is not None:
         before = before[: n.start(1)] + f"{int(n[1]) + x}" + before[n.end(1) :]
     if (n := FIRST_NUMBER.search(after)) is not None:

@@ -20,7 +20,7 @@ def run_ALU(program, variables):
 
 
 class Today(Puzzle):
-    """Today is reverse engineering day \o/
+    """Today is reverse engineering day!
 
     The input is divided in 14 blocks, each doing almost the same calculations.
     Shared instructions are:
