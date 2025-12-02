@@ -5,15 +5,17 @@
 Analysis of `solutions.json` and `timings.json` files to time newly
 solved puzzle parts and add them to `README.md`'s table.
 
-TODO : Add ability to recalculate and update a single day.
-
 Usage:
-    {name} [--erase]
+    {name} [(<year> <day>)] [--erase]
     {name} --help
 
+Arguments:
+    <year>, <day>       Date of the puzzle to create.
+                        Default: all puzzle without timing.
+
 Options:
-    -e, --erase         Recalculate previous timings
-    -h, --help          Show this help
+    -e, --erase         Recalculate previous timings.
+    -h, --help          Show this help.
 """
 
 import json
@@ -22,7 +24,7 @@ import sys
 from datetime import date
 from importlib import import_module
 from pathlib import Path
-from time import process_time
+from time import time
 
 from docopt import docopt
 
@@ -37,15 +39,15 @@ def puzzle_timing(year: int | str, day: int | str, solutions: list) -> list[floa
         solutions: Solutions for that day.
 
     Returns:
-        Timing of parts of the puzzle with a solution. Timing of parts
-        without solution is set to None.
+        Time to process parts of the puzzle. Without solution, parts' timing
+        is set to None.
     """
     puzzle = import_module(f"{year}.{day:>02}").Today()
     timing = []
     for part, solution in zip((puzzle.part_one, puzzle.part_two), solutions):
-        start = process_time()
+        start = time()
         answer = part()
-        part_duration = round(1000 * (process_time() - start), 3)
+        part_duration = round(1000 * (time() - start), 3)
         timing.append(part_duration if answer == solution else None)
     return timing
 
@@ -147,7 +149,7 @@ def update_readme(timings: dict) -> None:
             try:
                 times = timings[year][f"{day}"]
                 if any(t is not None for t in times):
-                    table[-1] += " ".join(get_emoji(t) for t in times) + "|"
+                    table[-1] += "".join(get_emoji(t) for t in times) + "|"
                 else:
                     table[-1] += ":x:|"
             except KeyError:

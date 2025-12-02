@@ -3,7 +3,7 @@
 import inspect
 import json
 from pathlib import Path
-from time import process_time
+from time import time
 
 from aoc import SOLUTIONS
 from aoc.inputs import load_input
@@ -74,9 +74,9 @@ class Puzzle:
         for k, (part, solution) in enumerate(
             zip((self.part_one, self.part_two), solutions)
         ):
-            start = process_time()
+            start = time()
             answer = part()
-            duration = process_time() - start
+            duration = time() - start
 
             if duration < 1:
                 duration = f"{round(1000 * duration, 3)} ms"
