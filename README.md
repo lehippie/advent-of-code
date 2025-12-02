@@ -7,7 +7,7 @@ Advent of Code solutions in python 3
 ||2015|2016|2017|2018|2019|2020|2021|2022|2023|2024|2025|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 |1|:zap::zap:|:x:|:x:|:x:|:zap::zap:|:zap::green_square:|:zap::zap:|:zap::zap:|:zap::green_square:|:zap::zap:|:zap::zap:|
-|2|:zap::zap:|:x:|:x:|:x:|:zap::green_square:|:zap::zap:|:zap::zap:|:zap::zap:|:zap::zap:|:zap::green_square:|:x:|
+|2|:zap::zap:|:x:|:x:|:x:|:zap::green_square:|:zap::zap:|:zap::zap:|:zap::zap:|:zap::zap:|:zap::green_square:|:green_square::green_square:|
 |3|:green_square::green_square:|:x:|:x:|:x:|:green_square::green_square:|:zap::zap:|:green_square::zap:|:zap::zap:|:green_square::green_square:|:zap::zap:|
 |4|:green_square::green_square:|:x:|:x:|:x:|:green_square::green_square:|:zap::zap:|:green_square::green_square:|:zap::zap:|:zap::zap:|:green_square::green_square:|
 |5|:zap::zap:|:x:|:x:|:x:|:zap::zap:|:zap::zap:|:green_square::green_square:|:zap::zap:|:zap::zap:|:zap::zap:|
@@ -28,7 +28,7 @@ Advent of Code solutions in python 3
 |20|:blue_square::blue_square:|:x:|:x:|:x:|:x:|:green_square::green_square:|:green_square::blue_square:|:green_square::blue_square:|:green_square::green_square:|:green_square::blue_square:|
 |21|:green_square::green_square:|:x:|:x:|:x:|:x:|:zap::zap:|:zap::green_square:|:green_square::green_square:|:green_square::x:|:zap::zap:|
 |22|:green_square::green_square:|:x:|:x:|:x:|:x:|:zap::blue_square:|:green_square::green_square:|:green_square::green_square:|:green_square::x:|:green_square::orange_square:|
-|23|:zap::zap:|:x:|:x:|:x:|:x:|:zap::blue_square:|:green_square::green_square:|:green_square::orange_square:|:blue_square::x:|:green_square::skull:|
+|23|:zap::zap:|:x:|:x:|:x:|:x:|:zap::blue_square:|:green_square::green_square:|:green_square::orange_square:|:blue_square::x:|:green_square::orange_square:|
 |24|:green_square::green_square:|:x:|:x:|:x:|:x:|:zap::green_square:|:skull::skull:|:x:|:green_square::x:|:zap::x:|
 |25|:green_square:|:x:|:x:|:x:|:x:|:green_square:|:green_square:|:zap:|:zap:|:x:|
 
