@@ -9,7 +9,7 @@ Advent of Code solutions in python 3
 |1|:zap::zap:|:x:|:x:|:x:|:zap::zap:|:zap::green_square:|:zap::zap:|:zap::zap:|:zap::green_square:|:zap::zap:|:zap::zap:|
 |2|:zap::zap:|:x:|:x:|:x:|:zap::green_square:|:zap::zap:|:zap::zap:|:zap::zap:|:zap::zap:|:zap::green_square:|:green_square::green_square:|
 |3|:green_square::green_square:|:x:|:x:|:x:|:green_square::green_square:|:zap::zap:|:green_square::zap:|:zap::zap:|:green_square::green_square:|:zap::zap:|:zap::zap:|
-|4|:green_square::green_square:|:x:|:x:|:x:|:green_square::green_square:|:zap::zap:|:green_square::green_square:|:zap::zap:|:zap::zap:|:green_square::green_square:|
+|4|:green_square::green_square:|:x:|:x:|:x:|:green_square::green_square:|:zap::zap:|:green_square::green_square:|:zap::zap:|:zap::zap:|:green_square::green_square:|:green_square::green_square:|
 |5|:zap::zap:|:x:|:x:|:x:|:zap::zap:|:zap::zap:|:green_square::green_square:|:zap::zap:|:zap::zap:|:zap::zap:|
 |6|:green_square::green_square:|:x:|:x:|:x:|:green_square::zap:|:zap::zap:|:zap::zap:|:zap::green_square:|:zap::zap:|:zap::blue_square:|
 |7|:zap::zap:|:x:|:x:|:x:|:green_square::green_square:|:green_square::zap:|:zap::zap:|:zap::zap:|:green_square::green_square:|:green_square::blue_square:|
@@ -32,4 +32,4 @@ Advent of Code solutions in python 3
 |24|:green_square::green_square:|:x:|:x:|:x:|:x:|:zap::green_square:|:skull::skull:|:x:|:green_square::x:|:zap::x:|
 |25|:green_square:|:x:|:x:|:x:|:x:|:green_square:|:green_square:|:zap:|:zap:|:x:|
 
-_(last update: 2025-12-03 - computed on an Intel i5 13600K)_
+_(last update: 2025-12-04 - computed on an Intel i5 13600K)_
