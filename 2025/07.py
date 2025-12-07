@@ -8,14 +8,15 @@ from aoc.puzzle import Puzzle
 class Today(Puzzle):
     def parser(self):
         self.beam = self.input[0].index("S")
-        self.splitters = []
-        for row in self.input[1:]:
-            if "^" in row:
-                self.splitters.append({m.start() for m in re.finditer(r"\^", row)})
+        self.splitters = [
+            {m.start() for m in re.finditer(r"\^", row)}
+            for row in self.input[1:]
+            if "^" in row
+        ]
 
     def part_one(self):
         splits = 0
-        beams = set([self.beam])
+        beams = {self.beam}
         for splitters in self.splitters:
             next_beams = set()
             for beam in beams:
