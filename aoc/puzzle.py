@@ -13,6 +13,9 @@ class Puzzle:
     """Puzzle class.
 
     This class is made to be inherited from to solve Advent of Code puzzles.
+    In order to fetch inputs automatically, child classes must be created in
+    files having the puzzle day number as names, themselves placed in
+    directories with years as names.
 
     Attributes defined:
         input: Store the puzzle input as a list of strings (one per line) or
@@ -25,14 +28,18 @@ class Puzzle:
             found solutions to prevent regressions.
     """
 
-    def __init__(self, test_input: str = None):
+    def __init__(self, test_input: str = ""):
         """Puzzle class constructor.
 
         Arguments:
             test_input: String to use in place of the real input.
         """
-        if test_input is None:
-            puzzle = Path(inspect.getmodule(self).__file__)
+        if test_input == "":
+            module = inspect.getmodule(self)
+            if module is not None and module.__file__ is not None:
+                puzzle = Path(module.__file__)
+            else:
+                raise ModuleNotFoundError("Can't find puzzle day file.")
             self.year, self.day = int(puzzle.parts[-2]), int(puzzle.stem)
             self.input = load_input(self.year, self.day)
         else:

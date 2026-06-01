@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-"""Create a new puzzle.
+"""Create a new puzzle solver.
 
 Usage:
-    {name} [(<year> <day>)]
-    {name} --help
+    new-day.py [(<year> <day>)]
+    new-day.py --help
 
 Arguments:
     <year>, <day>       Date of the puzzle to create.
@@ -16,14 +16,11 @@ Options:
 
 import re
 from datetime import date
-from pathlib import Path
 
 from docopt import docopt
 
 from aoc import ROOT, download_day
 
-
-TODAY = date.today()
 TEMPLATE = '''"""{title}"""
 
 from aoc.puzzle import Puzzle
@@ -51,7 +48,7 @@ if __name__ == "__main__":
 '''
 
 
-def check_date(puzzle_date: date) -> bool:
+def check_date(puzzle: date) -> bool:
     """Verify if a puzzle exists on given date.
 
     Arguments:
@@ -60,21 +57,15 @@ def check_date(puzzle_date: date) -> bool:
     Returns:
         True if a puzzle is available on given date, False otherwise.
     """
-    if puzzle_date.day > 25:
-        return False
-
-    if date(TODAY.year, 12, 1) <= TODAY <= date(TODAY.year, 12, 25):
-        last_puzzle = TODAY
-    elif TODAY.month == 12:
-        last_puzzle = date(TODAY.year, 12, 25)
-    else:
-        last_puzzle = date(TODAY.year - 1, 12, 25)
-
-    return date(2015, 12, 1) <= puzzle_date <= last_puzzle
+    if 2015 <= puzzle.year <= 2024 and puzzle.day <= 25:
+        return True
+    if puzzle.year == 2025 and puzzle.day <= 12:
+        return True
+    return False
 
 
 def create_puzzle_file(year: int, day: int) -> None:
-    """Create a basic file to solve <puzzle> day.
+    """Create a template file to solve <puzzle> day.
 
     Arguments:
         year, day: Date of the puzzle.
@@ -92,14 +83,12 @@ def create_puzzle_file(year: int, day: int) -> None:
 
 
 if __name__ == "__main__":
-    args = docopt(__doc__.format(name=Path(__file__).name))
+    args = docopt(__doc__)
 
     if args["<year>"]:
         puzzle = date(int(args["<year>"]), 12, int(args["<day>"]))
-    elif TODAY.month == 12 and TODAY.day < 26:
-        puzzle = TODAY
     else:
-        raise IOError("Today is not a puzzle day.")
+        puzzle = date.today()
 
     if check_date(puzzle):
         create_puzzle_file(puzzle.year, puzzle.day)

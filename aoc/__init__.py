@@ -2,7 +2,6 @@ from configparser import ConfigParser
 from pathlib import Path
 from urllib.request import Request, urlopen
 
-
 ROOT = Path(__file__).parents[1]
 CONFIG = ConfigParser()
 CONFIG.read(ROOT / "config.txt")
@@ -22,10 +21,10 @@ if not TIMINGS.exists():
 
 def download(url: str) -> str:
     """Download url's source code.
-    
+
     Arguments:
         url: Web page to download.
-    
+
     Returns:
         Source of the web page.
     """
@@ -36,10 +35,10 @@ def download(url: str) -> str:
 
 def download_day(year: int, day: int) -> str:
     """Download puzzle instructions.
-    
+
     Arguments:
         year, day: Date of the puzzle.
-    
+
     Returns:
         Source of the puzzle instructions web page.
     """
@@ -48,10 +47,10 @@ def download_day(year: int, day: int) -> str:
 
 def download_input(year: int, day: int) -> str:
     """Download personnal puzzle input.
-    
+
     Arguments:
         year, day: Date of the puzzle.
-    
+
     Returns:
         Source of the input web page.
     """
