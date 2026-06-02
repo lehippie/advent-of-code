@@ -3,7 +3,6 @@
 import re
 from aoc.puzzle import Puzzle
 
-
 DIGITS = {
     "one": "1",
     "two": "2",
@@ -35,7 +34,7 @@ class Today(Puzzle):
         calibration = 0
         possible_digits = set(DIGITS).union(DIGITS.values())
         for line in self.input:
-            first, last = None, None
+            first, last = "", ""
             for idx in range(len(line)):
                 for d in possible_digits:
                     if not first and line[idx:].startswith(d):

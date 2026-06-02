@@ -4,7 +4,6 @@ from collections import defaultdict
 from pathlib import Path
 from aoc.puzzle import Puzzle
 
-
 # Thanks graphviz!
 EDGES = [set(["jxd", "bbz"]), set(["glz", "mxd"]), set(["clb", "brd"])]
 
@@ -12,13 +11,14 @@ EDGES = [set(["jxd", "bbz"]), set(["glz", "mxd"]), set(["clb", "brd"])]
 class Today(Puzzle):
     def parser(self):
         self.graph = defaultdict(list)
-        with open(Path(__file__).parent / "graph.txt", "w") as f:
-            for line in self.input:
-                a, bs = line.split(": ")
-                for b in bs.split():
-                    # f.write(f"    {a} -- {b};\n")  # Uncomment to create graphviz data
-                    self.graph[a].append(b)
-                    self.graph[b].append(a)
+        for line in self.input:
+            a, bs = line.split(": ")
+            for b in bs.split():
+                # Uncomment the 2 following lines to create graphviz data
+                # with open(Path(__file__).parent / "graph.txt", "a") as f:
+                #     f.write(f"    {a} -- {b};\n")
+                self.graph[a].append(b)
+                self.graph[b].append(a)
 
     def part_one(self):
         frontier = [next(key for key in self.graph)]

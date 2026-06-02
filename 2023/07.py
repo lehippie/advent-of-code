@@ -3,7 +3,6 @@
 from collections import Counter
 from aoc.puzzle import Puzzle
 
-
 LABELS = {"A": 14, "K": 13, "Q": 12, "J": 11, "T": 10}
 LABELS.update({str(n): n for n in range(2, 10)})
 

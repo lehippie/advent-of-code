@@ -4,7 +4,6 @@ import re
 from string import ascii_lowercase
 from aoc.puzzle import Puzzle
 
-
 STRAIGHTS = [ascii_lowercase[k : k + 3] for k in range(len(ascii_lowercase) - 2)]
 FORBIDDEN = "iol"
 DOUBLES = re.compile(r"([a-z])\1")
@@ -47,7 +46,7 @@ def is_valid(password):
 
 class Today(Puzzle):
     def part_one(self):
-        self.pwd = increment(self.input)
+        self.pwd = increment(self.input[0])
         while not is_valid(self.pwd):
             self.pwd = increment(self.pwd)
         return self.pwd

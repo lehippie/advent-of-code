@@ -8,7 +8,7 @@ class Today(Puzzle):
     def part_one(self, start=1, leading_zeroes=5):
         self.n = start
         head = "0" * leading_zeroes
-        while not md5(f"{self.input}{self.n}".encode()).hexdigest().startswith(head):
+        while not md5(f"{self.input[0]}{self.n}".encode()).hexdigest().startswith(head):
             self.n += 1
         return self.n
 

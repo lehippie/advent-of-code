@@ -86,7 +86,7 @@ class Intcode:
 
 class Today(Puzzle):
     def parser(self):
-        self.program = list(map(int, self.input.split(",")))
+        self.program = list(map(int, self.input[0].split(",")))
 
     def part_one(self):
         max_signal = 0

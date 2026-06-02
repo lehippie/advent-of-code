@@ -80,7 +80,7 @@ class Packet:
 
 class Today(Puzzle):
     def parser(self):
-        self.bits = "".join(f"{int(f'0x{x}', 16):04b}" for x in self.input)
+        self.bits = "".join(f"{int(f'0x{x}', 16):04b}" for x in self.input[0])
 
     def part_one(self):
         self.transmission = Packet(self.bits)

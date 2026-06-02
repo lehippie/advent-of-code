@@ -23,7 +23,7 @@ def really_valid(password: str):
 
 class Today(Puzzle):
     def parser(self):
-        self.m, self.M = map(int, self.input.split("-"))
+        self.m, self.M = map(int, self.input[0].split("-"))
 
     def part_one(self, method=valid):
         return sum(method(str(pw)) for pw in range(self.m, self.M + 1))

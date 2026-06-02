@@ -5,8 +5,7 @@ import json
 from pathlib import Path
 from time import time
 
-from aoc import SOLUTIONS
-from aoc.inputs import load_input
+from aoc import SOLUTIONS, load_input
 
 
 class Puzzle:
@@ -18,8 +17,7 @@ class Puzzle:
     directories with years as names.
 
     Attributes defined:
-        input: Store the puzzle input as a list of strings (one per line) or
-            as a string (one line inputs).
+        input: Store the puzzle input lines as a list of strings.
 
     Methods:
         parser: Called at init to manipulate the puzzle input.
@@ -44,8 +42,6 @@ class Puzzle:
             self.input = load_input(self.year, self.day)
         else:
             self.input = test_input.splitlines()
-            if len(self.input) == 1:
-                self.input = self.input[0]
         self.parser()
 
     def parser(self):

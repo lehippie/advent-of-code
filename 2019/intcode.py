@@ -1,5 +1,6 @@
 """Intcode computer class."""
 
+
 class Intcode:
     def __init__(self, program):
         self.memory = {k: v for k, v in enumerate(program)}

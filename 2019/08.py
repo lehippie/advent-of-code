@@ -8,7 +8,9 @@ from aoc.puzzle import Puzzle
 class Today(Puzzle):
     def part_one(self):
         n = 25 * 6
-        self.layers = [self.input[k : k + n] for k in range(0, len(self.input), n)]
+        self.layers = [
+            self.input[0][k : k + n] for k in range(0, len(self.input[0]), n)
+        ]
         zeros = [Counter(l)["0"] for l in self.layers]
         counts = Counter(self.layers[zeros.index(min(zeros))])
         return counts["1"] * counts["2"]

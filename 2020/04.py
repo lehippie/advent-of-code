@@ -3,7 +3,6 @@
 import re
 from aoc.puzzle import Puzzle
 
-
 RULES = {
     "byr": (1920, 2002),
     "iyr": (2010, 2020),

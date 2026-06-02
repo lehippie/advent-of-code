@@ -7,7 +7,7 @@ class Display:
     def __init__(self, segments, output):
         self.segments = sorted(segments, key=len)
         self.output = output
-        self.digits = [None] * 10
+        self.digits = [0] * 10
 
     def repair(self):
         """Associate sets of segments with their digit. 1, 7, 4 and 8

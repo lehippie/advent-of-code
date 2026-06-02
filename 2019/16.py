@@ -18,7 +18,7 @@ def gen(k, limit, plus=True):
 
 class Today(Puzzle):
     def parser(self):
-        self.signal = list(map(int, self.input))
+        self.signal = list(map(int, self.input[0]))
 
     def part_one(self):
         """Repeating digits from the 0,1,0,-1 pattern while skipping the first 0
@@ -52,7 +52,7 @@ class Today(Puzzle):
         meaning that a new value is simply defined by the sum of itself and the
         following digits as there won't be any zeros or minus-ones.
         """
-        offset = int(self.input[:7])
+        offset = int(self.input[0][:7])
         signal = (self.signal * 10000)[offset:]
         for _ in range(100):
             csum = [signal[-1]]

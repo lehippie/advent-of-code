@@ -3,12 +3,11 @@
 import re
 from aoc.puzzle import Puzzle
 
-
 PARENTHESE = re.compile(r"\(\d+(?: [\+\*] \d+)+\)")
 ADDITION = re.compile(r"\d+(?: \+ \d+)+")
 
 
-def left2right(expression: str):
+def left2right(expression):
     """Calculation with left-to-right precedence."""
     expression = expression.split(" ")
     result = int(expression[0])

@@ -6,7 +6,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.target = int(self.input)
+        self.target = int(self.input[0])
 
     def part_one(self):
         """It is sure that the house which number is our target

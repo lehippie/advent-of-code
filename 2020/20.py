@@ -5,7 +5,6 @@ from itertools import combinations, product
 from math import prod
 from aoc.puzzle import Puzzle
 
-
 MONSTER = [
     "                  # ",
     "#    ##    ##    ###",
@@ -148,10 +147,11 @@ def find_monsters(sea, monster=MONSTER):
 
 class Today(Puzzle):
     def parser(self):
-        self.tiles = "\n".join(self.input).strip().split("\n\n")
-        for k, tile in enumerate(self.tiles):
+        input_tiles = "\n".join(self.input).strip().split("\n\n")
+        self.tiles = []
+        for tile in input_tiles:
             lines = tile.split("\n")
-            self.tiles[k] = Tile(int(lines[0][5:-1]), lines[1:])
+            self.tiles.append(Tile(int(lines[0][5:-1]), lines[1:]))
 
     def part_one(self):
         self.image = Image(self.tiles)

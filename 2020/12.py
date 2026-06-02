@@ -2,7 +2,6 @@
 
 from aoc.puzzle import Puzzle
 
-
 TURN_RIGHT = {"N": "E", "E": "S", "S": "W", "W": "N"}
 TURN_LEFT = {v: k for k, v in TURN_RIGHT.items()}
 

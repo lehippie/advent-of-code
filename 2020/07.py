@@ -3,7 +3,6 @@
 import re
 from aoc.puzzle import Puzzle
 
-
 MY_BAG = "shiny gold"
 
 

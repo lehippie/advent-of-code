@@ -5,7 +5,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.starting_numbers = list(map(int, self.input.split(",")))
+        self.starting_numbers = list(map(int, self.input[0].split(",")))
 
     def part_one(self, limit=2020):
         """Spoken numbers are the indexes of a list storing the most

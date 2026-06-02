@@ -5,7 +5,6 @@ from collections import defaultdict
 from itertools import product
 from aoc.puzzle import Puzzle
 
-
 FACING = {1: 0, 1j: 1, -1: 2, -1j: 3}
 TURN = {
     "R": {1: 1j, 1j: -1, -1: -1j, -1j: 1},

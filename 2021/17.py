@@ -7,7 +7,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.target = list(map(int, re.findall(r"-?\d+", self.input)))
+        self.target = list(map(int, re.findall(r"-?\d+", self.input[0])))
 
     def part_one(self):
         """No need to worry about x because the maximum height is

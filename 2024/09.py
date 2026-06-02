@@ -5,7 +5,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.disk = list(map(int, self.input))
+        self.disk = list(map(int, self.input[0]))
 
     def part_one(self):
         """Files are stored in a list with the ids as indexes and the

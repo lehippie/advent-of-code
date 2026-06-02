@@ -5,7 +5,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        row, col = self.input.split("row ")[1].split(", column ")
+        row, col = self.input[0].split("row ")[1].split(", column ")
         self.code_position = int(row), int(col[:-1])
 
     def part_one(self, code=20151125):

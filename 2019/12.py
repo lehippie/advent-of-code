@@ -51,12 +51,12 @@ class Today(Puzzle):
         """
         sim = MotionSimulator(self.moons)
         initial_states = [sum((m[p::3] for m in self.moons), []) for p in range(3)]
-        cycles = [None for _ in range(3)]
-        while any(c is None for c in cycles):
+        cycles = [0 for _ in range(3)]
+        while not all(c for c in cycles):
             sim.run_step()
             states = (sum((m[p::3] for m in sim.moons), []) for p in range(3))
             for c, (state, init) in enumerate(zip(states, initial_states)):
-                if cycles[c] is None and state == init:
+                if not cycles[c] and state == init:
                     cycles[c] = sim.step
         return lcm(*cycles)
 

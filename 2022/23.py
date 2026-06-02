@@ -5,7 +5,6 @@ from itertools import product
 from math import prod
 from aoc.puzzle import Puzzle
 
-
 NORTH = [-1j, -1 - 1j, 1 - 1j]
 SOUTH = [1j, -1 + 1j, 1 + 1j]
 WEST = [-1, -1 - 1j, -1 + 1j]

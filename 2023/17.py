@@ -3,7 +3,6 @@
 from heapq import heappush, heappop
 from aoc.puzzle import Puzzle
 
-
 DIRECTIONS = {1, -1, 1j, -1j}
 
 

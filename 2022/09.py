@@ -2,7 +2,6 @@
 
 from aoc.puzzle import Puzzle
 
-
 MOVE = {"U": 1j, "D": -1j, "L": -1, "R": 1}
 SIGN = lambda n: (n > 0) - (n < 0)
 

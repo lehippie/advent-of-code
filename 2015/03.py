@@ -27,7 +27,7 @@ class Today(Puzzle):
     def part_one(self):
         santa = Santa()
         houses = {santa.position}
-        for direction in self.input:
+        for direction in self.input[0]:
             houses.add(santa.move(direction))
         return len(houses)
 
@@ -35,7 +35,7 @@ class Today(Puzzle):
         santa = Santa()
         robot = Santa()
         houses = {santa.position}
-        for i, direction in enumerate(self.input):
+        for i, direction in enumerate(self.input[0]):
             if i % 2:
                 houses.add(santa.move(direction))
             else:

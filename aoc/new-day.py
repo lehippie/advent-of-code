@@ -19,7 +19,7 @@ from datetime import date
 
 from docopt import docopt
 
-from aoc import ROOT, download_day
+from aoc import ROOT, download_day, check_date
 
 TEMPLATE = '''"""{title}"""
 
@@ -48,22 +48,6 @@ if __name__ == "__main__":
 '''
 
 
-def check_date(puzzle: date) -> bool:
-    """Verify if a puzzle exists on given date.
-
-    Arguments:
-        puzzle: `datetime.date` of the puzzle.
-
-    Returns:
-        True if a puzzle is available on given date, False otherwise.
-    """
-    if 2015 <= puzzle.year <= 2024 and puzzle.day <= 25:
-        return True
-    if puzzle.year == 2025 and puzzle.day <= 12:
-        return True
-    return False
-
-
 def create_puzzle_file(year: int, day: int) -> None:
     """Create a template file to solve <puzzle> day.
 
@@ -86,11 +70,14 @@ if __name__ == "__main__":
     args = docopt(__doc__)
 
     if args["<year>"]:
-        puzzle = date(int(args["<year>"]), 12, int(args["<day>"]))
+        year = int(args["<year>"])
+        day = int(args["<day>"])
     else:
-        puzzle = date.today()
+        today = date.today()
+        year = today.year
+        day = today.day
 
-    if check_date(puzzle):
-        create_puzzle_file(puzzle.year, puzzle.day)
+    if check_date(year, day):
+        create_puzzle_file(year, day)
     else:
-        print(f"There is no puzzle on day {puzzle.day} of {puzzle.year}")
+        print(f"There is no puzzle on day {day} of {year}")

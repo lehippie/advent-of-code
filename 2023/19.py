@@ -4,7 +4,6 @@ from math import prod
 from collections import defaultdict
 from aoc.puzzle import Puzzle
 
-
 COMP = {"<": lambda i, j: i < j, ">": lambda i, j: i > j}
 
 

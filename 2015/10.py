@@ -10,7 +10,7 @@ def look_and_say(look):
 
 class Today(Puzzle):
     def part_one(self, steps=40):
-        last_said = self.input
+        last_said = self.input[0]
         for _ in range(steps):
             last_said = look_and_say(last_said)
         return len(last_said)

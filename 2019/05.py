@@ -78,7 +78,7 @@ class Intcode:
 
 class Today(Puzzle):
     def parser(self):
-        self.program = list(map(int, self.input.split(",")))
+        self.program = list(map(int, self.input[0].split(",")))
 
     def part_one(self, input_id=1):
         intcode = Intcode(self.program)

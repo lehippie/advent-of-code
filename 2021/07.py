@@ -6,7 +6,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.crabs = list(map(int, self.input.split(",")))
+        self.crabs = list(map(int, self.input[0].split(",")))
 
     def part_one(self):
         """As fuel consumption is equal to the distance, the optimal

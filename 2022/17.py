@@ -16,7 +16,7 @@ WIDTH = {1, 2, 3, 4, 5, 6, 7}
 
 class Today(Puzzle):
     def parser(self):
-        self.jets = [JET[c] for c in self.input]
+        self.jets = [JET[c] for c in self.input[0]]
 
     def part_one(self, nrocks=2022):
         rocks = cycle(ROCKS)

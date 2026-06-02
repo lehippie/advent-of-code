@@ -9,7 +9,7 @@ SILLY = re.compile(r"^(\d+)\1+$")
 
 class Today(Puzzle):
     def parser(self):
-        self.ranges = [list(map(int, r.split("-"))) for r in self.input.split(",")]
+        self.ranges = [list(map(int, r.split("-"))) for r in self.input[0].split(",")]
 
     def part_one(self, pattern=INVALID):
         return sum(

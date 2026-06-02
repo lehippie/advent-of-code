@@ -5,7 +5,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.circle = list(map(int, self.input))
+        self.circle = list(map(int, self.input[0]))
 
     def part_one(self, moves=100):
         """Naive approach constructing a new list after each move.
@@ -27,7 +27,7 @@ class Today(Puzzle):
         the indexes of a list where the value is the cup that follows
         clockwise."""
         init = self.circle + list(range(max(self.circle) + 1, ncups + 1))
-        cups = [None for _ in range(ncups + 1)]
+        cups = [0 for _ in range(ncups + 1)]
         for c, n in zip(init, init[1:] + [init[0]]):
             cups[c] = n
 

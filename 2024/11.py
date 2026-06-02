@@ -6,7 +6,7 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def parser(self):
-        self.stones = list(map(int, self.input.split()))
+        self.stones = list(map(int, self.input[0].split()))
 
     def part_one(self, blinks=25):
         stones = defaultdict(int)

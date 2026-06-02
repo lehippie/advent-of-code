@@ -10,6 +10,8 @@ REQUEST_HEADER = {
     "User-Agent": CONFIG["www"]["user-agent"],
 }
 
+INPUTS_DIR = ROOT / "inputs"
+
 SOLUTIONS = ROOT / "solutions.json"
 if not SOLUTIONS.exists():
     SOLUTIONS.write_text("{}")
@@ -17,6 +19,18 @@ if not SOLUTIONS.exists():
 TIMINGS = ROOT / "timings.json"
 if not TIMINGS.exists():
     TIMINGS.write_text("{}")
+
+
+def check_date(year: int, day: int) -> bool:
+    """Verify if a puzzle exists on given date.
+
+    Arguments:
+        year, day: Date of the puzzle.
+
+    Returns:
+        True if a puzzle is available on given date, False otherwise.
+    """
+    return (2015 <= year < 2025 and day <= 25) or (year == 2025 and day <= 12)
 
 
 def download(url: str) -> str:
@@ -42,7 +56,10 @@ def download_day(year: int, day: int) -> str:
     Returns:
         Source of the puzzle instructions web page.
     """
-    return download(f"https://adventofcode.com/{year}/day/{day}")
+    if check_date(year, day):
+        return download(f"https://adventofcode.com/{year}/day/{day}")
+    else:
+        raise IOError(f"There is no puzzle on day {day} of {year}")
 
 
 def download_input(year: int, day: int) -> str:
@@ -54,4 +71,29 @@ def download_input(year: int, day: int) -> str:
     Returns:
         Source of the input web page.
     """
-    return download(f"https://adventofcode.com/{year}/day/{day}/input")
+    if check_date(year, day):
+        return download(f"https://adventofcode.com/{year}/day/{day}/input")
+    else:
+        raise IOError(f"There is no puzzle on day {day} of {year}")
+
+
+def load_input(year: int, day: int) -> list[str]:
+    """Load input from dedicated folder. If not found, download and save it.
+
+    Arguments:
+        year, day: Date of the puzzle.
+
+    Returns:
+        List of the lines of the puzzle input.
+    """
+    input_path = INPUTS_DIR / f"{year}-{day:>02}.txt"
+
+    if not input_path.exists():
+        puzzle_input = download_input(year, day)
+        input_path.parent.mkdir(parents=True, exist_ok=True)
+        input_path.write_text(puzzle_input)
+        print(f"Input saved in {input_path}")
+
+    with open(input_path) as f:
+        content = [line.rstrip("\n\r") for line in f]
+    return content

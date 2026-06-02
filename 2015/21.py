@@ -3,7 +3,6 @@
 from itertools import chain, combinations
 from aoc.puzzle import Puzzle
 
-
 SHOP = {
     "Weapons": {  # Cost, Damage
         "Dagger": (8, 4),

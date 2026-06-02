@@ -13,7 +13,7 @@ def hashing(string):
 
 class Today(Puzzle):
     def parser(self):
-        self.sequence = self.input.split(",")
+        self.sequence = self.input[0].split(",")
 
     def part_one(self):
         return sum(hashing(step) for step in self.sequence)

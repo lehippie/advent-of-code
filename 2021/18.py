@@ -5,7 +5,6 @@ from collections import Counter
 from itertools import permutations
 from aoc.puzzle import Puzzle
 
-
 PAIR = re.compile(r"\[\d+,\d+\]")
 NUMBER_OVER_TEN = re.compile(r"\d\d+")
 FIRST_NUMBER = re.compile(r"\d+")

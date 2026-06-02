@@ -18,10 +18,10 @@ def almost_sum(data, discard="red"):
 
 class Today(Puzzle):
     def part_one(self):
-        return sum(map(int, re.findall(r"-?\d+", self.input)))
+        return sum(map(int, re.findall(r"-?\d+", self.input[0])))
 
     def part_two(self):
-        return almost_sum(json.loads(self.input))
+        return almost_sum(json.loads(self.input[0]))
 
 
 if __name__ == "__main__":

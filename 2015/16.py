@@ -3,7 +3,6 @@
 import re
 from aoc.puzzle import Puzzle
 
-
 THE_SUE = {
     "children": 3,
     "cats": 7,

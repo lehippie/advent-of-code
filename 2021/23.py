@@ -3,7 +3,6 @@
 from heapq import heappop, heappush
 from aoc.puzzle import Puzzle
 
-
 AMPHIPODS = "ABCD"
 ENERGY = (1, 10, 100, 1000)
 ROOMS_POSITIONS = (2, 4, 6, 8)

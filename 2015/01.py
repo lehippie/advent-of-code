@@ -6,12 +6,12 @@ from aoc.puzzle import Puzzle
 
 class Today(Puzzle):
     def part_one(self):
-        parentheses = Counter(self.input)
+        parentheses = Counter(self.input[0])
         return parentheses["("] - parentheses[")"]
 
     def part_two(self):
         floor = 0
-        for i, p in enumerate(self.input):
+        for i, p in enumerate(self.input[0]):
             floor = (floor + 1) if p == "(" else (floor - 1)
             if floor == -1:
                 break

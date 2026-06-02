@@ -5,7 +5,6 @@ from copy import deepcopy
 from math import inf
 from aoc.puzzle import Puzzle
 
-
 SPELLS = {  # Name: Cost
     "Magic Missile": 53,
     "Drain": 73,
@@ -40,19 +39,19 @@ class Fight:
         """Perform hero and boss turns.
 
         During his turn, the hero will cast <spell>.
-        If the fight ended, return result from the hero perspective.
+        Return True if the fight is won, False if lost and None otherwise.
         """
         if self.hard_mode:
             self.hero.hp -= 1
             if self.hero.hp <= 0:
-                return "lost"
+                return False
         for action in (self.apply_effects, self.hero_action, self.apply_effects):
             action(spell)
             if self.boss.hp <= 0:
-                return "won"
+                return True
         self.hero.hp -= max(1, self.boss.damage - self.hero.armor)
         if self.hero.hp <= 0:
-            return "lost"
+            return False
 
     def apply_effects(self, *args):
         if self.effects["Shield"]:
@@ -95,25 +94,24 @@ class Fight:
 
 
 def least_mana_winner(initial_fight: Fight):
-    """BFS while keeping trck of seen states to limit exploration."""
+    """BFS while keeping track of seen states to limit exploration."""
     fights = deque([initial_fight])
-    states = set(initial_fight.state)
+    states = set([initial_fight.state])
     best = deepcopy(initial_fight)
     best.cost = inf
     while fights:
         current_fight = fights.popleft()
-        if current_fight.cost >= best.cost:
+        if best.cost != 0 and current_fight.cost >= best.cost:
             continue
         for spell in current_fight.available_spells():
             fight = deepcopy(current_fight)
-            result = fight.combat_step(spell)
-            state = fight.state
-            if result == "won" and fight.cost < best.cost:
+            won = fight.combat_step(spell)
+            if won and fight.cost < best.cost:
                 best = fight
-            elif result is None and state not in states and fight.cost < best.cost:
-                states.add(state)
+            elif won is None and fight.state not in states:
+                states.add(fight.state)
                 fights.append(fight)
-    # print(best.cost, " > ".join(best.spells))
+    # print(f"{best.cost}: {' > '.join(best.spells)}")
     return best.cost
 
 

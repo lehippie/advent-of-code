@@ -3,7 +3,6 @@
 import re
 from aoc.puzzle import Puzzle
 
-
 VOWELS = re.compile(r"[aeiou]")
 DOUBLES = re.compile(r"(.)\1")
 DOUBLE_PAIRS = re.compile(r"(..).*\1")

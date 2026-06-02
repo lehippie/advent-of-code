@@ -3,7 +3,6 @@
 import re
 from aoc.puzzle import Puzzle
 
-
 LEGAL_PAIRS = r"\(\)|\[\]|{}|<>"
 CLOSERS = {"(": ")", "[": "]", "{": "}", "<": ">"}
 SYNTAX_POINTS = {")": 3, "]": 57, "}": 1197, ">": 25137}

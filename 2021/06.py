@@ -9,7 +9,7 @@ class Today(Puzzle):
         matters. We use a list where the index is the timer and
         the value is the count of fishes.
         """
-        timers = [self.input.count(str(k)) for k in range(9)]
+        timers = [self.input[0].count(str(k)) for k in range(9)]
         for _ in range(days):
             timers = timers[1:] + timers[:1]
             timers[6] += timers[-1]
