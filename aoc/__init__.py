@@ -11,14 +11,18 @@ REQUEST_HEADER = {
 }
 
 INPUTS_DIR = ROOT / "inputs"
-
 SOLUTIONS = ROOT / "solutions.json"
 if not SOLUTIONS.exists():
     SOLUTIONS.write_text("{}")
 
-TIMINGS = ROOT / "timings.json"
-if not TIMINGS.exists():
-    TIMINGS.write_text("{}")
+
+def puzzle_dates() -> set[tuple[int, int]]:
+    """Return a set of valid (year, day) puzzles."""
+    dates = set()
+    for year in range(2015, 2025):
+        dates.update([(year, day) for day in range(1, 26)])
+    dates.update([(2025, day) for day in range(1, 13)])
+    return dates
 
 
 def check_date(year: int, day: int) -> bool:
@@ -30,7 +34,7 @@ def check_date(year: int, day: int) -> bool:
     Returns:
         True if a puzzle is available on given date, False otherwise.
     """
-    return (2015 <= year < 2025 and day <= 25) or (year == 2025 and day <= 12)
+    return (year, day) in puzzle_dates()
 
 
 def download(url: str) -> str:

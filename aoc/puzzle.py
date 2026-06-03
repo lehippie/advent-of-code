@@ -26,7 +26,7 @@ class Puzzle:
             found solutions to prevent regressions.
     """
 
-    def __init__(self, test_input: str = ""):
+    def __init__(self, test_input: str = "") -> None:
         """Puzzle class constructor.
 
         Arguments:
@@ -44,13 +44,19 @@ class Puzzle:
             self.input = test_input.splitlines()
         self.parser()
 
-    def parser(self):
+    def parser(self) -> None:
         pass
 
-    def part_one(self):
+    def part_one(self) -> int | str:
+        """Placeholder for solving part one. Child method should
+        return an int or a string to be compatible with json.
+        """
         return NotImplemented
 
-    def part_two(self):
+    def part_two(self) -> int | str:
+        """Placeholder for solving part two. Child method should
+        return an int or a string to be compatible with json.
+        """
         return NotImplemented
 
     def solve(self) -> None:
@@ -64,13 +70,13 @@ class Puzzle:
             "<completed_day>": [<part1_solution>, <part2_solution>],
             "<partially_completed_day>": [<part1_solution>, null],
             ...
-            "one_part_day": [part_solution]
+            "<one_part_day>": [<part_solution>]
           }
         }
         """
         with open(SOLUTIONS) as f:
             try:
-                solutions = json.load(f)[f"{self.year}"][f"{self.day}"]
+                solutions = json.load(f)[str(self.year)][str(self.day)]
             except KeyError:
                 solutions = [None, None]
 

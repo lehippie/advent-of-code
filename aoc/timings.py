@@ -1,21 +1,11 @@
 #!/usr/bin/env python
 
-"""Compute the time to solve puzzles.
+"""Compute puzzle solving durations of each puzzle part which have a
+solution but no known timing, and update README.md's table.
 
-Analysis of `solutions.json` and `timings.json` files to time newly
-solved puzzle parts and add them to `README.md`'s table.
-
-Usage:
-    {name} [(<year> <day>)] [--erase]
-    {name} --help
-
-Arguments:
-    <year>, <day>       Date of the puzzle to create.
-                        Default: all puzzle without timing.
-
-Options:
-    -e, --erase         Recalculate previous timings.
-    -h, --help          Show this help.
+To update old puzzle timings, delete the corresponding lines in
+timings.json before running.
+To recalculate everything, delete timings.json and run again.
 """
 
 import json
@@ -23,15 +13,16 @@ import re
 import sys
 from datetime import date
 from importlib import import_module
-from pathlib import Path
 from time import time
 
-from docopt import docopt
+from aoc import ROOT, SOLUTIONS, puzzle_dates
 
-from aoc import ROOT, SOLUTIONS, TIMINGS
+TIMINGS = ROOT / "timings.json"
+if not TIMINGS.exists():
+    TIMINGS.write_text("{}")
 
 
-def puzzle_timing(year: int | str, day: int | str, solutions: list) -> list[float]:
+def puzzle_timing(year: str, day: str, solutions: list) -> list[float | None]:
     """Calculate the timing of a puzzle.
 
     Arguments:
@@ -39,8 +30,8 @@ def puzzle_timing(year: int | str, day: int | str, solutions: list) -> list[floa
         solutions: Solutions for that day.
 
     Returns:
-        Time to process parts of the puzzle. Without solution, parts' timing
-        is set to None.
+        Time to process parts of the puzzle in milliseconds.
+        Without solution, part timing is set to None.
     """
     puzzle = import_module(f"{year}.{day:>02}").Today()
     timing = []
@@ -52,11 +43,8 @@ def puzzle_timing(year: int | str, day: int | str, solutions: list) -> list[floa
     return timing
 
 
-def get_timings(erase: bool = False) -> dict:
+def calculate_timings() -> dict[str, dict[str, list[float | None]]]:
     """Calculate the timings of all solved puzzle.
-
-    Arguments:
-        erase: If True, previous known timings are recalculated.
 
     Returns:
         Dict of timings with same structure as `solutions.json`.
@@ -69,22 +57,19 @@ def get_timings(erase: bool = False) -> dict:
     for year, year_solutions in solutions.items():
         if year not in timings:
             timings[year] = {}
-
         for day, day_solutions in year_solutions.items():
+            if all(d is None for d in day_solutions):
+                continue
             if day not in timings[year]:
                 timings[year][day] = [None for _ in day_solutions]
-            if not any(d is not None for d in day_solutions):
-                continue
-            if erase or any(
-                s and not t for s, t in zip(day_solutions, timings[year][day])
-            ):
+            if any(s and not t for s, t in zip(day_solutions, timings[year][day])):
                 timings[year][day] = puzzle_timing(year, day, day_solutions)
                 print(f"{year}-{day}: {timings[year][day]} ms")
 
     return timings
 
 
-def write_timing_file(timings: dict):
+def write_timing_file(timings: dict[str, dict[str, list[float | None]]]):
     """Write the timings in a json file.
 
     Arguments:
@@ -92,7 +77,9 @@ def write_timing_file(timings: dict):
     """
     timings = {y: {f"{k:>02}": v for k, v in d.items()} for y, d in timings.items()}
     s = json.dumps(timings, indent=2, sort_keys=True)
+    # Remove leading zeros for one-digit days (needed before for sorting)
     s = re.sub(r'"0', '"', s)
+    # Remove indents inside days
     s = re.sub(r"\[\n\s{6}", "[", s)
     s = re.sub(r",\n\s{6}", ", ", s)
     s = re.sub(r"\n\s{4}\]", "]", s)
@@ -100,26 +87,26 @@ def write_timing_file(timings: dict):
         f.write(s)
 
 
-def get_emoji(timing: float) -> str:
+def get_emoji(timing: float | None) -> str:
     """Define emojis for timings representation in `README.md`.
 
     Arguments:
-        timing: time to solve a puzzle part.
+        timing: puzzle solving duration in milliseconds.
 
     Returns:
-        Emoji corresponding to given solving time interval.
+        Emoji corresponding to input timing.
     """
     if timing is None:
         return ":x:"
-    if timing < 1:
+    if timing < 5:
         return ":zap:"
     if timing < 1000:
         return ":green_square:"
     if timing < 5000:
         return ":blue_square:"
-    if timing < 60000:
+    if timing < 30000:
         return ":orange_square:"
-    if timing < 300000:
+    if timing < 60000:
         return ":red_square:"
     return ":skull:"
 
@@ -132,37 +119,40 @@ def update_readme(timings: dict) -> None:
     """
     header = (
         "# advent-of-code\n\nAdvent of Code solutions in python 3\n\n"
-        ":zap: < 1 ms&emsp;:green_square: < 1 s&emsp;:blue_square: < 5 s&emsp;"
-        ":orange_square: < 1 min&emsp;:red_square: < 5 min&emsp;:skull: > 5 min&emsp;"
-        ":x: unsolved\n\n"
+        ":zap: < 5 ms < :green_square: < 1 s < :blue_square: < 5 s < "
+        ":orange_square: < 30 s < :red_square: < 1 min < :skull: &emsp;"
+        ":x: Unsolved\n\n"
     )
     footer = (
         f"\n\n_(last update: {date.today().isoformat()} - "
         "computed on an Intel i5 13600K)_\n"
     )
-    years = sorted(timings)
-    table = ["||" + "|".join(years) + "|"]
+    dates = puzzle_dates()
+    years = sorted(set(y for y, _ in dates))
+    table = ["||" + "|".join(map(str, years)) + "|"]
     table.append("|:---:|" + "".join(":---:|" for _ in years))
-    for day in range(1, 26):
+    for day in range(1, max(d for _, d in dates) + 1):
         table.append(f"|{day}|")
         for year in years:
+            if (year, day) not in dates:
+                table[-1] += "|"
+                continue
             try:
-                times = timings[year][f"{day}"]
+                times = timings[f"{year}"][f"{day}"]
                 if any(t is not None for t in times):
                     table[-1] += "".join(get_emoji(t) for t in times) + "|"
                 else:
                     table[-1] += ":x:|"
             except KeyError:
-                pass
+                table[-1] += ":x:|"
 
     readme = ROOT / "README.md"
     readme.write_text(header + "\n".join(table) + footer)
 
 
 if __name__ == "__main__":
-    args = docopt(__doc__.format(name=Path(__file__).name))
     sys.path.append(".")  # Allow puzzle imports
-    sys.path.append("./2019")  # Allow local import of intcode computer
-    timings = get_timings(args["--erase"])
+    sys.path.append("./2019")  # Allow 2019 puzzles to import their Intcode computer
+    timings = calculate_timings()
     write_timing_file(timings)
     update_readme(timings)

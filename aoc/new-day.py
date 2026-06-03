@@ -19,7 +19,7 @@ from datetime import date
 
 from docopt import docopt
 
-from aoc import ROOT, download_day, check_date
+from aoc import ROOT, check_date, download_day
 
 TEMPLATE = '''"""{title}"""
 
@@ -58,8 +58,7 @@ def create_puzzle_file(year: int, day: int) -> None:
     if puzzle_path.exists():
         answer = input("Puzzle file already exists. Overwrite? [y/N] ")
         if not answer.lower().startswith("y"):
-            print("Aborted.")
-            return
+            exit("Aborted.")
     title = re.findall(r"--- Day.* ---", download_day(year, day))[0]
     puzzle_path.parent.mkdir(parents=True, exist_ok=True)
     puzzle_path.write_text(TEMPLATE.format(title=title))
