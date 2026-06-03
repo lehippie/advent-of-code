@@ -120,8 +120,8 @@ def update_readme(timings: dict) -> None:
     header = (
         "# advent-of-code\n\nAdvent of Code solutions in python 3\n\n"
         ":zap: < 5 ms < :green_square: < 1 s < :blue_square: < 5 s < "
-        ":orange_square: < 30 s < :red_square: < 1 min < :skull: &emsp;"
-        ":x: Unsolved\n\n"
+        ":orange_square: < 30 s < :red_square: < 1 min < :skull:"
+        "&emsp;&emsp;:x: = Unsolved\n\n"
     )
     footer = (
         f"\n\n_(last update: {date.today().isoformat()} - "

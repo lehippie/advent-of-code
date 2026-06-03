@@ -2,7 +2,7 @@
 
 Advent of Code solutions in python 3
 
-:zap: < 5 ms < :green_square: < 1 s < :blue_square: < 5 s < :orange_square: < 30 s < :red_square: < 1 min < :skull: &emsp;:x: Unsolved
+:zap: < 5 ms < :green_square: < 1 s < :blue_square: < 5 s < :orange_square: < 30 s < :red_square: < 1 min < :skull:&emsp;&emsp;:x: = Unsolved
 
 ||2015|2016|2017|2018|2019|2020|2021|2022|2023|2024|2025|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
